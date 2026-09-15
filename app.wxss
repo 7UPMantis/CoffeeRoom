@@ -124,7 +124,8 @@ view, text, input, textarea, picker, button {
   background: var(--coffee-tint);
   color: var(--coffee-mid);
   font-size: 22rpx;
-  margin-right: 10rpx;
+  /* 上下留出下边距，避免标签换行后两行紧贴 */
+  margin: 0 10rpx 8rpx 0;
 }
 
 .tag.green { background: var(--green-bg); color: var(--green); }

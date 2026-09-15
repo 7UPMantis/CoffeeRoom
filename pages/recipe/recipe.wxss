@@ -78,23 +78,24 @@
   margin-top: 6rpx;
 }
 
+/* 底部改为纵向堆叠：标签独占整行自由换行，操作区另起一行右对齐，
+   避免标签多时和「设常喝 / 删除」抢横向空间 */
 .rc-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding-top: 18rpx;
   border-top: 1rpx solid var(--line);
 }
 
 .rc-tags {
-  flex: 1;
   display: flex;
   flex-wrap: wrap;
+  /* 抵消 .tag 自带的下边距，免得底部多出一截空隙 */
+  margin-bottom: -8rpx;
 }
 
 .rc-ops {
-  flex-shrink: 0;
-  margin-left: 16rpx;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12rpx;
 }
 
 .op {
