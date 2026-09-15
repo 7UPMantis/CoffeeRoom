@@ -122,6 +122,68 @@ function ratioText(dose, water) {
   return '1:' + (Math.round((w / d) * 10) / 10)
 }
 
+/**
+ * 把配方里的时间字符串解析成秒，用于冲煮计时器。
+ * 支持：'2:30'（分:秒）、'2:30-3:00'（取第一个）、'25s'、'25-28s'（取第一个）
+ * 解析不出来返回 0（调用方回退到默认值）
+ */
+function parseDuration(str) {
+  const s = String(str || '').trim()
+  if (!s) return 0
+  // 先取时间段的左端（范围值取更快的那个，倒计时更安全）
+  const first = s.split(/[-~—]/)[0].trim()
+  if (first.indexOf(':') > -1) {
+    const parts = first.split(':')
+    const m = Number(parts[0])
+    const sec = Number(parts[1])
+    if (isNaN(m) || isNaN(sec)) return 0
+    return Math.max(0, m * 60 + sec)
+  }
+  const n = parseFloat(first)
+  if (isNaN(n)) return 0
+  return Math.max(0, Math.round(n))
+}
+
+// 秒 -> '2:30'
+function mmss(sec) {
+  const total = Math.max(0, Math.round(Number(sec) || 0))
+  const m = Math.floor(total / 60)
+  const s = total % 60
+  return m + ':' + pad(s)
+}
+
+// 时间戳 -> 'YYYY-MM-DD'（本地时区，用于按天聚合）
+function dateKey(ts) {
+  const d = ts instanceof Date ? ts : new Date(ts || Date.now())
+  return dateStr(d)
+}
+
+// 时间戳 -> 星期几（一 / 二 / ... / 日）
+function weekdayCN(ts) {
+  const d = ts instanceof Date ? ts : new Date(ts || Date.now())
+  return ['日', '一', '二', '三', '四', '五', '六'][d.getDay()]
+}
+
+/**
+ * 生成最近 n 天（含今天）的日期骨架，按时间正序。
+ * @returns [{ key: 'YYYY-MM-DD', label: '一', date: '9-15' }]
+ */
+function recentDays(n) {
+  const total = n || 7
+  const out = []
+  const base = new Date()
+  base.setHours(0, 0, 0, 0)
+  for (let i = total - 1; i >= 0; i--) {
+    const d = new Date(base.getTime() - i * 86400000)
+    out.push({
+      key: dateStr(d),
+      label: weekdayCN(d),
+      date: (d.getMonth() + 1) + '-' + d.getDate()
+    })
+  }
+  return out
+}
+
 module.exports = {
   pad: pad,
   dateStr: dateStr,
@@ -132,5 +194,10 @@ module.exports = {
   num: num,
   getBeanStatus: getBeanStatus,
   getStock: getStock,
-  ratioText: ratioText
+  ratioText: ratioText,
+  parseDuration: parseDuration,
+  mmss: mmss,
+  dateKey: dateKey,
+  weekdayCN: weekdayCN,
+  recentDays: recentDays
 }

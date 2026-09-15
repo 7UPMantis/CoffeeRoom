@@ -16,6 +16,7 @@
   </view>
 
   <view wx:for="{{list}}" wx:key="_id" class="card recipe-card">
+    <image wx:if="{{item.cover}}" class="rc-cover" src="{{item.cover}}" mode="aspectFill" data-id="{{item._id}}" bindtap="onEdit" lazy-load />
     <view class="rc-head" data-id="{{item._id}}" bindtap="onEdit">
       <view class="rc-title">
         <text class="rc-name">{{item.name}}</text>
@@ -51,6 +52,7 @@
         <text wx:if="{{item.time}}" class="tag grey">{{item.time}}</text>
       </view>
       <view class="rc-ops">
+        <text class="op brew" data-id="{{item._id}}" catchtap="onBrew">▶ 开始冲煮</text>
         <text class="op" data-id="{{item._id}}" catchtap="onToggleFav">{{item.favorite ? '取消常喝' : '设常喝'}}</text>
         <text class="op danger" data-id="{{item._id}}" data-name="{{item.name}}" catchtap="onDelete">删除</text>
       </view>

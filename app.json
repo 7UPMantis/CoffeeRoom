@@ -5,7 +5,8 @@
     "pages/bean/bean",
     "pages/record/record",
     "pages/recipe-edit/recipe-edit",
-    "pages/bean-edit/bean-edit"
+    "pages/bean-edit/bean-edit",
+    "pages/brew/brew"
   ],
   "window": {
     "backgroundTextStyle": "light",

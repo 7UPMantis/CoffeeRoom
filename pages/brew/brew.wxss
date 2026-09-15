@@ -1,0 +1,210 @@
+.brew-page {
+  padding-bottom: 60rpx;
+}
+
+/* ---------- 配方摘要 ---------- */
+.head-cover {
+  width: 100%;
+  height: 260rpx;
+  border-radius: var(--r-md);
+  margin-bottom: 22rpx;
+  background: var(--surface-2);
+  display: block;
+}
+
+.head-title {
+  font-size: 38rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+  letter-spacing: 0.5rpx;
+}
+
+.head-sub {
+  font-size: 24rpx;
+  color: var(--text-2);
+  margin-top: 8rpx;
+}
+
+.head-params {
+  display: flex;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 20rpx 0;
+  margin-top: 20rpx;
+}
+
+.hp {
+  flex: 1;
+  text-align: center;
+  border-right: 1rpx solid var(--line);
+}
+
+.hp:last-child {
+  border-right: none;
+}
+
+.hp-val {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--coffee);
+  line-height: 1.2;
+}
+
+.hp-key {
+  display: block;
+  font-size: 20rpx;
+  color: var(--text-2);
+  margin-top: 6rpx;
+}
+
+.head-bean {
+  margin-top: 18rpx;
+  font-size: 23rpx;
+  color: var(--text-2);
+}
+
+/* ---------- 计时器 ---------- */
+.timer-card {
+  margin-top: 20rpx;
+  text-align: center;
+  padding: 40rpx 32rpx 32rpx;
+}
+
+.timer-label {
+  font-size: 23rpx;
+  color: var(--text-2);
+}
+
+.timer-time {
+  font-size: 128rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+  line-height: 1.15;
+  letter-spacing: 2rpx;
+  font-variant-numeric: tabular-nums;
+  margin: 12rpx 0 20rpx;
+}
+
+.timer-time.done {
+  color: var(--green);
+}
+
+.timer-progress {
+  height: 16rpx;
+  border-radius: 999rpx;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.timer-progress-bar {
+  height: 100%;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #B08E72 0%, #6F4E37 100%);
+  transition: width 0.9s linear;
+}
+
+.timer-actions {
+  display: flex;
+  align-items: center;
+  margin-top: 40rpx;
+}
+
+.t-btn {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--coffee);
+  border: 1rpx solid var(--line-strong);
+  border-radius: 999rpx;
+  padding: 20rpx 0;
+  text-align: center;
+  background: var(--surface);
+}
+
+.t-btn.main {
+  flex: 1.5;
+  margin: 0 20rpx;
+  background: linear-gradient(135deg, #7B5940 0%, #6F4E37 100%);
+  color: #fff;
+  border-color: transparent;
+  font-weight: 600;
+  font-size: 32rpx;
+  box-shadow: 0 8rpx 20rpx rgba(111, 78, 55, 0.25);
+}
+
+.t-btn.main.pause {
+  background: linear-gradient(135deg, #D98B3A 0%, #C1741F 100%);
+  box-shadow: 0 8rpx 20rpx rgba(193, 116, 31, 0.25);
+}
+
+.timer-reset {
+  margin-top: 26rpx;
+  font-size: 24rpx;
+  color: var(--text-2);
+}
+
+/* ---------- 步骤 ---------- */
+.list-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 30rpx 0 4rpx;
+}
+
+.steps-card {
+  padding: 12rpx 28rpx 28rpx;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.step:last-of-type {
+  border-bottom: none;
+}
+
+.step-no {
+  width: 46rpx;
+  height: 46rpx;
+  border-radius: 50%;
+  background: var(--coffee-tint);
+  color: var(--coffee);
+  font-size: 24rpx;
+  line-height: 46rpx;
+  text-align: center;
+  flex-shrink: 0;
+  margin-right: 20rpx;
+  font-weight: 600;
+}
+
+.step-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.step.done .step-no {
+  background: var(--green);
+  color: #fff;
+}
+
+.step.done .step-text {
+  color: var(--text-3);
+  text-decoration: line-through;
+}
+
+.step-next {
+  margin-top: 26rpx;
+}
+
+.brew-tip {
+  margin-top: 26rpx;
+  font-size: 22rpx;
+  color: var(--text-3);
+  line-height: 1.7;
+  text-align: center;
+}

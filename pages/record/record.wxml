@@ -15,14 +15,82 @@
       <text class="stat-num">{{orders.length}}</text>
       <text class="stat-key">点单次数</text>
     </view>
+    <view class="stat-div"></view>
+    <view class="stat-item">
+      <text class="stat-num">{{usedGrams}}</text>
+      <text class="stat-key">累计耗豆 g</text>
+    </view>
   </view>
 
+  <!-- 近 7 日杯数 -->
+  <view wx:if="{{orders.length}}" class="card chart-card">
+    <view class="chart-head">
+      <text class="section-title">近 7 日杯数</text>
+      <text class="muted">峰值 {{chartMax}} 杯</text>
+    </view>
+    <view class="chart">
+      <view wx:for="{{chart}}" wx:key="date" class="chart-col">
+        <view class="chart-cups">{{item.cups || ''}}</view>
+        <view class="chart-bar-wrap">
+          <view class="chart-bar" style="height: {{item.h}}%"></view>
+        </view>
+        <view class="chart-label">{{item.label}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分类占比 + 成员排行 -->
+  <view wx:if="{{catStats.length}}" class="card">
+    <view class="section-title">消耗构成</view>
+
+    <view class="cat-list">
+      <view wx:for="{{catStats}}" wx:key="key" class="cat-row">
+        <text class="cat-name">{{item.icon}} {{item.label}}</text>
+        <view class="cat-bar-wrap">
+          <view class="cat-bar" style="width: {{item.pct}}%"></view>
+        </view>
+        <text class="cat-val">{{item.count}} 杯 · {{item.pct}}%</text>
+      </view>
+    </view>
+
+    <view wx:if="{{memberRank.length}}" class="rank-block">
+      <view class="rank-title">谁喝得最多</view>
+      <view wx:for="{{memberRank}}" wx:key="name" class="rank-row">
+        <text class="rank-name">{{index + 1}}. {{item.name}}</text>
+        <view class="rank-bar-wrap">
+          <view class="rank-bar" style="width: {{item.pct}}%"></view>
+        </view>
+        <text class="rank-val">{{item.cups}} 杯</text>
+      </view>
+    </view>
+
+    <view wx:if="{{topRecipes.length}}" class="rank-block">
+      <view class="rank-title">最常点</view>
+      <view class="top-tags">
+        <text wx:for="{{topRecipes}}" wx:key="name" class="tag">{{item.name}} × {{item.count}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 筛选 -->
   <view class="list-head">
     <text class="section-title">点单记录</text>
-    <text class="muted">{{orders.length}} 条</text>
+    <text class="muted">{{list.length}} / {{orders.length}} 条</text>
   </view>
 
-  <view wx:for="{{orders}}" wx:key="_id" class="card order-card">
+  <scroll-view class="chip-scroll" scroll-x enable-flex>
+    <view wx:for="{{memberOptions}}" wx:key="*this"
+          class="chip {{activeMember === item ? 'active' : ''}}"
+          data-key="{{item}}" bindtap="onMemberTap">{{item}}</view>
+  </scroll-view>
+
+  <view class="status-row">
+    <view wx:for="{{statusFilters}}" wx:key="key"
+          class="st-chip {{activeStatus === item.key ? 'active' : ''}}"
+          data-key="{{item.key}}" bindtap="onStatusTap">{{item.label}}</view>
+  </view>
+
+  <view wx:for="{{list}}" wx:key="_id" class="card order-card">
     <view class="oc-head">
       <view class="oc-who">给 {{item.forWho}}</view>
       <view class="tag {{item.status === 'done' ? 'green' : 'orange'}}">{{item.status === 'done' ? '已完成' : '待制作'}}</view>
@@ -35,6 +103,7 @@
       </view>
     </view>
 
+    <view wx:if="{{item._usageText}}" class="oc-usage">耗豆 {{item._usageText}}</view>
     <view wx:if="{{item.note}}" class="oc-note">备注：{{item.note}}</view>
 
     <view class="oc-foot">
@@ -44,6 +113,12 @@
         <text class="op danger" data-id="{{item._id}}" bindtap="onDelete">删除</text>
       </view>
     </view>
+  </view>
+
+  <view wx:if="{{!list.length && orders.length}}" class="empty">
+    <text class="empty-icon">🔍</text>
+    <view>当前筛选下没有记录</view>
+    <view class="muted" style="margin-top:16rpx">换个成员或状态看看</view>
   </view>
 
   <view wx:if="{{!orders.length}}" class="empty">
@@ -69,6 +144,6 @@
       <view class="btn-ghost" bindtap="onRedetect">重新检测</view>
       <view class="btn-ghost" bindtap="onSeed">示例数据</view>
     </view>
-    <view class="tip-text">未配置云环境时数据只存在本机；填好 app.js 里的 env 后点「重新检测」即可切到云开发，家人朋友可共享同一份配方与豆仓。</view>
+    <view class="tip-text">未配置云环境时数据只存在本机；填好 app.js 里的 env 后点「重新检测」即可切到云开发，家人朋友可共享同一份配方与豆仓。点单会自动扣减对应咖啡豆余量，删除记录会把豆量还回去。</view>
   </view>
 </view>

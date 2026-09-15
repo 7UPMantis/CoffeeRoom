@@ -65,17 +65,36 @@ Page({
     const id = e.currentTarget.dataset.id
     const name = e.currentTarget.dataset.name
     const self = this
-    wx.showModal({
-      title: '删除咖啡豆',
-      content: '确定删除「' + name + '」？',
-      confirmColor: '#E0483A',
-      success: function (res) {
-        if (!res.confirm) return
-        store.beans.remove(id).then(function () {
-          wx.showToast({ title: '已删除', icon: 'success' })
-          self.load()
-        })
-      }
+    // 先查有没有配方在用这支豆：软引用不清理会让配方指向已删除的豆
+    store.recipes.list().then(function (recipes) {
+      const used = (recipes || []).filter(function (r) { return r.beanId === id })
+      const content = used.length
+        ? '有 ' + used.length + ' 个配方在用「' + name + '」：\n' + used.map(function (r) { return '· ' + r.name }).join('\n') +
+          '\n\n删除后这些配方会变成「未关联咖啡豆」，仍可继续做，但不再扣豆量。确定删除？'
+        : '确定删除「' + name + '」？'
+      wx.showModal({
+        title: '删除咖啡豆',
+        content: content,
+        confirmColor: '#E0483A',
+        success: function (res) {
+          if (!res.confirm) return
+          wx.showLoading({ title: '处理中' })
+          const tasks = [store.beans.remove(id)]
+          // 顺手把引用摘掉，避免配方一直指向不存在的豆
+          used.forEach(function (r) {
+            tasks.push(store.recipes.update(r._id, { beanId: '', beanName: '' }))
+          })
+          Promise.all(tasks).then(function () {
+            wx.hideLoading()
+            wx.showToast({ title: used.length ? '已删除并解绑配方' : '已删除', icon: 'none' })
+            self.load()
+          }).catch(function (err) {
+            wx.hideLoading()
+            wx.showToast({ title: '删除失败', icon: 'none' })
+            console.error('[bean] 删除失败', err)
+          })
+        }
+      })
     })
   }
 })

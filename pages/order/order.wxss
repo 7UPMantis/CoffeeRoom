@@ -237,3 +237,116 @@
 .ph {
   color: var(--text-3);
 }
+
+/* ---------- 豆量预警条 ---------- */
+.notice {
+  display: flex;
+  align-items: center;
+  background: var(--orange-bg);
+  border: 1rpx solid #F2DCC0;
+  border-radius: var(--r-lg);
+  padding: 22rpx 24rpx;
+  margin-bottom: 22rpx;
+}
+
+.notice-icon {
+  font-size: 34rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.notice-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.notice-title {
+  font-size: 25rpx;
+  color: #8A5A20;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.notice-sub {
+  font-size: 21rpx;
+  color: #A5743C;
+  margin-top: 4rpx;
+}
+
+.notice-go {
+  flex-shrink: 0;
+  font-size: 24rpx;
+  color: #8A5A20;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 999rpx;
+  padding: 10rpx 22rpx;
+  margin-left: 14rpx;
+}
+
+/* ---------- 常喝一键加 ---------- */
+.quick-fav {
+  color: var(--coffee);
+  padding: 6rpx 4rpx;
+}
+
+/* ---------- 封面 ---------- */
+.r-cover {
+  width: 100%;
+  height: 200rpx;
+  border-radius: var(--r-md);
+  margin-bottom: 18rpx;
+  background: var(--surface-2);
+  display: block;
+}
+
+/* ---------- 豆量联动提示 ---------- */
+.r-stock {
+  margin-top: 12rpx;
+  font-size: 21rpx;
+  color: var(--text-2);
+}
+
+.r-stock.warn {
+  color: var(--orange);
+}
+
+.r-stock.grey {
+  color: var(--text-3);
+}
+
+/* ---------- 卡片底部：冲煮入口 + 步进器 ---------- */
+.r-brew {
+  font-size: 23rpx;
+  color: var(--coffee);
+  border: 1rpx solid var(--line-strong);
+  border-radius: 999rpx;
+  padding: 9rpx 22rpx;
+  background: var(--surface);
+}
+
+/* ---------- 下单弹层补充 ---------- */
+.si-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.si-grams {
+  font-size: 20rpx;
+  color: var(--text-2);
+  margin-top: 4rpx;
+}
+
+.si-grams.muted {
+  color: var(--text-3);
+}
+
+.sheet-hint {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: var(--coffee);
+  background: var(--coffee-tint);
+  border-radius: var(--r-sm);
+  padding: 14rpx 20rpx;
+}

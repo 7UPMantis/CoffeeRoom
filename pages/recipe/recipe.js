@@ -71,6 +71,10 @@ Page({
     wx.navigateTo({ url: '/pages/recipe-edit/recipe-edit?id=' + e.currentTarget.dataset.id })
   },
 
+  onBrew: function (e) {
+    wx.navigateTo({ url: '/pages/brew/brew?id=' + e.currentTarget.dataset.id })
+  },
+
   onToggleFav: function (e) {
     const id = e.currentTarget.dataset.id
     const item = this.data.all.find(function (r) { return r._id === id })
@@ -97,5 +101,16 @@ Page({
         })
       }
     })
+  },
+
+  onShareAppMessage: function () {
+    return {
+      title: '咖屋 · 我家的咖啡配方都在这',
+      path: '/pages/recipe/recipe'
+    }
+  },
+
+  onShareTimeline: function () {
+    return { title: '咖屋 · 我家的咖啡配方都在这' }
   }
 })

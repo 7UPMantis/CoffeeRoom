@@ -111,3 +111,23 @@
 .ph {
   color: var(--text-3);
 }
+
+/* ---------- 封面 ---------- */
+.rc-cover {
+  width: 100%;
+  height: 240rpx;
+  border-radius: var(--r-md);
+  margin-bottom: 22rpx;
+  background: var(--surface-2);
+  display: block;
+}
+
+/* ---------- 冲煮入口 ---------- */
+.op.brew {
+  color: var(--coffee-dark);
+  font-weight: 500;
+}
+
+.rc-ops {
+  gap: 8rpx;
+}

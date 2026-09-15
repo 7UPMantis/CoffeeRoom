@@ -1,0 +1,61 @@
+<view class="page brew-page">
+  <!-- 配方摘要 -->
+  <view class="card head">
+    <image wx:if="{{cover}}" class="head-cover" src="{{cover}}" mode="aspectFill" />
+    <view class="head-title">{{name}}</view>
+    <view class="head-sub">{{catIcon}} {{catLabel}}<text wx:if="{{toolLabel && toolLabel !== '未设置'}}"> · {{toolLabel}}</text></view>
+    <view class="head-params">
+      <view class="hp" wx:if="{{dose}}">
+        <text class="hp-val">{{dose}}</text>
+        <text class="hp-key">粉 g</text>
+      </view>
+      <view class="hp" wx:if="{{water}}">
+        <text class="hp-val">{{water}}</text>
+        <text class="hp-key">液 g</text>
+      </view>
+      <view class="hp" wx:if="{{ratio}}">
+        <text class="hp-val">{{ratio}}</text>
+        <text class="hp-key">粉水比</text>
+      </view>
+      <view class="hp" wx:if="{{temp}}">
+        <text class="hp-val">{{temp}}</text>
+        <text class="hp-key">水温 ℃</text>
+      </view>
+    </view>
+    <view wx:if="{{beanName}}" class="head-bean">用豆：{{beanName}}</view>
+  </view>
+
+  <!-- 计时器 -->
+  <view class="card timer-card">
+    <view class="timer-label">{{presetLabel}}</view>
+    <view class="timer-time {{finished ? 'done' : ''}}">{{remainText}}</view>
+    <view class="timer-progress">
+      <view class="timer-progress-bar" style="width: {{progress * 100}}%"></view>
+    </view>
+
+    <view class="timer-actions">
+      <view class="t-btn" data-delta="-15" bindtap="onAdjust">−15s</view>
+      <view class="t-btn main {{running ? 'pause' : ''}}" bindtap="onToggle">{{running ? '暂停' : (finished ? '再来' : '开始')}}</view>
+      <view class="t-btn" data-delta="15" bindtap="onAdjust">+15s</view>
+    </view>
+    <view class="timer-reset" bindtap="onReset">重置计时</view>
+  </view>
+
+  <!-- 步骤清单 -->
+  <view class="list-head">
+    <text class="section-title">冲煮步骤</text>
+    <text class="muted">{{doneCount}} / {{steps.length}}</text>
+  </view>
+
+  <view class="card steps-card">
+    <view wx:for="{{steps}}" wx:key="index"
+          class="step {{item.done ? 'done' : ''}}"
+          data-index="{{index}}" bindtap="onStepTap">
+      <view class="step-no">{{item.done ? '✓' : index + 1}}</view>
+      <view class="step-text">{{item.text}}</view>
+    </view>
+    <view class="btn-ghost step-next" bindtap="onNextStep">完成下一步</view>
+  </view>
+
+  <view class="brew-tip">冲煮期间屏幕保持常亮；开始后会自动倒数，到点震动提醒。</view>
+</view>

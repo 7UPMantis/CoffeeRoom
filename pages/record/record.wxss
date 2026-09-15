@@ -153,3 +153,185 @@
   color: var(--text-2);
   line-height: 1.75;
 }
+
+/* ---------- 近 7 日柱状图 ---------- */
+.chart-card {
+  margin-top: 20rpx;
+  padding: 28rpx 24rpx 20rpx;
+}
+
+.chart-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.chart {
+  display: flex;
+  align-items: flex-end;
+}
+
+.chart-col {
+  flex: 1;
+  text-align: center;
+}
+
+.chart-cups {
+  font-size: 20rpx;
+  color: var(--text-2);
+  height: 28rpx;
+  line-height: 28rpx;
+}
+
+.chart-bar-wrap {
+  height: 140rpx;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 8rpx;
+}
+
+.chart-bar {
+  width: 100%;
+  max-width: 40rpx;
+  border-radius: 8rpx 8rpx 4rpx 4rpx;
+  background: linear-gradient(180deg, #8B6B52 0%, #6F4E37 100%);
+  min-height: 0;
+}
+
+.chart-label {
+  font-size: 21rpx;
+  color: var(--text-3);
+  margin-top: 10rpx;
+}
+
+/* ---------- 消耗构成 ---------- */
+.cat-list {
+  margin-top: 22rpx;
+}
+
+.cat-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18rpx;
+}
+
+.cat-name {
+  width: 150rpx;
+  font-size: 24rpx;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.cat-bar-wrap {
+  flex: 1;
+  height: 16rpx;
+  border-radius: 999rpx;
+  background: var(--surface-3);
+  overflow: hidden;
+  margin-right: 16rpx;
+}
+
+.cat-bar {
+  height: 100%;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #B08E72 0%, #6F4E37 100%);
+}
+
+.cat-val {
+  font-size: 21rpx;
+  color: var(--text-2);
+  flex-shrink: 0;
+  min-width: 130rpx;
+  text-align: right;
+}
+
+/* ---------- 排行 ---------- */
+.rank-block {
+  margin-top: 28rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid var(--line);
+}
+
+.rank-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+  margin-bottom: 18rpx;
+}
+
+.rank-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.rank-name {
+  width: 160rpx;
+  font-size: 24rpx;
+  color: var(--text);
+  flex-shrink: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.rank-bar-wrap {
+  flex: 1;
+  height: 14rpx;
+  border-radius: 999rpx;
+  background: var(--surface-3);
+  overflow: hidden;
+  margin-right: 16rpx;
+}
+
+.rank-bar {
+  height: 100%;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #C19A6B 0%, #8B6B52 100%);
+}
+
+.rank-val {
+  font-size: 21rpx;
+  color: var(--text-2);
+  flex-shrink: 0;
+  min-width: 80rpx;
+  text-align: right;
+}
+
+.top-tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: -8rpx;
+}
+
+/* ---------- 状态筛选 ---------- */
+.status-row {
+  display: flex;
+  margin: 4rpx 0 20rpx;
+}
+
+.st-chip {
+  font-size: 24rpx;
+  color: var(--text-2);
+  background: var(--surface);
+  border: 1rpx solid var(--line-strong);
+  border-radius: 999rpx;
+  padding: 10rpx 26rpx;
+  margin-right: 14rpx;
+}
+
+.st-chip.active {
+  background: var(--coffee-tint);
+  border-color: var(--coffee-light);
+  color: var(--coffee-dark);
+  font-weight: 500;
+}
+
+/* ---------- 耗豆行 ---------- */
+.oc-usage {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: var(--coffee-mid);
+}
