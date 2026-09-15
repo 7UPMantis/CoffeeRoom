@@ -1,4 +1,18 @@
 <view class="page">
+  <!-- 用途标签：决定这支豆会出现在哪些配方里，放最前面 -->
+  <view class="card">
+    <view class="section-title">用途标签</view>
+    <view class="hint">标上用途后，这支豆只会出现在对得上的配方里（手冲豆不会跑进奶咖）。可多选。</view>
+    <view class="chip-wrap">
+      <view wx:for="{{usageOptions}}" wx:key="key"
+            class="opt-chip {{usageTags.indexOf(item.key) > -1 ? 'on' : ''}}"
+            data-key="{{item.key}}" bindtap="onUsageToggle">
+        <text class="oc-label">{{item.label}}</text>
+        <text class="oc-tip">{{item.tip}}</text>
+      </view>
+    </view>
+  </view>
+
   <view class="card">
     <view class="form-row">
       <text class="form-label">豆子名称</text>
@@ -7,6 +21,11 @@
     <view class="form-row">
       <text class="form-label">产地</text>
       <input class="form-value" placeholder="埃塞俄比亚 / 哥伦比亚" placeholder-class="ph" value="{{origin}}" data-key="origin" bindinput="onInput" />
+    </view>
+    <view class="preset-row">
+      <text wx:for="{{originPresets}}" wx:key="*this"
+            class="preset-chip {{origin === item ? 'on' : ''}}"
+            data-value="{{item}}" bindtap="onOriginPick">{{item}}</text>
     </view>
     <view class="form-row">
       <text class="form-label">处理法</text>
@@ -90,16 +109,23 @@
     <view class="reset-line" bindtap="onUseAll">剩余重置为满</view>
   </view>
 
-  <!-- 风味 -->
+  <!-- 风味：先点预置风味轮，再考虑自定义 -->
   <view class="card">
     <view class="section-title">风味标签</view>
-    <view class="tag-wrap">
+    <view class="preset-row">
+      <text wx:for="{{flavorPresets}}" wx:key="*this"
+            class="preset-chip {{flavor.indexOf(item) > -1 ? 'on' : ''}}"
+            data-value="{{item}}" bindtap="onFlavorPreset">{{item}}</text>
+    </view>
+
+    <view wx:if="{{flavor.length}}" class="tag-wrap">
       <view wx:for="{{flavor}}" wx:key="*this" class="tag-item" data-index="{{index}}" bindtap="onFlavorDel">
         {{item}} <text class="tag-x">×</text>
       </view>
     </view>
+
     <view class="tag-add">
-      <input class="tag-input" placeholder="柑橘 / 坚果 / 巧克力" placeholder-class="ph" value="{{flavorInput}}"
+      <input class="tag-input" placeholder="上面没有的，自己加一个" placeholder-class="ph" value="{{flavorInput}}"
              bindinput="onFlavorInput" confirm-type="done" bindconfirm="onFlavorAdd" />
       <view class="tag-btn" bindtap="onFlavorAdd">添加</view>
     </view>

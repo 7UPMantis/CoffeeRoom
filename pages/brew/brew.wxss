@@ -2,6 +2,38 @@
   padding-bottom: 60rpx;
 }
 
+/* ---------- 待做上下文 ---------- */
+.queue-banner {
+  display: flex;
+  align-items: center;
+  background: var(--coffee-tint);
+  border: 1rpx solid var(--line-strong);
+  padding: 24rpx 26rpx;
+}
+
+.qb-icon {
+  font-size: 40rpx;
+  margin-right: 18rpx;
+  flex-shrink: 0;
+}
+
+.qb-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.qb-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+}
+
+.qb-sub {
+  font-size: 22rpx;
+  color: var(--coffee-mid);
+  margin-top: 4rpx;
+}
+
 /* ---------- 配方摘要 ---------- */
 .head-cover {
   width: 100%;

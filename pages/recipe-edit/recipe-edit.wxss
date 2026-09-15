@@ -234,3 +234,47 @@
 .ph {
   color: var(--text-3);
 }
+
+/* ---------- 分组小标题与说明 ---------- */
+.sub-title {
+  margin-top: 26rpx;
+  font-size: 27rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+}
+
+.hint {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: var(--text-2);
+  line-height: 1.7;
+}
+
+.hint .em {
+  color: var(--coffee);
+  font-weight: 600;
+}
+
+/* ---------- 预置选项（用途 / 时长 / 标签） ---------- */
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 16rpx 0 4rpx;
+}
+
+.preset-chip {
+  padding: 10rpx 22rpx;
+  border-radius: 999rpx;
+  background: var(--surface-2);
+  border: 1rpx solid var(--line-strong);
+  color: var(--text-2);
+  font-size: 23rpx;
+  margin: 0 14rpx 14rpx 0;
+}
+
+.preset-chip.on {
+  background: var(--coffee-tint);
+  border-color: var(--coffee-light);
+  color: var(--coffee-dark);
+  font-weight: 500;
+}

@@ -77,6 +77,18 @@
   color: var(--text);
 }
 
+.oi-left {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.oi-bean {
+  font-size: 20rpx;
+  color: var(--text-3);
+  margin-top: 2rpx;
+}
+
 .oi-count {
   color: var(--coffee);
   font-weight: 600;

@@ -1,16 +1,19 @@
 /**
- * 咖啡豆消耗闭环。
+ * 咖啡豆消耗闭环 + 选豆匹配。
  *
- * 之前「点单」和「咖啡豆余量」是两套独立数据，点完单豆量纹丝不动，
- * 本模块把两者接起来：
- *   1. planUsage(items)     —— 下单前预估：这次点单要消耗哪些豆、各多少克、够不够
- *   2. applyUsage(plan)     —— 落库扣减，返回真正扣掉的用量（写进订单，便于回补）
- *   3. restoreUsage(usage)  —— 删除订单时按记录回补余量
+ * 职责：
+ *   1. beansFor(recipe, beans)  —— 按配方「所需豆用途」筛出可选豆（解决手冲豆出现在奶咖里）
+ *   2. planUsage(items)         —— 下单前预估：这次点单要消耗哪些豆、各多少克、够不够
+ *   3. applyUsage(plan)         —— 落库扣减，返回真正扣掉的用量（写进订单，便于回补）
+ *   4. restoreUsage(usage)      —— 删除订单时按记录回补余量
  *
- * 订单新增可选字段 beanUsage: [{ beanId, beanName, grams }]
- * 历史订单没有该字段，删除时不回补（不影响使用）。
+ * 订单结构（v1.2 起）：
+ *   items: [{ recipeId, name, count, beanId, beanName, dose }]   ← 豆在下单时确定
+ *   beanUsage: [{ beanId, beanName, grams }]                     ← 用于回补
+ * 历史订单缺少 beanId/dose 时，planUsage 会回退到配方上的默认值，保证兼容。
  */
 const store = require('./store.js')
+const C = require('./constants.js')
 
 function toNum(v, d) {
   const n = Number(v)
@@ -18,12 +21,40 @@ function toNum(v, d) {
 }
 
 /**
+ * 按配方的「所需豆用途」筛出豆仓里可选的豆。
+ * 未标注用途的豆也会列出（否则历史数据会全都消失），但排在最后并带 _unlabeled 标记，
+ * 由界面提示去补标用途。
+ *
+ * 排序：专用豆（用途精确命中）→ 通用豆 → 未标注；同组内余量多的在前。
+ * @returns {Array} 复制后的豆对象，附带 _unlabeled / _exact
+ */
+function beansFor(recipe, beans) {
+  const need = C.inferBeanType(recipe)
+  const out = []
+  ;(beans || []).forEach(function (b) {
+    const m = C.beanMatchesType(b, need)
+    if (!m.ok) return
+    const tags = b.usageTags || []
+    out.push(Object.assign({}, b, {
+      _unlabeled: m.unlabeled,
+      _exact: !m.unlabeled && need !== 'any' && tags.indexOf(need) > -1
+    }))
+  })
+  out.sort(function (a, b) {
+    if (a._unlabeled !== b._unlabeled) return a._unlabeled ? 1 : -1
+    if (a._exact !== b._exact) return a._exact ? -1 : 1
+    return toNum(b.remaining, 0) - toNum(a.remaining, 0)
+  })
+  return out
+}
+
+/**
  * 预估一次点单的咖啡豆消耗。
- * @param {Array} items [{ recipeId, name, count }]
+ * @param {Array} items [{ recipeId, name, count, beanId?, beanName?, dose? }]
  * @returns {Promise<{plan:Array, detail:Array, unlinked:Array}>}
  *   plan     [{ beanId, beanName, grams, before, total, missing, shortage }] 按豆聚合
  *   detail   [{ recipeName, count, beanId, beanName, grams }] 按款明细
- *   unlinked [配方名] 没关联咖啡豆或没填用量的款（不参与扣减）
+ *   unlinked [饮品名] 没选豆或没填用量的款（不参与扣减）
  */
 function planUsage(items) {
   const list = items || []
@@ -38,18 +69,24 @@ function planUsage(items) {
     list.forEach(function (it) {
       const r = rmap[it.recipeId]
       const count = toNum(it.count, 0)
-      const dose = r ? toNum(r.dose, 0) : 0
-      if (!r || !r.beanId || !dose || !count) {
-        unlinked.push((r && r.name) || it.name || '未知配方')
+      // 下单时选定的豆优先；没有则回退到配方默认豆（兼容旧数据）
+      const beanId = it.beanId || (r && r.beanId) || ''
+      const dose = (it.dose !== undefined && it.dose !== '' && it.dose !== null)
+        ? toNum(it.dose, 0)
+        : (r ? toNum(r.dose, 0) : 0)
+      const beanName = it.beanName || (r && r.beanName) || ''
+
+      if (!beanId || !dose || !count) {
+        unlinked.push((r && r.name) || it.name || '未知饮品')
         return
       }
       const grams = dose * count
-      agg[r.beanId] = (agg[r.beanId] || 0) + grams
+      agg[beanId] = (agg[beanId] || 0) + grams
       detail.push({
-        recipeName: r.name,
+        recipeName: (r && r.name) || it.name,
         count: count,
-        beanId: r.beanId,
-        beanName: r.beanName || '',
+        beanId: beanId,
+        beanName: beanName,
         grams: grams
       })
     })
@@ -128,6 +165,7 @@ function usageText(usage) {
 }
 
 module.exports = {
+  beansFor: beansFor,
   planUsage: planUsage,
   applyUsage: applyUsage,
   restoreUsage: restoreUsage,

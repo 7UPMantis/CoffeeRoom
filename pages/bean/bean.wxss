@@ -184,3 +184,52 @@
   font-size: 22rpx;
   color: var(--text-3);
 }
+
+/* ---------- 用途标签 ---------- */
+.bc-usage {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10rpx;
+}
+
+.usage-chip {
+  font-size: 21rpx;
+  color: var(--coffee);
+  background: var(--coffee-tint);
+  border-radius: 8rpx;
+  padding: 4rpx 14rpx;
+  margin: 0 10rpx 6rpx 0;
+}
+
+.usage-chip.warn {
+  color: var(--orange);
+  background: var(--orange-bg);
+}
+
+/* ---------- 该处理了 ---------- */
+.todo-card {
+  border-left: 6rpx solid var(--orange);
+}
+
+.todo-row {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.todo-row:last-child {
+  border-bottom: none;
+  padding-bottom: 4rpx;
+}
+
+.todo-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+}
+
+.todo-reasons {
+  margin-top: 10rpx;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: -8rpx;
+}

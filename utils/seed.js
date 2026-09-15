@@ -1,6 +1,7 @@
 const store = require('./store.js')
 
-// 首次使用的示例数据：2 支豆 + 5 个配方，方便立刻看到效果
+// 首次使用的示例数据：3 支豆 + 5 个配方，方便立刻看到效果
+// usageTags 决定这支豆会出现在哪些配方里（意式/手冲/冷萃/通用）
 const BEANS = [
   {
     name: '耶加雪菲 科契尔',
@@ -11,6 +12,7 @@ const BEANS = [
     weight: 250,
     remaining: 180,
     price: 98,
+    usageTags: ['filter'],
     flavor: ['柑橘', '茉莉', '蜂蜜'],
     note: '浅烘，手冲首选，水温 92℃ 表现最好'
   },
@@ -23,8 +25,22 @@ const BEANS = [
     weight: 500,
     remaining: 460,
     price: 128,
+    usageTags: ['espresso'],
     flavor: ['坚果', '焦糖', '巧克力'],
     note: '奶咖基底，配牛奶很稳'
+  },
+  {
+    name: '巴西 圣多斯 拼配',
+    origin: '拼配',
+    process: '日晒',
+    roast: 'dark',
+    roastDateOffset: -25,
+    weight: 500,
+    remaining: 320,
+    price: 88,
+    usageTags: ['universal'],
+    flavor: ['坚果', '可可', '烟熏'],
+    note: '通用口粮豆，意式和冷萃都能顶'
   }
 ]
 
@@ -101,7 +117,22 @@ const RECIPES = [
     temp: 93,
     time: '28s',
     steps: ['20g 粉萃取 40g 液', '观察油脂颜色与流速', '30 秒内饮用风味最佳'],
-    tags: ['基础'],
+    tags: ['基础', '提神'],
+    favorite: false
+  },
+  {
+    name: '冷萃咖啡',
+    category: 'cold',
+    tool: 'cold_brew',
+    beanName: '巴西 圣多斯 拼配',
+    dose: 40,
+    water: 400,
+    milk: 0,
+    grind: '粗',
+    temp: 0,
+    time: '4:00',
+    steps: ['40g 粗研磨咖啡粉放入冷萃瓶', '注入 400g 常温水，轻轻搅拌', '冷藏静置 12 小时', '滤出咖啡液，冷藏可存 3 天'],
+    tags: ['夏天', '解腻', '清爽'],
     favorite: false
   }
 ]
@@ -133,6 +164,7 @@ function run() {
           weight: b.weight,
           remaining: b.remaining,
           price: b.price,
+          usageTags: b.usageTags || [],
           flavor: b.flavor,
           note: b.note
         }).then(function (id) { beanIds[b.beanName || b.name] = id })
@@ -148,6 +180,7 @@ function run() {
           name: r.name,
           category: r.category,
           tool: r.tool,
+          beanType: r.beanType || '',
           beanId: beanIds[r.beanName] || '',
           beanName: r.beanName,
           dose: r.dose,

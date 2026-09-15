@@ -1,32 +1,18 @@
 <view class="page order-page">
-  <!-- 欢迎头部 -->
+  <!-- 顾客视角：今天想喝什么 -->
   <view class="hero">
     <view class="hero-text">
       <view class="hero-title">今天想喝点什么</view>
-      <view class="hero-sub">{{recipes.length}} 款配方 · {{beanCount}} 支咖啡豆</view>
+      <view class="hero-sub">{{recipes.length}} 款饮品</view>
     </view>
     <view class="hero-badge">☕</view>
   </view>
 
-  <!-- 豆量预警：余量不够一杯的豆，先提醒再点 -->
-  <view wx:if="{{lowBeans.length}}" class="notice">
-    <text class="notice-icon">⚠️</text>
-    <view class="notice-body">
-      <view class="notice-title">
-        <text wx:for="{{lowBeans}}" wx:for-item="b" wx:key="name">{{b.name}}<text wx:if="{{!b.empty}}"> 仅剩 {{b.left}}g</text><text wx:else> 已用完</text><text wx:if="{{index < lowBeans.length - 1}}">；</text></text>
-      </view>
-      <view class="notice-sub">这几支豆快见底了，去看看要不要补货</view>
-    </view>
-    <text class="notice-go" bindtap="onGoBean">豆仓</text>
-  </view>
-
-  <!-- 搜索 -->
   <view class="search">
-    <input placeholder="搜配方、标签、器具" placeholder-class="ph" value="{{keyword}}" bindinput="onSearch" confirm-type="search" />
+    <input placeholder="搜饮品、标签" placeholder-class="ph" value="{{keyword}}" bindinput="onSearch" confirm-type="search" />
     <text wx:if="{{keyword}}" class="search-clear" bindtap="onClearSearch">×</text>
   </view>
 
-  <!-- 分类标签 -->
   <scroll-view class="chip-scroll" scroll-x enable-flex>
     <view wx:for="{{categories}}" wx:key="key"
           class="chip {{activeCat === item.key ? 'active' : ''}}"
@@ -38,33 +24,18 @@
     <text class="muted quick-fav" bindtap="onQuickFav">★ 常喝一键加</text>
   </view>
 
-  <!-- 配方卡片 -->
+  <!-- 菜单卡片：只有名字、分类、标签、杯数 -->
   <view class="recipe-grid">
     <view wx:for="{{list}}" wx:key="_id" class="r-card">
       <image wx:if="{{item._hasCover}}" class="r-cover" src="{{item.cover}}" mode="aspectFill" lazy-load />
-      <view class="r-top">
-        <view class="r-name">{{item.name}}</view>
-        <view class="r-cat">{{item._catIcon}} {{item._catLabel}}</view>
-      </view>
-      <view class="r-meta">
-        <text wx:if="{{item.dose}}">{{item.dose}}g 粉</text>
-        <text wx:if="{{item._ratio}}" class="dot">·</text>
-        <text wx:if="{{item._ratio}}">{{item._ratio}}</text>
-        <text wx:if="{{item._toolLabel && item._toolLabel !== '未设置'}}" class="dot">·</text>
-        <text wx:if="{{item._toolLabel && item._toolLabel !== '未设置'}}">{{item._toolLabel}}</text>
-      </view>
-
-      <!-- 豆量联动提示 -->
-      <view wx:if="{{item._beanGone}}" class="r-stock warn">关联的豆已删除</view>
-      <view wx:elif="{{item._short}}" class="r-stock warn">余 {{item._beanLeft}}g，不够一杯</view>
-      <view wx:elif="{{item._cupsLeft}}" class="r-stock">余豆可做 {{item._cupsLeft}} 杯</view>
-      <view wx:elif="{{item._noBean}}" class="r-stock grey">未关联咖啡豆</view>
-
+      <view class="r-name">{{item.name}}</view>
+      <view class="r-cat">{{item._catIcon}} {{item._catLabel}}</view>
       <view class="r-tags">
         <text wx:for="{{item.tags}}" wx:for-item="tg" wx:key="*this" class="tag">{{tg}}</text>
       </view>
       <view class="r-bottom">
-        <view class="r-brew" data-id="{{item._id}}" catchtap="onBrew">▶ 冲煮</view>
+        <view wx:if="{{item.favorite}}" class="r-fav">★ 常喝</view>
+        <view wx:else class="placeholder-fav"></view>
         <view class="stepper">
           <view wx:if="{{cart[item._id]}}" class="st-btn" data-id="{{item._id}}" bindtap="onMinus">−</view>
           <text wx:if="{{cart[item._id]}}" class="st-num">{{cart[item._id]}}</text>
@@ -76,8 +47,8 @@
 
   <view wx:if="{{!list.length}}" class="empty">
     <text class="empty-icon">☕</text>
-    <view>这个分类还没有配方</view>
-    <view class="muted" style="margin-top:16rpx" bindtap="onGoRecipe">去「配方」页添加一款</view>
+    <view>这个分类还没有饮品</view>
+    <view class="muted" style="margin-top:16rpx" bindtap="onGoQueue">去「配方」页添加一款</view>
   </view>
 </view>
 
@@ -85,28 +56,35 @@
 <view wx:if="{{cartCount}}" class="cart-bar">
   <view class="cart-info" bindtap="onCartTap">
     <view class="cart-count">{{cartCount}} 杯</view>
-    <view class="cart-desc">{{cartList[0].name}}<text wx:if="{{cartList.length > 1}}"> 等 {{cartList.length}} 款</text><text wx:if="{{cartGrams}}"> · 约耗豆 {{cartGrams}}g</text></view>
+    <view class="cart-desc">{{cartList[0].name}}<text wx:if="{{cartList.length > 1}}"> 等 {{cartList.length}} 款</text></view>
   </view>
   <view class="cart-btn" bindtap="onCartTap">去下单</view>
 </view>
 
-<!-- 下单弹层 -->
+<!-- 下单弹层：选豆在这里 -->
 <view wx:if="{{showSheet}}" class="mask" bindtap="onCloseSheet"></view>
 <view wx:if="{{showSheet}}" class="sheet" catchtap="stopPop">
   <view class="sheet-title">确认点单</view>
 
-  <view class="sheet-items">
+  <scroll-view class="sheet-items" scroll-y>
     <view wx:for="{{cartList}}" wx:key="id" class="sheet-item">
       <view class="si-left">
-        <text class="si-name">{{item.name}}</text>
-        <text wx:if="{{item.grams}}" class="si-grams">耗豆 {{item.grams}}g<text wx:if="{{item.beanName}}"> · {{item.beanName}}</text></text>
-        <text wx:else class="si-grams muted">未关联咖啡豆，不扣豆量</text>
+        <view class="si-row">
+          <text class="si-name">{{item.name}}</text>
+          <text class="si-count">× {{item.count}}</text>
+        </view>
+        <picker wx:if="{{!item.noBean}}" mode="selector" range="{{item.beanOptions}}" range-key="name"
+                value="{{item.beanIndex}}" data-index="{{index}}" bindchange="onBeanChange">
+          <view class="si-bean">
+            <text class="si-bean-label">用豆</text>
+            <text class="si-bean-name">{{item.beanOptions[item.beanIndex].name}}</text>
+            <text class="si-bean-arrow">▾</text>
+          </view>
+        </picker>
+        <view wx:else class="si-bean empty">豆仓里还没有能用于这款的豆</view>
       </view>
-      <text class="si-count">× {{item.count}}</text>
     </view>
-  </view>
-
-  <view wx:if="{{cartGrams}}" class="sheet-hint">本次下单将从豆仓扣减约 {{cartGrams}}g</view>
+  </scroll-view>
 
   <view class="form-row">
     <text class="form-label">给谁做</text>

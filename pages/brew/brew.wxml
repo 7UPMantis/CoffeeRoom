@@ -1,4 +1,13 @@
 <view class="page brew-page">
+  <!-- 待做上下文：从待做队列进来时显示 -->
+  <view wx:if="{{orderId}}" class="card queue-banner">
+    <text class="qb-icon">☕</text>
+    <view class="qb-body">
+      <view class="qb-title">给 {{forWho}} 做 {{orderCount}} 杯</view>
+      <view class="qb-sub">做完会问你要不要标记这一单已完成</view>
+    </view>
+  </view>
+
   <!-- 配方摘要 -->
   <view class="card head">
     <image wx:if="{{cover}}" class="head-cover" src="{{cover}}" mode="aspectFill" />
@@ -22,7 +31,7 @@
         <text class="hp-key">水温 ℃</text>
       </view>
     </view>
-    <view wx:if="{{beanName}}" class="head-bean">用豆：{{beanName}}</view>
+    <view wx:if="{{useBeanName || beanName}}" class="head-bean">用豆：{{useBeanName || beanName}}</view>
   </view>
 
   <!-- 计时器 -->

@@ -98,7 +98,10 @@
 
     <view class="oc-items">
       <view wx:for="{{item.items}}" wx:for-item="it" wx:key="recipeId" class="oc-item">
-        <text class="oi-name">{{it.name}}</text>
+        <view class="oi-left">
+          <text class="oi-name">{{it.name}}</text>
+          <text class="oi-bean">{{it.beanName || '下单时未指定豆'}}</text>
+        </view>
         <text class="oi-count">× {{it.count}}</text>
       </view>
     </view>

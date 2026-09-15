@@ -5,6 +5,8 @@
   "description": "咖屋 · 微信小程序（点单 / 配方 / 咖啡豆 / 记录）",
   "scripts": {
     "check": "node scripts/check-project.js",
+    "test": "node scripts/test-logic.js",
+    "verify": "node scripts/check-project.js && node scripts/test-logic.js",
     "preview": "node scripts/serve-preview.js",
     "gen:tabbar": "node scripts/gen-tabbar.js"
   },

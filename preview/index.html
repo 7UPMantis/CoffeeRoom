@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>咖屋 · 界面预览（优化版）</title>
+<title>咖屋 · 界面预览（v1.2 视角分离版）</title>
 <style>
   :root{
     --coffee:#6F4E37; --coffee-dark:#4A3428; --coffee-mid:#8B6B52; --coffee-light:#B08E72;
@@ -13,9 +13,8 @@
     --text:#3D2C21; --text-2:#8A7666; --text-3:#B5A495;
     --green:#4A9E6B; --green-bg:#E9F4ED; --orange:#D98B3A; --orange-bg:#FCF1E3;
     --red:#C9564A; --red-bg:#FBEBE9; --blue:#5B8FB9; --blue-bg:#EAF1F8; --gold:#C19A6B;
-    --r-sm:6px; --r-md:9px; --r-lg:13px; --r-xl:17px;
+    --r-md:9px; --r-lg:13px; --r-xl:17px;
     --shadow-sm:0 2px 8px rgba(122,88,60,.05);
-    --shadow-md:0 6px 20px rgba(122,88,60,.08);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
@@ -23,9 +22,10 @@
     font-family:-apple-system,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
     display:flex; flex-direction:column; align-items:center; padding:28px 16px 48px; min-height:100vh;
   }
-  .hint{max-width:400px;margin-bottom:18px;font-size:13px;color:#7A6A5E;text-align:center;line-height:1.9}
+  .hint{max-width:420px;margin-bottom:18px;font-size:13px;color:#7A6A5E;text-align:center;line-height:1.9}
   .hint b{color:var(--coffee-dark)}
   .hint .new{display:inline-block;background:var(--orange-bg);color:#8A5A20;border-radius:4px;padding:0 6px;font-size:12px}
+  .hint .fix{display:inline-block;background:var(--green-bg);color:#2F6B45;border-radius:4px;padding:0 6px;font-size:12px}
 
   .phone{
     width:390px;height:844px;background:var(--bg);border-radius:44px;
@@ -36,7 +36,7 @@
   .navbar{height:44px;background:var(--coffee-dark);color:#fff;display:flex;align-items:center;justify-content:space-between;font-size:16px;font-weight:600;flex-shrink:0;padding:0 14px}
   .navbar .back{font-size:13px;font-weight:400;color:rgba(255,255,255,.85);cursor:pointer;width:52px}
   .navbar .ttl{flex:1;text-align:center}
-  .navbar .right{width:52px;text-align:right;font-size:20px;line-height:1;cursor:pointer}
+  .navbar .right{width:52px}
   .body{flex:1;overflow-y:auto;padding:12px 12px 96px;background:var(--bg)}
   .body::-webkit-scrollbar{width:0}
   .tabbar{height:60px;background:#fff;border-top:1px solid var(--line);display:flex;flex-shrink:0;padding-bottom:6px}
@@ -58,31 +58,20 @@
   .tag.orange{background:var(--orange-bg);color:var(--orange)} .tag.red{background:var(--red-bg);color:var(--red)}
   .tag.grey{background:var(--surface-3);color:var(--text-2)}
 
-  /* 点单 */
   .hero{background:linear-gradient(135deg,#7B5940 0%,#5D4030 100%);border-radius:var(--r-xl);padding:19px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 7px 15px rgba(93,64,48,.24)}
   .hero-title{font-size:19px;font-weight:600;color:#fff;letter-spacing:.5px}
   .hero-sub{font-size:12px;color:rgba(255,255,255,.72);margin-top:5px}
   .hero-badge{width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.16);text-align:center;line-height:50px;font-size:23px;flex-shrink:0;margin-left:10px}
-  .notice{display:flex;align-items:center;background:var(--orange-bg);border:1px solid #F2DCC0;border-radius:var(--r-lg);padding:11px 12px;margin-bottom:12px}
-  .notice-icon{margin-right:8px}
-  .notice-body{flex:1;min-width:0}
-  .notice-title{font-size:12.5px;color:#8A5A20;font-weight:500;line-height:1.5}
-  .notice-sub{font-size:11px;color:#A5743C}
-  .notice-go{font-size:12px;color:#8A5A20;background:rgba(255,255,255,.8);border-radius:999px;padding:5px 11px;cursor:pointer}
+
   .grid{display:flex;flex-wrap:wrap;margin:0 -5px}
   .r-card{width:calc(50% - 10px);margin:0 5px 10px;background:#fff;border-radius:10px;padding:12px;box-shadow:0 2px 10px rgba(78,52,46,.06);border:1px solid rgba(230,217,200,.5)}
   .r-cover{height:74px;border-radius:7px;margin-bottom:9px;background:linear-gradient(135deg,#C6A484,#8B6B52);position:relative;overflow:hidden}
   .r-cover span{position:absolute;right:7px;bottom:4px;font-size:17px;opacity:.65}
   .r-name{font-size:16px;font-weight:600;color:var(--coffee-dark)}
   .r-cat{font-size:11px;color:var(--text-2);margin-top:3px}
-  .r-meta{font-size:11px;color:var(--text-2);margin-top:7px}
-  .r-meta i{font-style:normal;color:var(--text-3);margin:0 3px}
-  .r-stock{font-size:10.5px;color:var(--text-2);margin-top:6px}
-  .r-stock.warn{color:var(--orange)}
-  .r-stock.grey{color:var(--text-3)}
   .r-tags{margin-top:6px;min-height:18px}
   .r-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
-  .r-brew{font-size:11.5px;color:var(--coffee);border:1px solid var(--line-strong);border-radius:999px;padding:4px 11px;cursor:pointer;background:#fff}
+  .r-fav{font-size:11px;color:var(--gold)}
   .stepper{display:flex;align-items:center}
   .st-btn{width:24px;height:24px;line-height:22px;text-align:center;border-radius:50%;border:1px solid var(--coffee);color:var(--coffee);font-size:16px;cursor:pointer;user-select:none}
   .st-btn.add{background:linear-gradient(135deg,#7B5940,#6F4E37);color:#fff;border-color:transparent}
@@ -93,21 +82,46 @@
   .cart-desc{color:rgba(255,255,255,.7);font-size:11px}
   .cart-btn{background:#fff;color:var(--coffee-dark);border-radius:999px;padding:8px 20px;font-size:14px;font-weight:600;cursor:pointer}
   .mask{position:absolute;inset:0;background:rgba(40,26,20,.45);z-index:10}
-  .sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:16px 16px 0 0;padding:16px 16px 24px;z-index:11}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:16px 16px 0 0;padding:16px 16px 24px;z-index:11;max-height:78%;overflow-y:auto}
   .sheet-title{font-size:17px;font-weight:600;color:var(--coffee-dark);margin-bottom:10px}
-  .sheet-items{background:var(--surface-2);border-radius:8px;padding:6px 12px;margin-bottom:4px}
-  .sheet-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13.5px;border-bottom:1px solid var(--line)}
+  .sheet-items{background:var(--surface-2);border-radius:8px;padding:4px 12px;margin-bottom:4px}
+  .sheet-item{padding:10px 0;border-bottom:1px solid var(--line)}
   .sheet-item:last-child{border-bottom:none}
-  .si-left{display:flex;flex-direction:column}
-  .si-grams{font-size:10.5px;color:var(--text-2);margin-top:2px}
-  .si-count{color:var(--coffee);font-weight:600}
-  .sheet-hint{margin-top:9px;font-size:11.5px;color:var(--coffee);background:var(--coffee-tint);border-radius:6px;padding:7px 11px}
+  .si-row{display:flex;justify-content:space-between;align-items:baseline}
+  .si-name{font-size:14.5px;font-weight:500}
+  .si-count{color:var(--coffee);font-weight:600;font-size:13.5px}
+  .bean-pick{margin-top:7px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px}
+  .bean-pick .lbl{font-size:11px;color:var(--text-3);flex-shrink:0}
+  .bean-pick select{flex:1;border:none;outline:none;background:transparent;font-size:12.5px;color:var(--coffee-dark);font-family:inherit}
+  .bean-pick.empty{justify-content:center;color:var(--text-3);font-size:11.5px;border-style:dashed}
   .form-row{display:flex;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
   .form-label{width:76px;color:var(--text-2);font-size:13.5px}
-  .form-input{flex:1;text-align:right;font-size:13.5px;border:none;outline:none;background:transparent;color:var(--text)}
+  .form-input{flex:1;text-align:right;font-size:13.5px;border:none;outline:none;background:transparent;color:var(--text);font-family:inherit}
   .sheet-actions{display:flex;margin-top:18px;gap:10px}
   .btn-ghost{flex:1;background:#fff;color:var(--coffee);border:1px solid var(--line-strong);border-radius:999px;padding:10px 0;text-align:center;font-size:15px;cursor:pointer}
   .btn-primary{flex:1;background:linear-gradient(135deg,#7B5940,#6F4E37);color:#fff;border-radius:999px;padding:11px 0;text-align:center;font-size:15px;font-weight:500;cursor:pointer;border:none}
+
+  /* 待做队列 */
+  .queue-card{border-left:5px solid var(--coffee)}
+  .q-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .q-badge{min-width:34px;height:34px;border-radius:999px;background:linear-gradient(135deg,#7B5940,#6F4E37);color:#fff;font-size:15px;font-weight:600;text-align:center;line-height:34px;padding:0 11px}
+  .q-order{margin-top:11px;padding-top:10px;border-top:1px solid var(--line)}
+  .q-order:first-of-type{border-top:none;padding-top:4px}
+  .q-meta{display:flex;justify-content:space-between;align-items:baseline}
+  .q-who{font-size:13.5px;font-weight:600;color:var(--coffee-dark)}
+  .q-time{font-size:10.5px;color:var(--text-3)}
+  .q-item{display:flex;align-items:center;margin-top:7px;background:var(--surface-2);border-radius:8px;padding:9px 11px}
+  .q-item-body{flex:1;min-width:0}
+  .q-item-top{display:flex;justify-content:space-between;align-items:baseline}
+  .q-item-name{font-size:14px}
+  .q-item-count{font-size:13px;font-weight:600;color:var(--coffee)}
+  .q-item-sub{margin-top:3px;font-size:10.5px;color:var(--text-2)}
+  .q-go{flex-shrink:0;margin-left:9px;font-size:11.5px;color:var(--coffee);background:#fff;border:1px solid var(--line-strong);border-radius:999px;padding:5px 10px;cursor:pointer}
+  .q-note{margin-top:6px;font-size:11.5px;color:var(--text-2)}
+  .q-actions{display:flex;justify-content:flex-end;margin-top:5px}
+  .op{font-size:12px;color:var(--coffee);cursor:pointer;padding:4px 7px}
+  .op.danger{color:var(--red)}
+  .op.brew{color:var(--coffee-dark);font-weight:500}
 
   /* 配方 */
   .rc-cover{height:96px;border-radius:9px;margin-bottom:11px;background:linear-gradient(135deg,#D2B79A,#9A7A5C)}
@@ -121,12 +135,9 @@
   .p-key{display:block;font-size:10px;color:var(--text-2);margin-top:2px}
   .rc-foot{padding-top:9px;border-top:1px solid var(--line)}
   .rc-tags{display:flex;flex-wrap:wrap}
-  .rc-ops{display:flex;justify-content:flex-end;gap:4px;margin-top:4px}
-  .op{font-size:12px;color:var(--coffee);cursor:pointer;padding:4px 7px}
-  .op.danger{color:var(--red)}
-  .op.brew{color:var(--coffee-dark);font-weight:500}
+  .rc-ops{display:flex;justify-content:flex-end;gap:2px;margin-top:4px}
 
-  /* 咖啡豆 */
+  /* 豆仓 */
   .ov-grid{display:flex;background:var(--surface-2);border-radius:8px;padding:10px 0;margin-top:12px}
   .ov-item{flex:1;text-align:center;border-right:1px solid var(--line)}
   .ov-item:last-child{border-right:none}
@@ -134,10 +145,17 @@
   .ov-num.green{color:var(--green)} .ov-num.blue{color:var(--blue)}
   .ov-num.orange{color:var(--orange)} .ov-num.red{color:var(--red)}
   .ov-key{display:block;font-size:11px;color:var(--text-2);margin-top:2px}
+  .todo-card{border-left:5px solid var(--orange)}
+  .todo-row{padding:10px 0;border-bottom:1px solid var(--line)}
+  .todo-row:last-child{border-bottom:none;padding-bottom:2px}
+  .todo-name{font-size:14px;font-weight:600;color:var(--coffee-dark)}
+  .todo-reasons{margin-top:5px;display:flex;flex-wrap:wrap}
   .bc-head{display:flex;justify-content:space-between;align-items:flex-start}
   .bc-name{font-size:17px;font-weight:600;color:var(--coffee-dark)}
   .bc-origin{font-size:12px;color:var(--text-2);margin-top:4px}
-  .bc-origin i{font-style:normal;color:var(--text-3);margin:0 4px}
+  .bc-usage{display:flex;flex-wrap:wrap;margin-top:5px;gap:5px}
+  .usage-chip{font-size:10.5px;color:var(--coffee);background:var(--coffee-tint);border-radius:4px;padding:1px 7px}
+  .usage-chip.warn{color:var(--orange);background:var(--orange-bg)}
   .timeline{margin-top:11px;background:var(--surface-2);border-radius:7px;padding:9px 10px}
   .tl-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
   .tl-label{font-size:13px;font-weight:500}
@@ -165,7 +183,7 @@
   .chart-col{flex:1;text-align:center}
   .chart-cups{font-size:10px;color:var(--text-2);height:14px}
   .chart-bar-wrap{height:70px;display:flex;align-items:flex-end;justify-content:center;padding:0 4px}
-  .chart-bar{width:100%;max-width:20px;border-radius:4px 4px 2px 2px;background:linear-gradient(180deg,#8B6B52,#6F4E37);transition:height .3s}
+  .chart-bar{width:100%;max-width:20px;border-radius:4px 4px 2px 2px;background:linear-gradient(180deg,#8B6B52,#6F4E37)}
   .chart-label{font-size:10.5px;color:var(--text-3);margin-top:5px}
   .cat-row,.rank-row{display:flex;align-items:center;margin-bottom:9px}
   .cat-name{width:76px;font-size:12px;flex-shrink:0}
@@ -184,8 +202,10 @@
   .oc-head{display:flex;justify-content:space-between;align-items:center}
   .oc-who{font-size:15px;font-weight:600;color:var(--coffee-dark)}
   .oc-items{margin-top:8px;background:var(--surface-2);border-radius:7px;padding:2px 10px}
-  .oc-item{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid var(--line)}
+  .oc-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;border-bottom:1px solid var(--line)}
   .oc-item:last-child{border-bottom:none}
+  .oi-left{display:flex;flex-direction:column}
+  .oi-bean{font-size:10px;color:var(--text-3)}
   .oi-count{color:var(--coffee);font-weight:600}
   .oc-usage{margin-top:6px;font-size:11px;color:var(--coffee-mid)}
   .oc-note{margin-top:6px;font-size:12px;color:var(--text-2)}
@@ -194,15 +214,18 @@
   .row-line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
   .rl-key{color:var(--text-2)}
   .tip-text{margin-top:12px;font-size:11px;color:var(--text-2);line-height:1.7}
-  .empty{padding:52px 20px;text-align:center;color:var(--text-3);font-size:13px}
-  .empty .ic{font-size:38px;display:block;margin-bottom:10px;opacity:.45}
   .btn-row{display:flex;gap:10px;margin-top:14px}
+  .empty{padding:34px 20px;text-align:center;color:var(--text-3);font-size:13px}
+  .empty .ic{font-size:38px;display:block;margin-bottom:10px;opacity:.45}
 
   /* 冲煮 */
-  .brew-head-cover{height:110px;border-radius:9px;margin-bottom:11px;background:linear-gradient(135deg,#C6A484,#8B6B52)}
+  .queue-banner{display:flex;align-items:center;background:var(--coffee-tint);border:1px solid var(--line-strong);padding:12px 13px}
+  .qb-icon{font-size:20px;margin-right:9px}
+  .qb-title{font-size:14px;font-weight:600;color:var(--coffee-dark)}
+  .qb-sub{font-size:11px;color:var(--coffee-mid);margin-top:2px}
   .timer-card{text-align:center;padding:22px 16px 16px}
   .timer-label{font-size:11.5px;color:var(--text-2)}
-  .timer-time{font-size:62px;font-weight:600;color:var(--coffee-dark);line-height:1.15;letter-spacing:1px;font-variant-numeric:tabular-nums;margin:6px 0 10px}
+  .timer-time{font-size:62px;font-weight:600;color:var(--coffee-dark);line-height:1.15;font-variant-numeric:tabular-nums;margin:6px 0 10px}
   .timer-time.done{color:var(--green)}
   .timer-progress{height:8px;border-radius:999px;background:var(--surface-3);overflow:hidden}
   .timer-progress-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#B08E72,#6F4E37);transition:width .9s linear}
@@ -224,10 +247,10 @@
 <body>
 
 <div class="hint">
-  <b>咖屋 · 界面预览（优化版 v1.1）</b><br>
-  这是按小程序样式做的网页原型，<b>不是真的小程序</b>，但交互是真的：<br>
-  点单会真的扣豆量、删除记录会回补、计时器会真倒数。<br>
-  <span class="new">新增</span> 豆量闭环 · 数据看板 · 冲煮计时器 · 封面 · 分享
+  <b>咖屋 · 界面预览（v1.2 视角分离版）</b><br>
+  <span class="fix">已修正</span> 点单页只留顾客视角：去掉了余豆、豆仓警告、冲煮入口和配方参数<br>
+  <span class="new">新增</span> 下单时选豆（按用途筛选） · 待做队列 · 豆仓「该处理了」 · 用途标签<br>
+  交互是真的：选豆会真的扣那支豆，删记录会回补，计时器会真倒数。
 </div>
 
 <div class="phone">
@@ -263,57 +286,80 @@
 </div>
 
 <script>
-/* ================= 数据 ================= */
 const CATS=[{key:'all',label:'全部',icon:'🏠'},{key:'espresso',label:'浓缩',icon:'☕'},{key:'milk',label:'奶咖',icon:'🥛'},{key:'filter',label:'手冲',icon:'🌊'},{key:'cold',label:'冷饮',icon:'🧊'},{key:'special',label:'特调',icon:'✨'},{key:'other',label:'其他',icon:'🍮'}];
 const TOOL={machine:'意式咖啡机',hand_drip:'手冲壶',french_press:'法压壶',aeropress:'爱乐压',moka:'摩卡壶',cold_brew:'冷萃瓶',siphon:'虹吸壶',capsule:'胶囊机',other:'其他'};
 const ROAST={light:'浅烘',medium:'中烘',medium_dark:'中深烘',dark:'深烘'};
 const DEF={rest:7,peak:45,shelf:90};
+const LOW_RATIO=0.15;
 const STATUS_FILTERS=[{key:'all',label:'全部'},{key:'pending',label:'待制作'},{key:'done',label:'已完成'}];
+
+const USAGE_TAGS=[{key:'espresso',label:'意式'},{key:'filter',label:'手冲'},{key:'cold_brew',label:'冷萃'},{key:'universal',label:'通用'}];
+const USAGE_COMPAT={espresso:['espresso','universal'],filter:['filter','universal'],cold_brew:['cold_brew','filter','universal'],any:['espresso','filter','cold_brew','universal']};
+const TOOL_BEAN_TYPE={machine:'espresso',capsule:'espresso',moka:'espresso',hand_drip:'filter',siphon:'filter',french_press:'filter',aeropress:'filter',cold_brew:'cold_brew'};
+const CATEGORY_BEAN_TYPE={espresso:'espresso',milk:'espresso',filter:'filter',cold:'cold_brew',special:'any',other:'any'};
+const BEAN_TYPE_LABEL={espresso:'意式豆',filter:'手冲豆',cold_brew:'冷萃豆',any:'不限'};
 
 function dstr(off){const d=new Date();d.setDate(d.getDate()+off);const p=x=>(x<10?'0':'')+x;return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())}
 function daysSince(s){const a=s.split('-');const t=new Date(+a[0],+a[1]-1,+a[2]);const n=new Date();t.setHours(0,0,0,0);n.setHours(0,0,0,0);return Math.round((n-t)/864e5)}
 function pad2(n){return (n<10?'0':'')+n}
 function mmss(sec){const t=Math.max(0,Math.round(sec));return Math.floor(t/60)+':'+pad2(t%60)}
-function parseDur(s){s=String(s||'').trim();if(!s)return 0;const first=s.split(/[-~—]/)[0].trim();if(first.includes(':')){const p=first.split(':');const m=+p[0],x=+p[1];return isNaN(m)||isNaN(x)?0:m*60+x}const n=parseFloat(first);return isNaN(n)?0:Math.round(n)}
+function parseDur(s){s=String(s||'').trim();if(!s)return 0;const f=s.split(/[-~—]/)[0].trim();if(f.includes(':')){const p=f.split(':');const m=+p[0],x=+p[1];return isNaN(m)||isNaN(x)?0:m*60+x}const n=parseFloat(f);return isNaN(n)?0:Math.round(n)}
 function weekday(ts){return ['日','一','二','三','四','五','六'][new Date(ts).getDay()]}
 function keyOf(ts){const d=new Date(ts);return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())}
+function inferBeanType(r){if(!r)return 'any';if(r.beanType)return r.beanType;return TOOL_BEAN_TYPE[r.tool]||CATEGORY_BEAN_TYPE[r.category]||'any'}
+function beanMatchesType(b,need){need=need||'any';const tags=(b&&b.usageTags)||[];if(!tags.length)return{ok:true,unlabeled:true};const allow=USAGE_COMPAT[need]||USAGE_COMPAT.any;return{ok:tags.some(t=>allow.indexOf(t)>-1),unlabeled:false}}
+function beansFor(recipe,beans){
+  const need=inferBeanType(recipe);const out=[];
+  (beans||[]).forEach(b=>{const m=beanMatchesType(b,need);if(!m.ok)return;const tags=b.usageTags||[];
+    out.push(Object.assign({},b,{_unlabeled:m.unlabeled,_exact:!m.unlabeled&&need!=='any'&&tags.indexOf(need)>-1}))});
+  out.sort((a,b)=>{if(a._unlabeled!==b._unlabeled)return a._unlabeled?1:-1;if(a._exact!==b._exact)return a._exact?-1:1;return (b.remaining||0)-(a.remaining||0)});
+  return out;
+}
 
 let BEANS=[
- {id:'b1',name:'耶加雪菲 科契尔',origin:'埃塞俄比亚',process:'水洗',roast:'light',roastDate:dstr(-12),weight:250,remaining:46,price:98,flavor:['柑橘','茉莉','蜂蜜']},
- {id:'b2',name:'哥伦比亚 慧兰',origin:'哥伦比亚',process:'水洗',roast:'medium_dark',roastDate:dstr(-3),weight:500,remaining:420,price:128,flavor:['坚果','焦糖','巧克力']}
+ {id:'b1',name:'耶加雪菲 科契尔',origin:'埃塞俄比亚',process:'水洗',roast:'light',roastDate:dstr(-12),weight:250,remaining:120,price:98,usageTags:['filter'],flavor:['柑橘','茉莉','蜂蜜']},
+ {id:'b2',name:'哥伦比亚 慧兰',origin:'哥伦比亚',process:'水洗',roast:'medium_dark',roastDate:dstr(-3),weight:500,remaining:118,price:128,usageTags:['espresso'],flavor:['坚果','焦糖','巧克力']},
+ {id:'b3',name:'巴西 圣多斯 拼配',origin:'拼配',process:'日晒',roast:'dark',roastDate:dstr(-60),weight:500,remaining:320,price:88,usageTags:['universal'],flavor:['坚果','可可','烟熏']}
 ];
 let RECIPES=[
- {id:'r1',name:'经典拿铁',cover:1,category:'milk',tool:'machine',beanId:'b2',beanName:'哥伦比亚 慧兰',dose:18,water:36,milk:220,grind:'细',temp:92,time:'25-28s',tags:['日常','奶咖','早餐'],favorite:true,steps:['18g 咖啡粉布粉压平','萃取 36g 浓缩液，25-28 秒','牛奶打发至 60℃ 左右','浓缩倒入杯中，缓慢注入奶泡']},
- {id:'r2',name:'澳白 Flat White',category:'milk',tool:'machine',beanId:'b2',beanName:'哥伦比亚 慧兰',dose:18,water:30,milk:130,grind:'细',temp:92,time:'25s',tags:['咖啡感强'],favorite:false,steps:['萃取 30g 浓缩','牛奶打薄奶泡约 0.5cm','贴杯壁注入，收尾拉花']},
- {id:'r3',name:'手冲耶加',cover:1,category:'filter',tool:'hand_drip',beanId:'b1',beanName:'耶加雪菲 科契尔',dose:15,water:240,milk:0,grind:'中细',temp:92,time:'2:30',tags:['果酸','慢手冲'],favorite:true,steps:['滤纸润湿温杯','15g 粉，注入 30g 水闷蒸 30 秒','分三次注水至 240g','总时长控制在 2 分 30 秒左右']},
- {id:'r4',name:'冰美式',category:'cold',tool:'machine',beanId:'b2',beanName:'哥伦比亚 慧兰',dose:18,water:36,milk:0,grind:'细',temp:92,time:'25s',tags:['夏天','解腻'],favorite:false,steps:['杯中加满冰块','萃取 36g 浓缩淋在冰上','补 120ml 冷水，搅匀']},
- {id:'r5',name:'浓缩 Espresso',category:'espresso',tool:'machine',beanId:'b2',beanName:'哥伦比亚 慧兰',dose:20,water:40,milk:0,grind:'细',temp:93,time:'28s',tags:['基础'],favorite:false,steps:['20g 粉萃取 40g 液','观察油脂颜色与流速','30 秒内饮用风味最佳']},
- {id:'r6',name:'肉桂特调',category:'special',tool:'moka',beanId:'',beanName:'',dose:0,water:0,milk:0,grind:'中细',temp:90,time:'3:00',tags:['新品','待关联豆'],favorite:false,steps:['摩卡壶萃取','加肉桂粉与奶泡']}
+ {id:'r1',name:'经典拿铁',cover:1,category:'milk',tool:'machine',beanId:'b2',dose:18,water:36,milk:220,grind:'细',temp:92,time:'25s',tags:['日常','奶感重','早餐'],favorite:true,steps:['18g 咖啡粉布粉压平','萃取 36g 浓缩液，25-28 秒','牛奶打发至 60℃ 左右','浓缩倒入杯中，缓慢注入奶泡']},
+ {id:'r2',name:'澳白 Flat White',category:'milk',tool:'machine',beanId:'b2',dose:18,water:30,milk:130,grind:'细',temp:92,time:'25s',tags:['咖啡感强'],favorite:false,steps:['萃取 30g 浓缩','牛奶打薄奶泡约 0.5cm','贴杯壁注入，收尾拉花']},
+ {id:'r3',name:'手冲耶加',cover:1,category:'filter',tool:'hand_drip',beanId:'b1',dose:15,water:240,milk:0,grind:'中细',temp:92,time:'2:30',tags:['果酸','清爽','下午茶'],favorite:true,steps:['滤纸润湿温杯','15g 粉，注入 30g 水闷蒸 30 秒','分三次注水至 240g','总时长控制在 2 分 30 秒左右']},
+ {id:'r4',name:'冰美式',category:'cold',tool:'machine',beanId:'b3',dose:18,water:36,milk:0,grind:'细',temp:92,time:'25s',tags:['夏天','解腻','提神'],favorite:false,steps:['杯中加满冰块','萃取 36g 浓缩淋在冰上','补 120ml 冷水，搅匀']},
+ {id:'r5',name:'浓缩 Espresso',category:'espresso',tool:'machine',beanId:'b2',dose:20,water:40,milk:0,grind:'细',temp:93,time:'28s',tags:['提神'],favorite:false,steps:['20g 粉萃取 40g 液','观察油脂颜色与流速','30 秒内饮用风味最佳']},
+ {id:'r6',name:'冷萃咖啡',category:'cold',tool:'cold_brew',beanId:'b3',dose:40,water:400,milk:0,grind:'粗',temp:0,time:'4:00',tags:['夏天','清爽'],favorite:false,steps:['40g 粗研磨咖啡粉放入冷萃瓶','注入 400g 常温水，轻轻搅拌','冷藏静置 12 小时','滤出咖啡液，冷藏可存 3 天']}
 ];
 let ORDERS=[
- {id:'o1',forWho:'妈妈',note:'少糖、多奶',status:'done',createdAt:Date.now()-864e5*2,items:[{recipeId:'r1',name:'经典拿铁',count:2}],totalCount:2,beanUsage:[{beanId:'b2',beanName:'哥伦比亚 慧兰',grams:36}]},
- {id:'o2',forWho:'爸爸',note:'',status:'pending',createdAt:Date.now()-36e5*5,items:[{recipeId:'r3',name:'手冲耶加',count:1},{recipeId:'r4',name:'冰美式',count:1}],totalCount:2,beanUsage:[{beanId:'b1',beanName:'耶加雪菲 科契尔',grams:15},{beanId:'b2',beanName:'哥伦比亚 慧兰',grams:18}]},
- {id:'o3',forWho:'自己',note:'',status:'done',createdAt:Date.now()-864e5*4,items:[{recipeId:'r5',name:'浓缩 Espresso',count:1}],totalCount:1,beanUsage:[{beanId:'b2',beanName:'哥伦比亚 慧兰',grams:20}]},
- {id:'o4',forWho:'爸爸',note:'',status:'done',createdAt:Date.now()-864e5*1,items:[{recipeId:'r1',name:'经典拿铁',count:1},{recipeId:'r2',name:'澳白 Flat White',count:1}],totalCount:2,beanUsage:[{beanId:'b2',beanName:'哥伦比亚 慧兰',grams:36}]}
+ {id:'o1',forWho:'妈妈',note:'少糖、多奶',status:'pending',createdAt:Date.now()-36e5*1,totalCount:2,
+  items:[{recipeId:'r1',name:'经典拿铁',count:2,beanId:'b2',beanName:'哥伦比亚 慧兰',dose:18}],
+  beanUsage:[{beanId:'b2',beanName:'哥伦比亚 慧兰',grams:36}]},
+ {id:'o2',forWho:'爸爸',note:'',status:'pending',createdAt:Date.now()-36e5*4,totalCount:2,
+  items:[{recipeId:'r3',name:'手冲耶加',count:1,beanId:'b1',beanName:'耶加雪菲 科契尔',dose:15},{recipeId:'r4',name:'冰美式',count:1,beanId:'b3',beanName:'巴西 圣多斯 拼配',dose:18}],
+  beanUsage:[{beanId:'b1',beanName:'耶加雪菲 科契尔',grams:15},{beanId:'b3',beanName:'巴西 圣多斯 拼配',grams:18}]},
+ {id:'o3',forWho:'自己',note:'',status:'done',createdAt:Date.now()-864e5*2,totalCount:1,
+  items:[{recipeId:'r5',name:'浓缩 Espresso',count:1,beanId:'b2',beanName:'哥伦比亚 慧兰',dose:20}],
+  beanUsage:[{beanId:'b2',beanName:'哥伦比亚 慧兰',grams:20}]},
+ {id:'o4',forWho:'爸爸',note:'',status:'done',createdAt:Date.now()-864e5*4,totalCount:2,
+  items:[{recipeId:'r1',name:'经典拿铁',count:1,beanId:'b2',beanName:'哥伦比亚 慧兰',dose:18},{recipeId:'r2',name:'澳白 Flat White',count:1,beanId:'b2',beanName:'哥伦比亚 慧兰',dose:18}],
+  beanUsage:[{beanId:'b2',beanName:'哥伦比亚 慧兰',grams:36}]},
+ {id:'o5',forWho:'妈妈',note:'',status:'done',createdAt:Date.now()-864e5*5,totalCount:1,
+  items:[{recipeId:'r6',name:'冷萃咖啡',count:1,beanId:'b3',beanName:'巴西 圣多斯 拼配',dose:40}],
+  beanUsage:[{beanId:'b3',beanName:'巴西 圣多斯 拼配',grams:40}]}
 ];
-
-/* 按预置历史把豆量扣掉，让「余量不足」的演示状态是自洽的 */
 (function seedStock(){
   ORDERS.forEach(o=>(o.beanUsage||[]).forEach(u=>{const b=BEANS.find(x=>x.id===u.beanId);if(b)b.remaining=Math.max(0,b.remaining-u.grams)}));
 })();
 
-/* ================= 状态 ================= */
-let tab='order',cat='all',cart={},sheet=false,forWho='',note='';
+let tab='order',cat='all',cart={},cartBean={},sheet=false,forWho='',note='';
 let activeMember='全部',activeStatus='all';
-let brew={id:'',remain:0,target:0,running:false,finished:false,steps:[],timer:null};
+let brew={id:'',orderId:'',remain:0,target:0,running:false,finished:false,steps:[],timer:null};
 
-/* ================= 工具 ================= */
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function catOf(k){return CATS.find(c=>c.key===k)||CATS[CATS.length-1]}
 function ratio(d,w){return d&&w?'1:'+(Math.round(w/d*10)/10):''}
 function beanOf(id){return BEANS.find(b=>b.id===id)||null}
+function recipeOf(id){return RECIPES.find(r=>r.id===id)||null}
 function total(){return Object.values(cart).reduce((a,b)=>a+b,0)}
-function cartGrams(){let g=0;Object.keys(cart).forEach(id=>{const r=RECIPES.find(x=>x.id===id);if(r&&r.beanId&&r.dose)g+=r.dose*cart[id]});return g}
 function status(b){
   const n=daysSince(b.roastDate);
   if(n<0) return {label:'未到烘焙日',tone:'grey',tip:'烘焙日期在未来',p:0};
@@ -322,121 +368,122 @@ function status(b){
   if(n<=DEF.shelf) return {label:'风味衰退',tone:'orange',tip:'已过巅峰 '+(n-DEF.peak)+' 天，建议尽快喝完',p:(n-DEF.peak)/(DEF.shelf-DEF.peak)};
   return {label:'已过保质期',tone:'red',tip:'超期 '+(n-DEF.shelf)+' 天，不建议继续饮用',p:1};
 }
-function lowBeans(){return BEANS.filter(b=>b.remaining/b.weight<=0.15).map(b=>({name:b.name,left:b.remaining,empty:b.remaining<=0}))}
+function defaultBeanOf(r){
+  const opts=beansFor(r,BEANS);
+  if(!opts.length)return '';
+  const preset=r.beanId&&opts.find(b=>b.id===r.beanId);
+  return (preset||opts[0]).id;
+}
+function cartGrams(){let g=0;Object.keys(cart).forEach(id=>{const r=recipeOf(id);if(!r||!r.dose)return;const bid=cartBean[id];if(bid)g+=r.dose*cart[id]});return g}
 
-/* ================= 点单 ================= */
+/* ============ 点单（顾客视角：只有名字/分类/标签/杯数） ============ */
 function pOrder(){
   const list=cat==='all'?RECIPES:RECIPES.filter(r=>r.category===cat);
-  const lows=lowBeans();
-  const notice=lows.length?('<div class="notice"><span class="notice-icon">⚠️</span><div class="notice-body">'
-    +'<div class="notice-title">'+lows.map(b=>esc(b.name)+(b.empty?' 已用完':' 仅剩 '+b.left+'g')).join('；')+'</div>'
-    +'<div class="notice-sub">这几支豆快见底了，去看看要不要补货</div></div>'
-    +'<span class="notice-go" onclick="go(\'bean\')">豆仓</span></div>'):'';
-
   const cards=list.map(r=>{
     const c=cart[r.id]||0;
-    const b=r.beanId?beanOf(r.beanId):null;
-    let stockLine='';
-    if(r.beanId&&!b) stockLine='<div class="r-stock warn">关联的豆已删除</div>';
-    else if(b&&r.dose&&b.remaining<r.dose) stockLine='<div class="r-stock warn">余 '+b.remaining+'g，不够一杯</div>';
-    else if(b&&r.dose) stockLine='<div class="r-stock">余豆可做 '+Math.floor(b.remaining/r.dose)+' 杯</div>';
-    else stockLine='<div class="r-stock grey">未关联咖啡豆</div>';
-
     return '<div class="r-card">'
       +(r.cover?'<div class="r-cover"><span>☕</span></div>':'')
       +'<div class="r-name">'+esc(r.name)+'</div>'
       +'<div class="r-cat">'+catOf(r.category).icon+' '+catOf(r.category).label+'</div>'
-      +'<div class="r-meta">'+(r.dose?r.dose+'g 粉':'')+(ratio(r.dose,r.water)?'<i>·</i>'+ratio(r.dose,r.water):'')+(TOOL[r.tool]?'<i>·</i>'+TOOL[r.tool]:'')+'</div>'
-      +stockLine
       +'<div class="r-tags">'+(r.tags||[]).map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</div>'
-      +'<div class="r-bottom"><div class="r-brew" onclick="openBrew(\''+r.id+'\')">▶ 冲煮</div><div class="stepper">'
+      +'<div class="r-bottom"><div class="r-fav">'+(r.favorite?'★ 常喝':'')+'</div><div class="stepper">'
       +(c?'<div class="st-btn" onclick="minus(\''+r.id+'\')">−</div><span class="st-num">'+c+'</span>':'')
       +'<div class="st-btn add" onclick="plus(\''+r.id+'\')">＋</div></div></div></div>';
   }).join('');
-
   return '<div class="hero"><div><div class="hero-title">今天想喝点什么</div>'
-   +'<div class="hero-sub">'+RECIPES.length+' 款配方 · '+BEANS.length+' 支咖啡豆</div></div>'
-   +'<div class="hero-badge">☕</div></div>'
-   +notice
-   +'<div class="search">🔍 搜配方、标签、器具</div>'
+   +'<div class="hero-sub">'+RECIPES.length+' 款饮品</div></div><div class="hero-badge">☕</div></div>'
+   +'<div class="search">🔍 搜饮品、标签</div>'
    +'<div class="chips">'+CATS.map(c=>'<div class="chip'+(cat===c.key?' on':'')+'" onclick="cat=\''+c.key+'\';render()">'+c.icon+' '+c.label+'</div>').join('')+'</div>'
    +'<div class="list-head"><span class="sec-title">选一杯</span><span class="muted" style="color:var(--coffee);cursor:pointer" onclick="quickFav()">★ 常喝一键加</span></div>'
-   +'<div class="grid">'+(cards||'<div class="empty"><span class="ic">☕</span>这个分类还没有配方</div>')+'</div>';
+   +'<div class="grid">'+(cards||'<div class="empty"><span class="ic">☕</span>这个分类还没有饮品</div>')+'</div>';
 }
-function quickFav(){
-  const favs=RECIPES.filter(r=>r.favorite);
-  if(!favs.length)return;
-  favs.forEach(r=>cart[r.id]=(cart[r.id]||0)+1);
-  render();
-}
+function quickFav(){const f=RECIPES.filter(r=>r.favorite);if(!f.length)return;f.forEach(r=>cart[r.id]=(cart[r.id]||0)+1);render()}
 function plus(id){cart[id]=(cart[id]||0)+1;render()}
 function minus(id){cart[id]=(cart[id]||0)-1;if(cart[id]<=0)delete cart[id];render()}
 
 function cartHTML(){
   const n=total(); if(!n) return '';
   const list=RECIPES.filter(r=>cart[r.id]);
-  const g=cartGrams();
   return '<div class="cart-bar"><div class="cart-info" onclick="sheet=true;render()">'
-   +'<div class="cart-count">'+n+' 杯</div><div class="cart-desc">'+esc(list[0].name)+(list.length>1?' 等 '+list.length+' 款':'')+(g?' · 约耗豆 '+g+'g':'')+'</div></div>'
+   +'<div class="cart-count">'+n+' 杯</div><div class="cart-desc">'+esc(list[0].name)+(list.length>1?' 等 '+list.length+' 款':'')+'</div></div>'
    +'<div class="cart-btn" onclick="sheet=true;render()">去下单</div></div>';
 }
 function renderOverlay(){
   const O=document.getElementById('overlay');
   if(!sheet){O.innerHTML=cartHTML();return}
   const list=RECIPES.filter(r=>cart[r.id]);
-  const g=cartGrams();
   O.innerHTML='<div class="mask" onclick="sheet=false;render()"></div><div class="sheet">'
    +'<div class="sheet-title">确认点单</div><div class="sheet-items">'
    +list.map(r=>{
-      const grams=(r.beanId&&r.dose)?r.dose*cart[r.id]:0;
-      return '<div class="sheet-item"><div class="si-left"><span>'+esc(r.name)+'</span>'
-        +(grams?'<span class="si-grams">耗豆 '+grams+'g · '+esc(r.beanName)+'</span>':'<span class="si-grams" style="color:var(--text-3)">未关联咖啡豆，不扣豆量</span>')
-        +'</div><span class="si-count">× '+cart[r.id]+'</span></div>';
+      const opts=beansFor(r,BEANS);
+      const cur=cartBean[r.id]||defaultBeanOf(r);
+      let pick;
+      if(!opts.length) pick='<div class="bean-pick empty">豆仓里还没有能用于这款的豆</div>';
+      else {
+        const mark=b=>b._unlabeled?'（未标注用途）':(b._exact?'':'（通用）');
+        pick='<div class="bean-pick"><span class="lbl">用豆</span><select onchange="setBean(\''+r.id+'\',this.value)">'
+          +opts.map(b=>'<option value="'+b.id+'"'+(b.id===cur?' selected':'')+'>'+esc(b.name)+' · '+(ROAST[b.roast]||'')+mark(b)+'</option>').join('')
+          +'</select></div>';
+      }
+      return '<div class="sheet-item"><div class="si-row"><span class="si-name">'+esc(r.name)+'</span>'
+        +'<span class="si-count">× '+cart[r.id]+'</span></div>'+pick+'</div>';
     }).join('')
    +'</div>'
-   +(g?'<div class="sheet-hint">本次下单将从豆仓扣减约 '+g+'g</div>':'')
    +'<div class="form-row"><span class="form-label">给谁做</span><input class="form-input" id="who" placeholder="爸爸 / 妈妈 / 自己" value="'+esc(forWho)+'"></div>'
    +'<div class="form-row"><span class="form-label">备注</span><input class="form-input" id="note" placeholder="少糖、多奶、去冰…" value="'+esc(note)+'"></div>'
    +'<div class="sheet-actions"><div class="btn-ghost" onclick="sheet=false;render()">再看看</div>'
    +'<div class="btn-primary" onclick="submit()">提交 '+total()+' 杯</div></div></div>';
 }
+function setBean(recipeId,beanId){cartBean[recipeId]=beanId;render()}
 function submit(){
   forWho=(document.getElementById('who')||{}).value||''; note=(document.getElementById('note')||{}).value||'';
-  const items=RECIPES.filter(r=>cart[r.id]).map(r=>({recipeId:r.id,name:r.name,count:cart[r.id]}));
-  // 核算缺豆
+  const items=RECIPES.filter(r=>cart[r.id]).map(r=>({
+    recipeId:r.id,name:r.name,count:cart[r.id],
+    beanId:cartBean[r.id]||defaultBeanOf(r),
+    beanName:(beanOf(cartBean[r.id]||defaultBeanOf(r))||{}).name||'',
+    dose:r.dose
+  }));
   const short=[];
-  const usage=[];
   items.forEach(it=>{
-    const r=RECIPES.find(x=>x.id===it.recipeId);
-    if(!r||!r.beanId||!r.dose)return;
-    const b=beanOf(r.beanId);
-    const grams=r.dose*it.count;
-    const before=b?b.remaining:0;
+    if(!it.beanId||!it.dose)return;
+    const b=beanOf(it.beanId);const grams=it.dose*it.count;const before=b?b.remaining:0;
     if(!b||before<grams) short.push((b?b.name:'已删除的豆')+' 需 '+grams+'g，仅余 '+before+'g');
   });
-  if(short.length && !confirm('咖啡豆不够了：\n'+short.join('\n')+'\n\n仍要下单吗？（余量会扣到 0）')) return;
-  // 真的扣豆
+  if(short.length && !confirm('这支豆不太够：\n'+short.join('\n')+'\n\n仍要下单吗？（余量会扣到 0）也可以回去换豆。')) return;
+  const usage=[];
   items.forEach(it=>{
-    const r=RECIPES.find(x=>x.id===it.recipeId);
-    if(!r||!r.beanId||!r.dose)return;
-    const b=beanOf(r.beanId); if(!b)return;
-    const grams=r.dose*it.count;
+    if(!it.beanId||!it.dose)return;
+    const b=beanOf(it.beanId); if(!b)return;
+    const grams=it.dose*it.count;
     b.remaining=Math.max(0,b.remaining-grams);
     usage.push({beanId:b.id,beanName:b.name,grams:grams});
   });
   ORDERS.unshift({id:'o'+Date.now(),forWho:forWho||'不指定',note:note,status:'pending',createdAt:Date.now(),items:items,totalCount:total(),beanUsage:usage});
-  cart={};sheet=false;forWho='';note='';tab='record';activeMember='全部';activeStatus='all';render();
+  cart={};cartBean={};sheet=false;forWho='';note='';tab='recipe';activeMember='全部';activeStatus='all';render();
 }
 
-/* ================= 配方 ================= */
+/* ============ 配方（咖啡师视角：待做队列 + 参数） ============ */
 function pRecipe(){
+  const pend=ORDERS.filter(o=>o.status==='pending');
+  let cups=0; pend.forEach(o=>cups+=o.totalCount||0);
+  const queue=pend.length?('<div class="card queue-card"><div class="q-head"><div>'
+    +'<div class="sec-title">待做 '+cups+' 杯</div><div class="muted">'+pend.length+' 张单子等着做</div></div>'
+    +'<div class="q-badge">'+cups+'</div></div>'
+    +pend.map(o=>'<div class="q-order"><div class="q-meta"><span class="q-who">给 '+esc(o.forWho)+'</span>'
+      +'<span class="q-time">'+tf(o.createdAt)+'</span></div>'
+      +o.items.map(it=>'<div class="q-item" onclick="openBrew(\''+it.recipeId+'\',\''+o.id+'\')">'
+        +'<div class="q-item-body"><div class="q-item-top"><span class="q-item-name">'+esc(it.name)+'</span>'
+        +'<span class="q-item-count">× '+it.count+'</span></div>'
+        +'<div class="q-item-sub">'+(it.beanName?'用豆 '+esc(it.beanName):'下单时没选豆')+'</div></div>'
+        +'<span class="q-go">冲煮 ›</span></div>').join('')
+      +(o.note?'<div class="q-note">备注：'+esc(o.note)+'</div>':'')
+      +'<div class="q-actions"><span class="op" onclick="queueDone(\''+o.id+'\')">整单完成</span></div></div>').join('')
+    +'</div>'):'';
+
   const list=cat==='all'?RECIPES:RECIPES.filter(r=>r.category===cat);
-  return '<div class="search">🔍 搜配方、标签、器具</div>'
-   +'<div class="chips">'+CATS.map(c=>'<div class="chip'+(cat===c.key?' on':'')+'" onclick="cat=\''+c.key+'\';render()">'+c.icon+' '+c.label+'</div>').join('')+'</div>'
-   +'<div class="list-head"><span class="sec-title">我的配方</span><span class="muted">'+list.length+' / '+RECIPES.length+'</span></div>'
-   +list.map(r=>{
-     const b=r.beanId?beanOf(r.beanId):null;
-     return '<div class="card">'
+  const cards=list.map(r=>{
+    const b=r.beanId?beanOf(r.beanId):null;
+    return '<div class="card">'
       +(r.cover?'<div class="rc-cover"></div>':'')
       +'<div class="rc-name">'+esc(r.name)+(r.favorite?'<span class="rc-star">★</span>':'')+'</div>'
       +'<div class="rc-sub">'+catOf(r.category).icon+' '+catOf(r.category).label+(TOOL[r.tool]?' · '+TOOL[r.tool]:'')+'</div>'
@@ -445,38 +492,58 @@ function pRecipe(){
       +(ratio(r.dose,r.water)?'<div class="param"><span class="p-val">'+ratio(r.dose,r.water)+'</span><span class="p-key">粉水比</span></div>':'')
       +(r.temp?'<div class="param"><span class="p-val">'+r.temp+'</span><span class="p-key">水温 ℃</span></div>':'')+'</div>'
       +'<div class="rc-foot"><div class="rc-tags">'
-      +(r.beanName?'<span class="tag">'+esc(r.beanName)+'</span>':'<span class="tag grey">未关联豆</span>')
-      +(b?'<span class="tag grey">可做 '+Math.floor(b.remaining/(r.dose||1))+' 杯</span>':'')
+      +'<span class="tag">'+BEAN_TYPE_LABEL[inferBeanType(r)]+'</span>'
+      +(b?'<span class="tag">'+esc(b.name)+'</span>':'<span class="tag grey">未设默认豆</span>')
       +(r.tags||[]).map(t=>'<span class="tag grey">'+esc(t)+'</span>').join('')
       +(r.grind?'<span class="tag grey">'+esc(r.grind)+'研磨</span>':'')
       +(r.time?'<span class="tag grey">'+esc(r.time)+'</span>':'')+'</div>'
-      +'<div class="rc-ops"><span class="op brew" onclick="openBrew(\''+r.id+'\')">▶ 开始冲煮</span>'
+      +'<div class="rc-ops"><span class="op brew" onclick="openBrew(\''+r.id+'\',\'\')">▶ 开始冲煮</span>'
       +'<span class="op" onclick="toggleFav(\''+r.id+'\')">'+(r.favorite?'取消常喝':'设常喝')+'</span>'
       +'<span class="op danger" onclick="delRecipe(\''+r.id+'\')">删除</span></div></div></div>';
-   }).join('')
-   +'<div class="empty" style="padding:24px"><span class="ic">📖</span>点右下角 ＋ 记录第一杯</div>';
-}
-function toggleFav(id){const r=RECIPES.find(x=>x.id===id);if(r)r.favorite=!r.favorite;render()}
-function delRecipe(id){const r=RECIPES.find(x=>x.id===id);if(!r)return;if(confirm('确定删除「'+r.name+'」？')){RECIPES=RECIPES.filter(x=>x.id!==id);render()}}
+  }).join('');
 
-/* ================= 咖啡豆 ================= */
+  return queue
+    +'<div class="search">🔍 搜配方、标签、器具</div>'
+    +'<div class="chips">'+CATS.map(c=>'<div class="chip'+(cat===c.key?' on':'')+'" onclick="cat=\''+c.key+'\';render()">'+c.icon+' '+c.label+'</div>').join('')+'</div>'
+    +'<div class="list-head"><span class="sec-title">我的配方</span><span class="muted">'+list.length+' / '+RECIPES.length+'</span></div>'
+    +cards;
+}
+function tf(ts){const d=new Date(ts);return (d.getMonth()+1)+'-'+d.getDate()+' '+pad2(d.getHours())+':'+pad2(d.getMinutes())}
+function toggleFav(id){const r=recipeOf(id);if(r)r.favorite=!r.favorite;render()}
+function delRecipe(id){const r=recipeOf(id);if(!r)return;if(confirm('确定删除「'+r.name+'」？')){RECIPES=RECIPES.filter(x=>x.id!==id);render()}}
+function queueDone(id){const o=ORDERS.find(x=>x.id===id);if(!o)return;o.status='done';render()}
+
+/* ============ 咖啡豆 ============ */
 function pBean(){
   const st=BEANS.map(status);
   const sum={peak:0,resting:0,fading:0,expired:0};
-  st.forEach(s=>{if(sum[s.label==='最佳风味'?'peak':s.label==='养豆中'?'resting':s.label==='风味衰退'?'fading':s.label==='已过保质期'?'expired':'x']!==undefined)sum[s.label==='最佳风味'?'peak':s.label==='养豆中'?'resting':s.label==='风味衰退'?'fading':'expired']++});
+  st.forEach(s=>{const k=s.label==='最佳风味'?'peak':s.label==='养豆中'?'resting':s.label==='风味衰退'?'fading':s.label==='已过保质期'?'expired':'';if(k)sum[k]++});
   const left=BEANS.reduce((a,b)=>a+b.remaining,0);
-  return '<div class="card"><div class="sec-title">豆仓概览</div>'
-   +'<div class="muted" style="margin-top:4px">在库 '+BEANS.length+' 支 · 剩余 '+left+'g</div>'
-   +'<div class="ov-grid">'
-   +'<div class="ov-item"><span class="ov-num green">'+sum.peak+'</span><span class="ov-key">最佳风味</span></div>'
-   +'<div class="ov-item"><span class="ov-num blue">'+sum.resting+'</span><span class="ov-key">养豆中</span></div>'
-   +'<div class="ov-item"><span class="ov-num orange">'+sum.fading+'</span><span class="ov-key">风味衰退</span></div>'
-   +'<div class="ov-item"><span class="ov-num red">'+sum.expired+'</span><span class="ov-key">已过期</span></div></div></div>'
-   +'<div class="list-head"><span class="sec-title">我的咖啡豆</span></div>'
-   +BEANS.map((b,i)=>{const s=st[i];const n=daysSince(b.roastDate);const pct=Math.round(b.remaining/b.weight*100);
-     const used=RECIPES.filter(r=>r.beanId===b.id);
-     return '<div class="card"><div class="bc-head"><div><div class="bc-name">'+esc(b.name)+'</div>'
-      +'<div class="bc-origin">'+esc(b.origin)+'<i>·</i>'+esc(b.process)+'<i>·</i>'+ROAST[b.roast]+'</div></div>'
+
+  const todos=[];
+  BEANS.forEach(b=>{
+    const s=status(b);const pct=b.weight?b.remaining/b.weight:0;const n=daysSince(b.roastDate);
+    const reasons=[];
+    if(b.remaining<=0) reasons.push(['已经用完','red']);
+    else if(pct<=LOW_RATIO) reasons.push(['只剩 '+b.remaining+'g，该补货了','orange']);
+    if(s.label==='已过保质期') reasons.push(['已过保质期 '+(n-DEF.shelf)+' 天','red']);
+    else if(s.label==='风味衰退'){const l=DEF.shelf-n;reasons.push([l<=7?'还有 '+l+' 天过期，尽快喝完':'已过风味巅峰',l<=7?'red':'orange'])}
+    if(!(b.usageTags||[]).length) reasons.push(['未标用途，会出现在所有配方里','grey']);
+    if(reasons.length) todos.push({b:b,reasons:reasons});
+  });
+  const todoCard=todos.length?('<div class="card todo-card"><div class="sec-title">该处理了（'+todos.length+' 支）</div>'
+    +todos.map(t=>'<div class="todo-row"><div class="todo-name">'+esc(t.b.name)+'</div><div class="todo-reasons">'
+      +t.reasons.map(r=>'<span class="tag '+r[1]+'">'+esc(r[0])+'</span>').join('')+'</div></div>').join('')+'</div>'):'';
+
+  const cards=BEANS.map(b=>{
+    const s=status(b);const n=daysSince(b.roastDate);const pct=Math.round(b.remaining/b.weight*100);
+    const used=RECIPES.filter(r=>r.beanId===b.id);
+    const tags=(b.usageTags||[]).length
+      ? (b.usageTags||[]).map(k=>{const t=USAGE_TAGS.find(x=>x.key===k);return '<span class="usage-chip">'+(t?t.label:k)+'</span>'}).join('')
+      : '<span class="usage-chip warn">未标用途</span>';
+    return '<div class="card"><div class="bc-head"><div><div class="bc-name">'+esc(b.name)+'</div>'
+      +'<div class="bc-origin">'+esc(b.origin)+' · '+esc(b.process)+' · '+ROAST[b.roast]+'</div>'
+      +'<div class="bc-usage">'+tags+'</div></div>'
       +'<span class="tag '+s.tone+'">'+s.label+'</span></div>'
       +'<div class="timeline"><div class="tl-row"><span class="tl-label">'+s.label+'</span><span class="tl-day">烘焙后第 '+n+' 天</span></div>'
       +'<div class="progress"><div class="bar bg-'+s.tone+'" style="width:'+Math.min(100,s.p*100)+'%"></div></div>'
@@ -484,23 +551,33 @@ function pBean(){
       +'<div class="bc-stock"><div class="stk-row"><span class="stk-label">余量'+(used.length?' · '+used.length+' 个配方在用':'')+'</span><span class="stk-val">'+b.remaining+'g / '+b.weight+'g</span></div>'
       +'<div class="progress"><div class="bar '+(pct<=15?'bg-orange':'bg-coffee')+'" style="width:'+pct+'%"></div></div></div>'
       +'<div class="bc-flavor">'+(b.flavor||[]).map(f=>'<span class="tag">'+esc(f)+'</span>').join('')+'</div>'
-      +'<div class="bc-date">'+s.label+' · 烘焙日 '+b.roastDate+'</div>'
+      +'<div class="bc-date">烘焙日 '+b.roastDate+'</div>'
       +'<div class="rc-ops" style="margin-top:6px"><span class="op danger" onclick="delBean(\''+b.id+'\')">删除</span></div>'
       +'</div>';
-   }).join('')
-   +'<div class="empty" style="padding:24px"><span class="ic">🫘</span>点右下角 ＋ 添加，自动帮你算养豆期</div>';
+  }).join('');
+
+  return '<div class="card"><div class="sec-title">豆仓概览</div>'
+   +'<div class="muted" style="margin-top:4px">在库 '+BEANS.length+' 支 · 剩余 '+left+'g</div>'
+   +'<div class="ov-grid">'
+   +'<div class="ov-item"><span class="ov-num green">'+sum.peak+'</span><span class="ov-key">最佳风味</span></div>'
+   +'<div class="ov-item"><span class="ov-num blue">'+sum.resting+'</span><span class="ov-key">养豆中</span></div>'
+   +'<div class="ov-item"><span class="ov-num orange">'+sum.fading+'</span><span class="ov-key">风味衰退</span></div>'
+   +'<div class="ov-item"><span class="ov-num red">'+sum.expired+'</span><span class="ov-key">已过期</span></div></div></div>'
+   +todoCard
+   +'<div class="list-head"><span class="sec-title">我的咖啡豆</span></div>'
+   +cards;
 }
 function delBean(id){
   const b=beanOf(id); if(!b)return;
   const used=RECIPES.filter(r=>r.beanId===id);
-  const msg=used.length?('有 '+used.length+' 个配方在用「'+b.name+'」：\n'+used.map(r=>'· '+r.name).join('\n')+'\n\n删除后这些配方会变成「未关联咖啡豆」。确定删除？'):('确定删除「'+b.name+'」？')
+  const msg=used.length?('有 '+used.length+' 个配方在用「'+b.name+'」：\n'+used.map(r=>'· '+r.name).join('\n')+'\n\n删除后这些配方会变成「未设默认豆」。确定删除？'):('确定删除「'+b.name+'」？')
   if(!confirm(msg))return;
   BEANS=BEANS.filter(x=>x.id!==id);
   used.forEach(r=>{r.beanId='';r.beanName=''});
   render();
 }
 
-/* ================= 记录 ================= */
+/* ============ 记录 ============ */
 function pRecord(){
   let monthCount=0,totalCount=0,usedGrams=0;
   const now=new Date(), mk=now.getFullYear()+'-'+pad2(now.getMonth()+1);
@@ -510,8 +587,6 @@ function pRecord(){
     totalCount+=o.totalCount||0;
     (o.beanUsage||[]).forEach(u=>usedGrams+=u.grams||0);
   });
-
-  // 近 7 日
   const dayMap={};
   ORDERS.forEach(o=>{const k=keyOf(o.createdAt);dayMap[k]=(dayMap[k]||0)+(o.totalCount||0)});
   const days=[];
@@ -525,24 +600,17 @@ function pRecord(){
         +'<div class="chart-bar-wrap"><div class="chart-bar" style="height:'+h+'%"></div></div>'
         +'<div class="chart-label">'+d.label+'</div></div>';
     }).join('')+'</div></div>';
-
-  // 分类占比
   const catMap={};
-  ORDERS.forEach(o=>(o.items||[]).forEach(it=>{const r=RECIPES.find(x=>x.id===it.recipeId);const k=(r&&r.category)||'other';catMap[k]=(catMap[k]||0)+(it.count||0)}));
+  ORDERS.forEach(o=>(o.items||[]).forEach(it=>{const r=recipeOf(it.recipeId);const k=(r&&r.category)||'other';catMap[k]=(catMap[k]||0)+(it.count||0)}));
   const catTotal=Object.values(catMap).reduce((a,b)=>a+b,0);
   const catStats=Object.keys(catMap).map(k=>({k,label:catOf(k).label,icon:catOf(k).icon,count:catMap[k],pct:catTotal?Math.round(catMap[k]/catTotal*100):0})).sort((a,b)=>b.count-a.count);
-
-  // 成员排行
   const memMap={};
   ORDERS.forEach(o=>{const w=(o.forWho||'不指定').trim()||'不指定';memMap[w]=(memMap[w]||0)+(o.totalCount||0)});
   const rank=Object.keys(memMap).map(k=>({name:k,cups:memMap[k]})).sort((a,b)=>b.cups-a.cups);
   const memMax=rank.length?rank[0].cups:0;
-
-  // 最常点
   const recMap={};
   ORDERS.forEach(o=>(o.items||[]).forEach(it=>{recMap[it.name]=(recMap[it.name]||0)+(it.count||0)}));
   const top=Object.keys(recMap).map(k=>({name:k,count:recMap[k]})).sort((a,b)=>b.count-a.count).slice(0,5);
-
   const analysis='<div class="card"><div class="sec-title">消耗构成</div>'
     +'<div style="margin-top:11px">'+catStats.map(c=>'<div class="cat-row"><span class="cat-name">'+c.icon+' '+c.label+'</span>'
       +'<div class="cat-bar-wrap"><div class="cat-bar" style="width:'+c.pct+'%"></div></div>'
@@ -553,8 +621,6 @@ function pRecord(){
       +'<span class="rank-val">'+m.cups+' 杯</span></div>').join('')+'</div>'
     +'<div class="rank-block"><div class="rank-title">最常点</div><div class="top-tags">'
     +top.map(t=>'<span class="tag">'+esc(t.name)+' × '+t.count+'</span>').join('')+'</div></div></div>';
-
-  // 筛选
   const members=['全部'].concat(rank.map(r=>r.name));
   const list=ORDERS.filter(o=>{
     const w=(o.forWho||'不指定').trim()||'不指定';
@@ -562,27 +628,25 @@ function pRecord(){
     if(activeStatus!=='all'&&(o.status||'pending')!==activeStatus)return false;
     return true;
   });
-
-  const tf=ts=>{const d=new Date(ts);return (d.getMonth()+1)+'-'+d.getDate()+' '+pad2(d.getHours())+':'+pad2(d.getMinutes())};
   const cards=list.map(o=>{
     const usage=(o.beanUsage||[]).map(u=>{const b=beanOf(u.beanId);return (b?b.name:u.beanName)+' −'+Math.round(u.grams)+'g'}).join('，');
     return '<div class="card"><div class="oc-head"><div class="oc-who">给 '+esc(o.forWho)+'</div>'
      +'<span class="tag '+(o.status==='done'?'green':'orange')+'">'+(o.status==='done'?'已完成':'待制作')+'</span></div>'
-     +'<div class="oc-items">'+o.items.map(it=>'<div class="oc-item"><span>'+esc(it.name)+'</span><span class="oi-count">× '+it.count+'</span></div>').join('')+'</div>'
+     +'<div class="oc-items">'+o.items.map(it=>'<div class="oc-item"><div class="oi-left"><span>'+esc(it.name)+'</span>'
+       +'<span class="oi-bean">'+(it.beanName?esc(it.beanName):'下单时未指定豆')+'</span></div>'
+       +'<span class="oi-count">× '+it.count+'</span></div>').join('')+'</div>'
      +(usage?'<div class="oc-usage">耗豆 '+esc(usage)+'</div>':'')
      +(o.note?'<div class="oc-note">备注：'+esc(o.note)+'</div>':'')
      +'<div class="oc-foot"><span class="oc-time">'+tf(o.createdAt)+' · 共 '+o.totalCount+' 杯</span>'
      +'<span class="op" onclick="toggleOrder(\''+o.id+'\')">'+(o.status==='done'?'标记待做':'标记完成')+'</span>'
      +'<span class="op danger" onclick="delOrder(\''+o.id+'\')">删除</span></div></div>';
   }).join('');
-
   return '<div class="card stat-card">'
    +'<div class="stat-item"><span class="stat-num">'+monthCount+'</span><span class="stat-key">本月杯数</span></div><div class="stat-div"></div>'
    +'<div class="stat-item"><span class="stat-num">'+totalCount+'</span><span class="stat-key">累计杯数</span></div><div class="stat-div"></div>'
    +'<div class="stat-item"><span class="stat-num">'+ORDERS.length+'</span><span class="stat-key">点单次数</span></div><div class="stat-div"></div>'
    +'<div class="stat-item"><span class="stat-num">'+Math.round(usedGrams)+'</span><span class="stat-key">累计耗豆 g</span></div></div>'
-   +(ORDERS.length?chart:'')
-   +(ORDERS.length?analysis:'')
+   +(ORDERS.length?chart:'')+(ORDERS.length?analysis:'')
    +'<div class="list-head"><span class="sec-title">点单记录</span><span class="muted">'+list.length+' / '+ORDERS.length+' 条</span></div>'
    +'<div class="chips">'+members.map(m=>'<div class="chip'+(activeMember===m?' on':'')+'" onclick="activeMember=\''+esc(m)+'\';render()">'+esc(m)+'</div>').join('')+'</div>'
    +'<div class="status-row">'+STATUS_FILTERS.map(s=>'<div class="st-chip'+(activeStatus===s.key?' on':'')+'" onclick="activeStatus=\''+s.key+'\';render()">'+s.label+'</div>').join('')+'</div>'
@@ -591,7 +655,7 @@ function pRecord(){
    +'<div class="card"><div class="row-line"><span class="rl-key">当前存储</span><span>本地存储（原型演示）</span></div>'
    +'<div class="row-line"><span class="rl-key">云环境 ID</span><span>cloud1-****7893ab698</span></div>'
    +'<div class="btn-row"><div class="btn-ghost">重新检测</div><div class="btn-ghost">示例数据</div></div>'
-   +'<div class="tip-text">点单会自动扣减对应咖啡豆余量，删除记录会把豆量还回去。</div></div>';
+   +'<div class="tip-text">点单时选定的豆会被扣减；删除记录会把豆量还回去。</div></div>';
 }
 function toggleOrder(id){const o=ORDERS.find(x=>x.id===id);if(o){o.status=o.status==='done'?'pending':'done';render()}}
 function delOrder(id){
@@ -603,23 +667,32 @@ function delOrder(id){
   render();
 }
 
-/* ================= 冲煮 ================= */
-function openBrew(id){
-  const r=RECIPES.find(x=>x.id===id); if(!r)return;
+/* ============ 冲煮 ============ */
+function openBrew(id,orderId){
+  const r=recipeOf(id); if(!r)return;
+  let beanName='';let cnt=0;let who='';
+  if(orderId){
+    const o=ORDERS.find(x=>x.id===orderId);
+    if(o){who=o.forWho;const hit=o.items.find(it=>it.recipeId===id);cnt=(hit&&hit.count)||o.totalCount;beanName=(hit&&hit.beanName)||''}
+  }
   const sec=parseDur(r.time)||150;
-  brew={id:id,remain:sec,target:sec,running:false,finished:false,timer:null,
+  brew={id:id,orderId:orderId||'',forWho:who,orderCount:cnt,useBeanName:beanName,remain:sec,target:sec,
+    running:false,finished:false,timer:null,
     steps:(r.steps&&r.steps.length?r.steps:['按配方步骤冲煮']).map(s=>({text:s,done:false}))};
   tab='brew'; render();
 }
-function closeBrew(){if(brew.timer){clearInterval(brew.timer);brew.timer=null}tab='order';render()}
+function closeBrew(){if(brew.timer){clearInterval(brew.timer);brew.timer=null}tab='recipe';render()}
 function brewToggle(){
   if(brew.running){clearInterval(brew.timer);brew.timer=null;brew.running=false;render();return}
   if(brew.finished||brew.remain<=0){brew.remain=brew.target;brew.finished=false}
   brew.running=true;
   brew.timer=setInterval(()=>{
     brew.remain--;
-    if(brew.remain<=0){clearInterval(brew.timer);brew.timer=null;brew.remain=0;brew.running=false;brew.finished=true;render();alert('时间到 ☕ 冲煮完成，趁热喝。')}
-    else render();
+    if(brew.remain<=0){
+      clearInterval(brew.timer);brew.timer=null;brew.remain=0;brew.running=false;brew.finished=true;render();
+      if(brew.orderId){ if(confirm('时间到 ☕\n冲煮完成。把这一单标记成已做完吗？')){const o=ORDERS.find(x=>x.id===brew.orderId);if(o)o.status='done';} }
+      else alert('时间到 ☕ 冲煮完成，趁热喝。');
+    } else render();
   },1000);
   render();
 }
@@ -629,17 +702,21 @@ function stepTap(i){brew.steps[i].done=!brew.steps[i].done;render()}
 function nextStep(){const i=brew.steps.findIndex(s=>!s.done);if(i<0)return;for(let k=0;k<=i;k++)brew.steps[k].done=true;render()}
 
 function pBrew(){
-  const r=RECIPES.find(x=>x.id===brew.id); if(!r)return '<div class="empty">配方不存在</div>';
+  const r=recipeOf(brew.id); if(!r)return '<div class="empty">配方不存在</div>';
   const done=brew.steps.filter(s=>s.done).length;
   const prog=brew.target?Math.min(1,1-brew.remain/brew.target):0;
-  return (r.cover?'<div class="brew-head-cover"></div>':'')
+  const banner=brew.orderId?('<div class="card queue-banner"><span class="qb-icon">☕</span><div>'
+    +'<div class="qb-title">给 '+esc(brew.forWho||'不指定')+' 做 '+brew.orderCount+' 杯</div>'
+    +'<div class="qb-sub">做完会问你要不要标记这一单已完成</div></div></div>'):'';
+  return banner
+   +(r.cover?'<div class="card"><div class="rc-cover" style="margin-bottom:0"></div></div>':'')
    +'<div class="card"><div class="rc-name">'+esc(r.name)+'</div>'
    +'<div class="rc-sub">'+catOf(r.category).icon+' '+catOf(r.category).label+(TOOL[r.tool]?' · '+TOOL[r.tool]:'')+'</div>'
    +'<div class="params">'+(r.dose?'<div class="param"><span class="p-val">'+r.dose+'</span><span class="p-key">粉 g</span></div>':'')
    +(r.water?'<div class="param"><span class="p-val">'+r.water+'</span><span class="p-key">液 g</span></div>':'')
    +(ratio(r.dose,r.water)?'<div class="param"><span class="p-val">'+ratio(r.dose,r.water)+'</span><span class="p-key">粉水比</span></div>':'')
    +(r.temp?'<div class="param"><span class="p-val">'+r.temp+'</span><span class="p-key">水温 ℃</span></div>':'')+'</div>'
-   +(r.beanName?'<div class="muted" style="margin-top:9px">用豆：'+esc(r.beanName)+'</div>':'')+'</div>'
+   +(brew.useBeanName?'<div class="muted" style="margin-top:9px">用豆：'+esc(brew.useBeanName)+'</div>':'')+'</div>'
    +'<div class="card timer-card"><div class="timer-label">'+(r.time?'按配方 '+esc(r.time):'配方未填时长，默认 2:30')+'</div>'
    +'<div class="timer-time'+(brew.finished?' done':'')+'">'+mmss(brew.remain)+'</div>'
    +'<div class="timer-progress"><div class="timer-progress-bar" style="width:'+(prog*100)+'%"></div></div>'
@@ -654,7 +731,6 @@ function pBrew(){
    +'<div class="brew-tip">冲煮期间屏幕保持常亮；开始后会自动倒数，到点震动提醒。</div>';
 }
 
-/* ================= 渲染 ================= */
 const TITLES={order:'点单',recipe:'咖啡配方',bean:'咖啡豆管理',record:'点单记录',brew:'冲煮计时'};
 function go(t){if(brew.timer){clearInterval(brew.timer);brew.timer=null;brew.running=false}tab=t;cat='all';render()}
 function render(){

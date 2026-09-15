@@ -10,9 +10,8 @@ Page({
     keyword: '',
     recipes: [],
     list: [],
-    beanCount: 0,
-    lowBeans: [], // 余量偏低（<=15%）或已空的豆，用于顶部提醒
-    cart: {}, // { recipeId: count }
+    cart: {},      // { recipeId: count }
+    cartBean: {},  // { recipeId: beanId }  下单时选定的豆
     cartCount: 0,
     cartGrams: 0,
     cartList: [],
@@ -39,29 +38,17 @@ Page({
       store.recipes.list(),
       store.beans.list()
     ]).then(function (res) {
+      const recipes = res[0] || []
       const beans = res[1] || []
-      const bmap = {}
-      beans.forEach(function (b) { bmap[b._id] = b })
 
-      const lowBeans = beans.filter(function (b) {
-        const st = util.getStock(b)
-        return st.pct <= 0.15
-      }).map(function (b) {
-        const st = util.getStock(b)
-        return {
-          name: b.name,
-          pct: Math.round(st.pct * 100),
-          left: st.left,
-          empty: st.left <= 0
-        }
+      // 每个配方按「所需豆用途」预先筛出可选豆，供下单时选择
+      const beanOptions = {}
+      recipes.forEach(function (r) {
+        beanOptions[r._id] = stock.beansFor(r, beans)
       })
+      self._beanOptions = beanOptions
 
-      self._bmap = bmap
-      self.setData({
-        recipes: self.decorate(res[0] || [], bmap),
-        beanCount: beans.length,
-        lowBeans: lowBeans
-      }, function () {
+      self.setData({ recipes: self.decorate(recipes) }, function () {
         self.syncList()
         self.syncCart()
         if (done) done()
@@ -69,40 +56,29 @@ Page({
     })
   },
 
-  decorate: function (list, bmap) {
+  decorate: function (list) {
     return list.map(function (r) {
       const cat = C.categoryOf(r.category)
-      const bean = r.beanId ? bmap[r.beanId] : null
-      const dose = util.num(r.dose, 0)
-      const left = bean ? util.num(bean.remaining, 0) : 0
       return Object.assign({}, r, {
         _catLabel: cat.label,
         _catIcon: cat.icon,
-        _toolLabel: C.labelOf(C.TOOLS, r.tool),
-        _ratio: util.ratioText(r.dose, r.water),
-        _hasCover: !!r.cover,
-        // 豆量联动：能不能做、还能做几杯（粗略，按单杯 dose 估算）
-        _noBean: !r.beanId,
-        _beanGone: !!r.beanId && !bean,
-        _beanLeft: left,
-        _cupsLeft: dose > 0 ? Math.floor(left / dose) : 0,
-        _short: !!r.beanId && !!bean && dose > 0 && left < dose
+        _hasCover: !!r.cover
       })
     })
   },
 
+  // 点单页是顾客视角：只按饮品名、分类、标签搜
   filtered: function () {
     const kw = (this.data.keyword || '').trim().toLowerCase()
     const activeCat = this.data.activeCat
     return this.data.recipes.filter(function (r) {
       if (activeCat !== 'all' && r.category !== activeCat) return false
       if (!kw) return true
-      const hay = [r.name, r._catLabel, r._toolLabel, (r.tags || []).join(' '), r.beanName || ''].join(' ').toLowerCase()
+      const hay = [r.name, r._catLabel, (r.tags || []).join(' ')].join(' ').toLowerCase()
       return hay.indexOf(kw) > -1
     })
   },
 
-  // 计算属性同步到 data
   syncList: function () {
     this.setData({ list: this.filtered() })
   },
@@ -135,27 +111,78 @@ Page({
     this.setData({ cart: cart }, this.syncCart)
   },
 
+  // 每款饮品默认选中的豆：配方默认豆 → 该豆在可选列表里就用它，否则用第一个
+  defaultBeanOf: function (recipe) {
+    const opts = (this._beanOptions && this._beanOptions[recipe._id]) || []
+    if (!opts.length) return ''
+    const preset = recipe.beanId && opts.filter(function (b) { return b._id === recipe.beanId })[0]
+    return (preset || opts[0])._id
+  },
+
   syncCart: function () {
+    const self = this
     const cart = this.data.cart
     const map = {}
     this.data.recipes.forEach(function (r) { map[r._id] = r })
+
+    const cartBean = Object.assign({}, this.data.cartBean)
     let grams = 0
+
     const list = Object.keys(cart).map(function (id) {
       const r = map[id]
       if (!r) return null
+      const count = cart[id]
       const dose = util.num(r.dose, 0)
-      if (r.beanId && dose) grams += dose * cart[id]
+      const opts = (self._beanOptions && self._beanOptions[id]) || []
+
+      // 落定这款的选豆
+      let beanId = cartBean[id]
+      if (!beanId || !opts.filter(function (b) { return b._id === beanId }).length) {
+        beanId = self.defaultBeanOf(r)
+      }
+      cartBean[id] = beanId
+      const bean = opts.filter(function (b) { return b._id === beanId })[0] || null
+
+      const g = (bean && dose) ? dose * count : 0
+      grams += g
+
       return {
         id: id,
         name: r.name,
-        count: cart[id],
+        count: count,
         catLabel: r._catLabel,
-        beanName: r.beanName || '',
-        grams: r.beanId && dose ? dose * cart[id] : 0
+        dose: dose,
+        beanOptions: opts.map(function (b) {
+          const roast = C.labelOf(C.ROASTS, b.roast)
+          const tail = (roast && roast !== '未设置') ? ' · ' + roast : ''
+          let mark = ''
+          if (b._unlabeled) mark = '（未标注用途）'
+          else if (!b._exact) mark = '（通用）'
+          return { id: b._id, name: b.name + tail + mark }
+        }),
+        beanIndex: Math.max(0, opts.findIndex(function (b) { return b._id === beanId })),
+        beanId: beanId,
+        beanName: bean ? bean.name : '',
+        beanUnlabeled: !!(bean && bean._unlabeled),
+        noBean: !opts.length,
+        grams: g
       }
     }).filter(Boolean)
+
     const count = list.reduce(function (s, i) { return s + i.count }, 0)
-    this.setData({ cartList: list, cartCount: count, cartGrams: grams })
+    this.setData({ cartList: list, cartCount: count, cartBean: cartBean, cartGrams: grams })
+  },
+
+  // 下单弹层里换豆
+  onBeanChange: function (e) {
+    const idx = Number(e.currentTarget.dataset.index)
+    const item = this.data.cartList[idx]
+    if (!item) return
+    const picked = item.beanOptions[Number(e.detail.value)]
+    if (!picked) return
+    const cartBean = Object.assign({}, this.data.cartBean)
+    cartBean[item.id] = picked.id
+    this.setData({ cartBean: cartBean }, this.syncCart)
   },
 
   onCartTap: function () {
@@ -181,7 +208,7 @@ Page({
   onQuickFav: function () {
     const favorites = this.data.recipes.filter(function (r) { return r.favorite })
     if (!favorites.length) {
-      wx.showToast({ title: '还没有设常喝的配方', icon: 'none' })
+      wx.showToast({ title: '还没有设常喝的饮品', icon: 'none' })
       return
     }
     const cart = Object.assign({}, this.data.cart)
@@ -194,7 +221,14 @@ Page({
     const self = this
     if (!this.data.cartCount) return
     const items = this.data.cartList.map(function (i) {
-      return { recipeId: i.id, name: i.name, count: i.count }
+      return {
+        recipeId: i.id,
+        name: i.name,
+        count: i.count,
+        beanId: i.beanId,
+        beanName: i.beanName,
+        dose: i.dose
+      }
     })
 
     wx.showLoading({ title: '核算用豆' })
@@ -207,10 +241,10 @@ Page({
           return '· ' + p.beanName + ' 需 ' + Math.round(p.grams) + 'g，仅余 ' + Math.round(p.before) + 'g'
         }).join('\n')
         wx.showModal({
-          title: '咖啡豆不够了',
-          content: lines + '\n\n仍要下单吗？（余量会扣到 0）',
+          title: '这支豆不太够',
+          content: lines + '\n\n仍要下单吗？（余量会扣到 0）也可以回上一步换一支豆。',
           confirmText: '仍然下单',
-          cancelText: '返回调整',
+          cancelText: '回去换豆',
           success: function (res) {
             if (res.confirm) self.doSubmit(items, calc)
           }
@@ -241,11 +275,20 @@ Page({
       wx.hideLoading()
       const txt = stock.usageText(usage)
       wx.showToast({
-        title: txt ? '已下单 · ' + txt : '已下单',
+        title: txt ? '已下单 · ' + txt : '已下单，已进待做',
         icon: 'none',
         duration: 2200
       })
-      self.setData({ cart: {}, cartList: [], cartCount: 0, cartGrams: 0, showSheet: false, forWho: '', note: '' }, function () {
+      self.setData({
+        cart: {},
+        cartBean: {},
+        cartList: [],
+        cartCount: 0,
+        cartGrams: 0,
+        showSheet: false,
+        forWho: '',
+        note: ''
+      }, function () {
         self.load()
       })
     }).catch(function (e) {
@@ -255,27 +298,19 @@ Page({
     })
   },
 
-  // 跳到冲煮计时器
-  onBrew: function (e) {
-    wx.navigateTo({ url: '/pages/brew/brew?id=' + e.currentTarget.dataset.id })
-  },
-
-  onGoRecipe: function () {
+  // 下单后去配方页看「待做」
+  onGoQueue: function () {
     wx.switchTab({ url: '/pages/recipe/recipe' })
-  },
-
-  onGoBean: function () {
-    wx.switchTab({ url: '/pages/bean/bean' })
   },
 
   onShareAppMessage: function () {
     return {
-      title: '咖屋 · 记录家里的每一杯咖啡',
+      title: '咖屋 · 今天想喝点什么',
       path: '/pages/order/order'
     }
   },
 
   onShareTimeline: function () {
-    return { title: '咖屋 · 记录家里的每一杯咖啡' }
+    return { title: '咖屋 · 今天想喝点什么' }
   }
 })

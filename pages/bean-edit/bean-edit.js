@@ -8,6 +8,7 @@ Page({
     id: '',
     name: '',
     origin: '',
+    originPresets: C.PRESET_ORIGINS,
     processLabels: ['不指定'].concat(C.PROCESSES),
     processIndex: 0,
     roastLabels: [],
@@ -20,6 +21,11 @@ Page({
     restDays: C.BEAN_DEFAULTS.restDays,
     peakDays: C.BEAN_DEFAULTS.peakDays,
     shelfDays: C.BEAN_DEFAULTS.shelfDays,
+    // 用途标签：决定这支豆会出现在哪些配方里
+    usageOptions: C.USAGE_TAGS,
+    usageTags: [],
+    // 风味：预置风味轮点选 + 自定义
+    flavorPresets: C.PRESET_FLAVORS,
     flavor: [],
     flavorInput: '',
     note: '',
@@ -55,6 +61,7 @@ Page({
         restDays: b.restDays || C.BEAN_DEFAULTS.restDays,
         peakDays: b.peakDays || C.BEAN_DEFAULTS.peakDays,
         shelfDays: b.shelfDays || C.BEAN_DEFAULTS.shelfDays,
+        usageTags: b.usageTags || [],
         flavor: b.flavor || [],
         note: b.note || ''
       }, function () {
@@ -105,8 +112,34 @@ Page({
     this.setData({ preview: text })
   },
 
+  // 用途标签多选
+  onUsageToggle: function (e) {
+    const key = e.currentTarget.dataset.key
+    const tags = this.data.usageTags.slice()
+    const i = tags.indexOf(key)
+    if (i > -1) tags.splice(i, 1)
+    else tags.push(key)
+    this.setData({ usageTags: tags })
+  },
+
+  // 产地：预置点选（避免自由输入把同名产地写成好几个）
+  onOriginPick: function (e) {
+    const v = e.currentTarget.dataset.value
+    this.setData({ origin: this.data.origin === v ? '' : v })
+  },
+
   onFlavorInput: function (e) {
     this.setData({ flavorInput: e.detail.value })
+  },
+
+  // 风味：点预置风味轮标签，再点取消
+  onFlavorPreset: function (e) {
+    const v = e.currentTarget.dataset.value
+    const list = this.data.flavor.slice()
+    const i = list.indexOf(v)
+    if (i > -1) list.splice(i, 1)
+    else list.push(v)
+    this.setData({ flavor: list })
   },
 
   onFlavorAdd: function () {
@@ -152,9 +185,30 @@ Page({
       restDays: Number(d.restDays) || C.BEAN_DEFAULTS.restDays,
       peakDays: Number(d.peakDays) || C.BEAN_DEFAULTS.peakDays,
       shelfDays: Number(d.shelfDays) || C.BEAN_DEFAULTS.shelfDays,
+      usageTags: d.usageTags,
       flavor: d.flavor,
       note: d.note
     }
+    // 没标用途的豆会出现在所有配方里，提醒一次但不阻止
+    if (!d.usageTags.length) {
+      const self = this
+      wx.showModal({
+        title: '还没标用途',
+        content: '标上「意式 / 手冲 / 冷萃 / 通用」后，这支豆只会出现在对得上的配方里。现在保存的话，它会出现在所有配方中。',
+        confirmText: '仍然保存',
+        cancelText: '回去补标',
+        success: function (res) {
+          if (res.confirm) self.doSave(payload)
+        }
+      })
+      return
+    }
+    this.doSave(payload)
+  },
+
+  doSave: function (payload) {
+    const self = this
+    const d = this.data
     wx.showLoading({ title: '保存中' })
     const task = d.isEdit ? store.beans.update(d.id, payload) : store.beans.add(payload)
     task.then(function () {

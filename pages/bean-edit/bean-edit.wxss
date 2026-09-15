@@ -148,3 +148,79 @@
 .ph {
   color: var(--text-3);
 }
+
+/* ---------- 说明文字 ---------- */
+.hint {
+  margin-top: 12rpx;
+  font-size: 23rpx;
+  color: var(--text-2);
+  line-height: 1.7;
+}
+
+/* ---------- 用途标签（大块可点选） ---------- */
+.chip-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 22rpx -8rpx 0;
+}
+
+.opt-chip {
+  width: calc(50% - 16rpx);
+  margin: 8rpx;
+  padding: 20rpx 22rpx;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  border: 2rpx solid transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+.opt-chip.on {
+  background: var(--coffee-tint);
+  border-color: var(--coffee-light);
+}
+
+.oc-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.opt-chip.on .oc-label {
+  color: var(--coffee-dark);
+}
+
+.oc-tip {
+  font-size: 20rpx;
+  color: var(--text-3);
+  margin-top: 6rpx;
+  line-height: 1.4;
+}
+
+.opt-chip.on .oc-tip {
+  color: var(--coffee-mid);
+}
+
+/* ---------- 预置选项（产地 / 风味 / 时长 / 标签） ---------- */
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 16rpx 0 4rpx;
+}
+
+.preset-chip {
+  padding: 10rpx 22rpx;
+  border-radius: 999rpx;
+  background: var(--surface-2);
+  border: 1rpx solid var(--line-strong);
+  color: var(--text-2);
+  font-size: 23rpx;
+  margin: 0 14rpx 14rpx 0;
+}
+
+.preset-chip.on {
+  background: var(--coffee-tint);
+  border-color: var(--coffee-light);
+  color: var(--coffee-dark);
+  font-weight: 500;
+}

@@ -37,12 +37,21 @@
   <view class="card">
     <view class="section-title">冲煮参数</view>
 
+    <view class="sub-title">所需豆用途</view>
+    <view class="hint">决定下单时能选到哪些豆。现在：<text class="em">{{beanTypeLabel}}</text></view>
+    <view class="preset-row">
+      <text wx:for="{{beanTypeOptions}}" wx:key="key"
+            class="preset-chip {{beanType === item.key ? 'on' : ''}}"
+            data-key="{{item.key}}" bindtap="onBeanTypeTap">{{item.label}}</text>
+    </view>
+
     <view class="form-row">
-      <text class="form-label">使用咖啡豆</text>
+      <text class="form-label">默认用豆</text>
       <picker mode="selector" range="{{beanLabels}}" value="{{beanIndex}}" bindchange="onBeanChange">
         <view class="form-value {{beanName ? '' : 'placeholder'}}">{{beanName || '不指定'}}</view>
       </picker>
     </view>
+    <view class="hint">只列出符合上面用途的豆；下单时家人还可以换。没设默认豆也能下单，会让人现场选。</view>
 
     <view class="form-row">
       <text class="form-label">冲煮器具</text>
@@ -69,7 +78,7 @@
         <input class="pg-input" type="digit" placeholder="36" placeholder-class="ph" value="{{water}}" data-key="water" bindinput="onInput" />
         <text class="pg-unit">g</text>
       </view>
-      <view class="pg-item">
+      <view wx:if="{{showMilk}}" class="pg-item">
         <text class="pg-label">牛奶</text>
         <input class="pg-input" type="digit" placeholder="0" placeholder-class="ph" value="{{milk}}" data-key="milk" bindinput="onInput" />
         <text class="pg-unit">ml</text>
@@ -88,7 +97,12 @@
 
     <view class="form-row">
       <text class="form-label">萃取时间</text>
-      <input class="form-value" placeholder="25-28s / 2:30" placeholder-class="ph" value="{{time}}" data-key="time" bindinput="onInput" />
+      <input class="form-value" placeholder="25s / 2:30" placeholder-class="ph" value="{{time}}" data-key="time" bindinput="onInput" />
+    </view>
+    <view class="preset-row">
+      <text wx:for="{{timePresets}}" wx:key="*this"
+            class="preset-chip {{time === item ? 'on' : ''}}"
+            data-value="{{item}}" bindtap="onTimePreset">{{item}}</text>
     </view>
   </view>
 
@@ -106,14 +120,22 @@
 
   <!-- 标签 -->
   <view class="card">
-    <view class="section-title">自定义标签</view>
-    <view class="tag-wrap">
+    <view class="section-title">标签</view>
+    <view class="hint">点一下选上，再点取消。顾客端就是靠这些标签找饮品的。</view>
+    <view class="preset-row">
+      <text wx:for="{{tagPresets}}" wx:key="*this"
+            class="preset-chip {{tags.indexOf(item) > -1 ? 'on' : ''}}"
+            data-value="{{item}}" bindtap="onTagPreset">{{item}}</text>
+    </view>
+
+    <view wx:if="{{tags.length}}" class="tag-wrap">
       <view wx:for="{{tags}}" wx:key="*this" class="tag-item" data-index="{{index}}" bindtap="onTagDel">
         {{item}} <text class="tag-x">×</text>
       </view>
     </view>
+
     <view class="tag-add">
-      <input class="tag-input" placeholder="输入标签，回车添加" placeholder-class="ph" value="{{tagInput}}"
+      <input class="tag-input" placeholder="上面没有的，自己加一个" placeholder-class="ph" value="{{tagInput}}"
              bindinput="onTagInput" confirm-type="done" bindconfirm="onTagAdd" />
       <view class="tag-btn" bindtap="onTagAdd">添加</view>
     </view>

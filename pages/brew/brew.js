@@ -7,6 +7,10 @@ const FALLBACK_SEC = 150 // 配方没写时间时的兜底：2 分 30 秒
 Page({
   data: {
     id: '',
+    orderId: '',
+    forWho: '',
+    orderCount: 0,
+    useBeanName: '',
     name: '',
     cover: '',
     catLabel: '',
@@ -35,9 +39,25 @@ Page({
       setTimeout(function () { wx.navigateBack() }, 800)
       return
     }
-    this.setData({ id: opts.id })
+    this.setData({ id: opts.id, orderId: (opts && opts.orderId) || '' })
     this.loadRecipe(opts.id)
+    if (opts && opts.orderId) this.loadOrderContext(opts.orderId, opts.id)
     wx.setKeepScreenOn({ keepScreenOn: true })
+  },
+
+  // 从待做队列进来时，带上「给谁做 / 几杯 / 用哪支豆」
+  loadOrderContext: function (orderId, recipeId) {
+    const self = this
+    store.orders.list().then(function (orders) {
+      const o = (orders || []).filter(function (x) { return x._id === orderId })[0]
+      if (!o) return
+      const hit = (o.items || []).filter(function (it) { return it.recipeId === recipeId })[0]
+      self.setData({
+        forWho: o.forWho || '不指定',
+        orderCount: (hit && hit.count) || o.totalCount || 0,
+        useBeanName: (hit && hit.beanName) || ''
+      })
+    })
   },
 
   onUnload: function () {
@@ -177,7 +197,23 @@ Page({
   },
 
   onFinish: function () {
+    const self = this
     wx.vibrateLong()
+    if (this.data.orderId) {
+      wx.showModal({
+        title: '时间到 ☕',
+        content: '冲煮完成。把「' + (this.data.forWho || '这一单') + '」标记成已做完吗？',
+        confirmText: '标记完成',
+        cancelText: '先不用',
+        success: function (res) {
+          if (!res.confirm) return
+          store.orders.update(self.data.orderId, { status: 'done' }).then(function () {
+            wx.showToast({ title: '已标记完成', icon: 'success' })
+          })
+        }
+      })
+      return
+    }
     wx.showModal({
       title: '时间到 ☕',
       content: '冲煮完成，趁热喝。',

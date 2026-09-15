@@ -27,6 +27,17 @@
     </view>
   </view>
 
+  <!-- 该处理了：从点单页搬过来的库存警告归口 -->
+  <view wx:if="{{todos.length}}" class="card todo-card">
+    <view class="section-title">该处理了（{{todos.length}} 支）</view>
+    <view wx:for="{{todos}}" wx:key="_id" class="todo-row" data-id="{{item._id}}" bindtap="onEdit">
+      <text class="todo-name">{{item.name}}</text>
+      <view class="todo-reasons">
+        <text wx:for="{{item.reasons}}" wx:for-item="r" wx:key="text" class="tag {{r.tone}}">{{r.text}}</text>
+      </view>
+    </view>
+  </view>
+
   <view class="list-head">
     <text class="section-title">我的咖啡豆</text>
   </view>
@@ -41,6 +52,10 @@
           <text wx:if="{{item.process}}">{{item.process}}</text>
           <text wx:if="{{item._roastLabel && item._roastLabel !== '未设置'}}" class="dot">·</text>
           <text wx:if="{{item._roastLabel && item._roastLabel !== '未设置'}}">{{item._roastLabel}}</text>
+        </view>
+        <view class="bc-usage">
+          <text wx:for="{{item._usageLabels}}" wx:for-item="u" wx:key="*this" class="usage-chip">{{u}}</text>
+          <text wx:if="{{item._noUsage}}" class="usage-chip warn">未标用途</text>
         </view>
       </view>
       <view class="tag {{item._status.tone}}">{{item._status.label}}</view>

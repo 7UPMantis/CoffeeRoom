@@ -131,3 +131,117 @@
 .rc-ops {
   gap: 8rpx;
 }
+
+/* ---------- 待做队列 ---------- */
+.queue-card {
+  border-left: 6rpx solid var(--coffee);
+}
+
+.q-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.q-badge {
+  min-width: 64rpx;
+  height: 64rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #7B5940 0%, #6F4E37 100%);
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
+  text-align: center;
+  line-height: 64rpx;
+  padding: 0 20rpx;
+  box-shadow: 0 6rpx 16rpx rgba(111, 78, 55, 0.25);
+}
+
+.q-order {
+  margin-top: 22rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid var(--line);
+}
+
+.q-order:first-of-type {
+  border-top: none;
+  padding-top: 8rpx;
+}
+
+.q-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.q-who {
+  font-size: 27rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+}
+
+.q-time {
+  font-size: 21rpx;
+  color: var(--text-3);
+}
+
+.q-item {
+  display: flex;
+  align-items: center;
+  margin-top: 14rpx;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 18rpx 22rpx;
+}
+
+.q-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.q-item-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.q-item-name {
+  font-size: 28rpx;
+  color: var(--text);
+}
+
+.q-item-count {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--coffee);
+}
+
+.q-item-sub {
+  margin-top: 6rpx;
+  font-size: 21rpx;
+  color: var(--text-2);
+}
+
+.q-go {
+  flex-shrink: 0;
+  margin-left: 18rpx;
+  font-size: 23rpx;
+  color: var(--coffee);
+  background: var(--surface);
+  border: 1rpx solid var(--line-strong);
+  border-radius: 999rpx;
+  padding: 9rpx 20rpx;
+}
+
+.q-note {
+  margin-top: 12rpx;
+  font-size: 23rpx;
+  color: var(--text-2);
+}
+
+.q-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10rpx;
+}

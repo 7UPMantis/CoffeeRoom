@@ -1,4 +1,5 @@
 const BEAN_DEFAULTS = require('./constants.js').BEAN_DEFAULTS
+const LOW_STOCK_RATIO = require('./constants.js').LOW_STOCK_RATIO
 
 function pad(n) {
   return n < 10 ? '0' + n : '' + n
@@ -111,7 +112,7 @@ function getStock(bean) {
     total: total,
     left: left,
     pct: pct,
-    low: total > 0 && left / total <= 0.15
+    low: total > 0 && left / total <= LOW_STOCK_RATIO
   }
 }
 

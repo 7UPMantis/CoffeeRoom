@@ -8,7 +8,8 @@ Page({
   data: {
     beans: [],
     summary: { peak: 0, resting: 0, fading: 0, expired: 0, unknown: 0 },
-    totalWeight: 0
+    totalWeight: 0,
+    todos: [] // 「该处理了」清单：低余量 / 临期 / 已过期
   },
 
   onShow: function () {
@@ -25,12 +26,16 @@ Page({
       const decorated = list.map(function (b) {
         const status = util.getBeanStatus(b)
         const stock = util.getStock(b)
+        const usageTags = b.usageTags || []
         return Object.assign({}, b, {
           _status: status,
           _stock: stock,
           _roastLabel: C.labelOf(C.ROASTS, b.roast),
           _pct: Math.round(stock.pct * 100),
-          _days: status.days === undefined ? null : status.days
+          _days: status.days === undefined ? null : status.days,
+          _usageTags: usageTags,
+          _usageLabels: usageTags.map(function (k) { return C.usageLabel(k) }),
+          _noUsage: !usageTags.length
         })
       })
       decorated.sort(function (a, b) {
@@ -42,13 +47,34 @@ Page({
 
       const summary = { peak: 0, resting: 0, fading: 0, expired: 0, unknown: 0 }
       let total = 0
+      const todos = []
       decorated.forEach(function (b) {
         const k = b._status.key
         if (summary[k] === undefined) summary.unknown++
         else summary[k]++
         total += b._stock.left
+
+        // 该处理了：低余量 / 已过期 / 风味衰退 / 快到保质期（7 天内）
+        const reasons = []
+        if (b._stock.left <= 0) reasons.push({ text: '已经用完', tone: 'red' })
+        else if (b._stock.low) reasons.push({ text: '只剩 ' + b._stock.left + 'g，该补货了', tone: 'orange' })
+        if (k === 'expired') reasons.push({ text: '已过保质期 ' + (b._status.days - C.BEAN_DEFAULTS.shelfDays) + ' 天', tone: 'red' })
+        else if (k === 'fading') {
+          const left = C.BEAN_DEFAULTS.shelfDays - b._status.days
+          reasons.push({ text: left <= 7 ? '还有 ' + left + ' 天过期，尽快喝完' : '已过风味巅峰', tone: left <= 7 ? 'red' : 'orange' })
+        }
+        if (b._noUsage) reasons.push({ text: '未标用途，会出现在所有配方里', tone: 'grey' })
+
+        if (reasons.length) {
+          todos.push({
+            _id: b._id,
+            name: b.name,
+            reasons: reasons
+          })
+        }
       })
-      self.setData({ beans: decorated, summary: summary, totalWeight: total })
+
+      self.setData({ beans: decorated, summary: summary, totalWeight: total, todos: todos })
       if (done) done()
     })
   },
