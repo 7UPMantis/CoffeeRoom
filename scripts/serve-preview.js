@@ -1,4 +1,9 @@
-#!/usr/bin/env node
+/**
+ * 本地开发脚本，不属于小程序包（已在 project.config.json 的 packOptions.ignore 中排除）。
+ * 原来的 shebang 行已移除：小程序编译器会解析 miniprogramRoot 下的所有 .js，
+ * 遇到 #! 会报 SyntaxError: Invalid or unexpected token，导致上传失败。
+ * 用法：node scripts/serve-preview.js
+ */
 /**
  * 本地静态预览服务器。
  *
