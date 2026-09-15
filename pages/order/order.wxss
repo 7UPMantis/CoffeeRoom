@@ -259,6 +259,23 @@
   justify-content: center;
 }
 
+/* 只有一支可选豆：只展示，不做成选择器（豆仓通常 2-3 支，多数情况没得选） */
+.si-bean.locked {
+  background: transparent;
+  border-style: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.si-bean.locked .si-bean-label {
+  color: var(--text-3);
+}
+
+.si-bean.locked .si-bean-name {
+  color: var(--text-2);
+  flex: none;
+}
+
 .si-bean-label {
   font-size: 22rpx;
   color: var(--text-3);

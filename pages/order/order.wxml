@@ -73,7 +73,7 @@
           <text class="si-name">{{item.name}}</text>
           <text class="si-count">× {{item.count}}</text>
         </view>
-        <picker wx:if="{{!item.noBean}}" mode="selector" range="{{item.beanOptions}}" range-key="name"
+        <picker wx:if="{{!item.noBean && !item.beanLocked}}" mode="selector" range="{{item.beanOptions}}" range-key="name"
                 value="{{item.beanIndex}}" data-index="{{index}}" bindchange="onBeanChange">
           <view class="si-bean">
             <text class="si-bean-label">用豆</text>
@@ -81,6 +81,10 @@
             <text class="si-bean-arrow">▾</text>
           </view>
         </picker>
+        <view wx:elif="{{item.beanLocked}}" class="si-bean locked">
+          <text class="si-bean-label">用豆</text>
+          <text class="si-bean-name">{{item.beanName}}</text>
+        </view>
         <view wx:else class="si-bean empty">豆仓里还没有能用于这款的豆</view>
       </view>
     </view>

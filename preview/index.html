@@ -94,6 +94,8 @@
   .bean-pick .lbl{font-size:11px;color:var(--text-3);flex-shrink:0}
   .bean-pick select{flex:1;border:none;outline:none;background:transparent;font-size:12.5px;color:var(--coffee-dark);font-family:inherit}
   .bean-pick.empty{justify-content:center;color:var(--text-3);font-size:11.5px;border-style:dashed}
+  .bean-pick.locked{border:none;background:transparent;padding-left:0;padding-right:0}
+  .bean-pick.locked .locked-name{font-size:12.5px;color:var(--text-2)}
   .form-row{display:flex;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
   .form-label{width:76px;color:var(--text-2);font-size:13.5px}
   .form-input{flex:1;text-align:right;font-size:13.5px;border:none;outline:none;background:transparent;color:var(--text);font-family:inherit}
@@ -419,6 +421,7 @@ function renderOverlay(){
       const cur=cartBean[r.id]||defaultBeanOf(r);
       let pick;
       if(!opts.length) pick='<div class="bean-pick empty">豆仓里还没有能用于这款的豆</div>';
+      else if(opts.length===1) pick='<div class="bean-pick locked"><span class="lbl">用豆</span><span class="locked-name">'+esc(opts[0].name)+'</span></div>';
       else {
         const mark=b=>b._unlabeled?'（未标注用途）':(b._exact?'':'（通用）');
         pick='<div class="bean-pick"><span class="lbl">用豆</span><select onchange="setBean(\''+r.id+'\',this.value)">'

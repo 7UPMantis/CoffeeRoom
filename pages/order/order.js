@@ -165,6 +165,9 @@ Page({
         beanName: bean ? bean.name : '',
         beanUnlabeled: !!(bean && bean._unlabeled),
         noBean: !opts.length,
+        // 只有一支可选豆时不给选择器——豆仓通常就 2-3 支，多数情况没得选，
+        // 多一个下拉只是让流程变长
+        beanLocked: opts.length === 1,
         grams: g
       }
     }).filter(Boolean)

@@ -90,6 +90,13 @@ ok('手冲豆没有出现在奶咖的可选豆里', pick4Milk.indexOf('b1') === 
 const pick4Any = stock.beansFor({ category: 'special', tool: 'other', beanType: 'any' }, beanPool).map(b => b._id)
 eq('不限用途时四支豆都能选', pick4Any.sort(), ['b1', 'b2', 'b3', 'b4'])
 
+// 选豆交互降级：豆仓通常只有 2-3 支，候选数决定要不要渲染选择器
+// （order.js 用 beansFor 的长度判断：1 → 只读展示，≥2 → 选择器）
+ok('候选只有 1 支时长度=1，页面应降级为只读展示',
+  stock.beansFor({ category: 'filter', tool: 'hand_drip' }, [beanPool[0]]).length === 1)
+ok('候选 ≥2 支时页面才渲染选择器',
+  stock.beansFor({ category: 'filter', tool: 'hand_drip' }, beanPool).length >= 2)
+
 /* ---------- 4. 下单闭环：选豆 → 扣减 → 回补 ---------- */
 section('4. 下单闭环（选豆 / 扣豆 / 回补）')
 store.beans.add({ name: '哥伦比亚 慧兰', weight: 500, remaining: 460, usageTags: ['espresso'] })
