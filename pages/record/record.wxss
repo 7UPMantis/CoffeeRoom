@@ -1,0 +1,155 @@
+.stat-card {
+  display: flex;
+  align-items: center;
+  padding: 34rpx 28rpx;
+  background: linear-gradient(160deg, #FFFDFB 0%, #FBF4EC 100%);
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-num {
+  display: block;
+  font-size: 46rpx;
+  font-weight: 600;
+  color: var(--coffee);
+  line-height: 1.2;
+}
+
+.stat-key {
+  display: block;
+  font-size: 22rpx;
+  color: var(--text-2);
+  margin-top: 8rpx;
+}
+
+.stat-div {
+  width: 1rpx;
+  height: 62rpx;
+  background: var(--line);
+}
+
+.list-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 30rpx 0 4rpx;
+}
+
+.order-card {
+  padding: 28rpx 28rpx 22rpx;
+}
+
+.oc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.oc-who {
+  font-size: 31rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+}
+
+.oc-items {
+  margin-top: 18rpx;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 10rpx 24rpx;
+}
+
+.oc-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 14rpx 0;
+  font-size: 27rpx;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.oc-item:last-child {
+  border-bottom: none;
+}
+
+.oi-name {
+  color: var(--text);
+}
+
+.oi-count {
+  color: var(--coffee);
+  font-weight: 600;
+}
+
+.oc-note {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: var(--text-2);
+}
+
+.oc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18rpx;
+  padding-top: 18rpx;
+  border-top: 1rpx solid var(--line);
+}
+
+.oc-time {
+  font-size: 22rpx;
+  color: var(--text-3);
+}
+
+.oc-ops {
+  flex-shrink: 0;
+}
+
+.op {
+  font-size: 24rpx;
+  color: var(--coffee);
+  padding: 8rpx 12rpx;
+}
+
+.op.danger {
+  color: var(--red);
+}
+
+.row-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.rl-key {
+  font-size: 27rpx;
+  color: var(--text-2);
+}
+
+.rl-val {
+  font-size: 27rpx;
+  color: var(--text);
+}
+
+.btn-row {
+  display: flex;
+  margin-top: 30rpx;
+}
+
+.btn-row .btn-ghost {
+  flex: 1;
+}
+
+.btn-row .btn-ghost:first-child {
+  margin-right: 20rpx;
+}
+
+.tip-text {
+  margin-top: 26rpx;
+  font-size: 22rpx;
+  color: var(--text-2);
+  line-height: 1.75;
+}

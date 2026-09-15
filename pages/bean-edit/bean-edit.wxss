@@ -1,0 +1,150 @@
+/* ---------- 参数输入 ---------- */
+.param-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 24rpx -8rpx 0;
+}
+
+.pg-item {
+  width: calc(50% - 16rpx);
+  margin: 8rpx;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 20rpx 22rpx;
+  display: flex;
+  align-items: center;
+}
+
+.pg-label {
+  font-size: 24rpx;
+  color: var(--text-2);
+  width: 130rpx;
+  flex-shrink: 0;
+}
+
+.pg-input {
+  flex: 1;
+  text-align: right;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--coffee);
+}
+
+.pg-unit {
+  font-size: 22rpx;
+  color: var(--text-3);
+  margin-left: 6rpx;
+}
+
+/* ---------- 状态预览 ---------- */
+.preview-box {
+  margin-top: 22rpx;
+  background: var(--blue-bg);
+  color: #3E6C96;
+  border-radius: var(--r-md);
+  padding: 20rpx 22rpx;
+  font-size: 24rpx;
+  line-height: 1.65;
+}
+
+/* ---------- 养豆时间轴 ---------- */
+.axis {
+  margin-top: 26rpx;
+}
+
+.axis-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20rpx;
+  color: var(--text-2);
+  margin-bottom: 12rpx;
+}
+
+.axis-bar {
+  display: flex;
+  height: 16rpx;
+  border-radius: 999rpx;
+  overflow: hidden;
+  background: var(--surface-3);
+}
+
+.ax {
+  height: 100%;
+}
+
+.ax-blue { background: linear-gradient(90deg, #8FB9D6 0%, #5B8FB9 100%); }
+.ax-green { background: linear-gradient(90deg, #7CC199 0%, #4A9E6B 100%); }
+.ax-orange { background: linear-gradient(90deg, #EAB676 0%, #D98B3A 100%); }
+
+.reset-line {
+  margin-top: 18rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: var(--coffee);
+  padding: 14rpx;
+}
+
+/* ---------- 标签 ---------- */
+.tag-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tag-item {
+  padding: 11rpx 22rpx;
+  border-radius: 999rpx;
+  background: var(--coffee-tint);
+  color: var(--coffee-mid);
+  font-size: 24rpx;
+  margin: 0 16rpx 16rpx 0;
+}
+
+.tag-x {
+  color: var(--text-3);
+  margin-left: 8rpx;
+}
+
+.tag-add {
+  display: flex;
+  align-items: center;
+}
+
+.tag-input {
+  flex: 1;
+  background: var(--surface-2);
+  border-radius: 999rpx;
+  padding: 18rpx 26rpx;
+  font-size: 28rpx;
+}
+
+.tag-btn {
+  margin-left: 16rpx;
+  padding: 18rpx 34rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #7B5940 0%, #6F4E37 100%);
+  color: #fff;
+  font-size: 26rpx;
+  box-shadow: 0 6rpx 16rpx rgba(111, 78, 55, 0.22);
+}
+
+/* ---------- 备注 ---------- */
+.note-area {
+  width: 100%;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 22rpx;
+  font-size: 28rpx;
+  min-height: 130rpx;
+}
+
+.save-btn {
+  margin-top: 44rpx;
+}
+
+.del-btn {
+  margin-top: 22rpx;
+}
+
+.ph {
+  color: var(--text-3);
+}

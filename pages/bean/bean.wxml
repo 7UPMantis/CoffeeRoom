@@ -1,0 +1,92 @@
+<view class="page">
+  <!-- 概览 -->
+  <view class="card overview">
+    <view class="ov-top">
+      <view>
+        <view class="ov-title">豆仓概览</view>
+        <view class="ov-sub">在库 {{beans.length}} 支 · 剩余 {{totalWeight}}g</view>
+      </view>
+    </view>
+    <view class="ov-grid">
+      <view class="ov-item">
+        <text class="ov-num green">{{summary.peak}}</text>
+        <text class="ov-key">最佳风味</text>
+      </view>
+      <view class="ov-item">
+        <text class="ov-num blue">{{summary.resting}}</text>
+        <text class="ov-key">养豆中</text>
+      </view>
+      <view class="ov-item">
+        <text class="ov-num orange">{{summary.fading}}</text>
+        <text class="ov-key">风味衰退</text>
+      </view>
+      <view class="ov-item">
+        <text class="ov-num red">{{summary.expired}}</text>
+        <text class="ov-key">已过期</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="list-head">
+    <text class="section-title">我的咖啡豆</text>
+  </view>
+
+  <view wx:for="{{beans}}" wx:key="_id" class="card bean-card" data-id="{{item._id}}" bindtap="onEdit">
+    <view class="bc-head">
+      <view class="bc-left">
+        <view class="bc-name">{{item.name}}</view>
+        <view class="bc-origin">
+          <text wx:if="{{item.origin}}">{{item.origin}}</text>
+          <text wx:if="{{item.process}}" class="dot">·</text>
+          <text wx:if="{{item.process}}">{{item.process}}</text>
+          <text wx:if="{{item._roastLabel && item._roastLabel !== '未设置'}}" class="dot">·</text>
+          <text wx:if="{{item._roastLabel && item._roastLabel !== '未设置'}}">{{item._roastLabel}}</text>
+        </view>
+      </view>
+      <view class="tag {{item._status.tone}}">{{item._status.label}}</view>
+    </view>
+
+    <!-- 养豆 / 保质期进度 -->
+    <view class="bc-timeline">
+      <view class="tl-row">
+        <text class="tl-label">{{item._status.label}}</text>
+        <text class="tl-day" wx:if="{{item._days !== null}}">烘焙后第 {{item._days}} 天</text>
+      </view>
+      <view class="progress">
+        <view class="progress-bar bg-{{item._status.tone}}" style="width: {{item._status.progress * 100}}%"></view>
+      </view>
+      <view class="tl-tip">{{item._status.tip}}</view>
+    </view>
+
+    <!-- 余量 -->
+    <view class="bc-stock">
+      <view class="st-row">
+        <text class="st-label">余量</text>
+        <text class="st-val">{{item._stock.left}}g / {{item._stock.total}}g</text>
+      </view>
+      <view class="progress">
+        <view class="progress-bar {{item._stock.low ? 'bg-orange' : 'bg-coffee'}}" style="width: {{item._pct}}%"></view>
+      </view>
+    </view>
+
+    <view class="bc-foot">
+      <view class="bc-flavor">
+        <text wx:for="{{item.flavor}}" wx:for-item="fv" wx:key="*this" class="tag">{{fv}}</text>
+      </view>
+      <text class="bc-del" data-id="{{item._id}}" data-name="{{item.name}}" catchtap="onDelete">删除</text>
+    </view>
+
+    <view class="bc-date" wx:if="{{item.roastDate}}">
+      <text wx:if="{{item._status.endDate}}">{{item._status.label}}截止 {{item._status.endDate}}</text>
+      <text wx:else>烘焙日 {{item.roastDate}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{!beans.length}}" class="empty">
+    <text class="empty-icon">🫘</text>
+    <view>还没有登记咖啡豆</view>
+    <view class="muted" style="margin-top:16rpx">点右下角 ＋ 添加，自动帮你算养豆期</view>
+  </view>
+</view>
+
+<view class="fab" bindtap="onAdd">＋</view>

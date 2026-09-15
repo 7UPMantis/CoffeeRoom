@@ -1,0 +1,112 @@
+.search-clear {
+  color: var(--text-3);
+  font-size: 40rpx;
+  padding: 0 8rpx;
+  line-height: 1;
+}
+
+.list-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 26rpx 0 4rpx;
+}
+
+.recipe-card {
+  padding: 30rpx 28rpx 22rpx;
+}
+
+.rc-head {
+  margin-bottom: 20rpx;
+}
+
+.rc-title {
+  display: flex;
+  align-items: center;
+}
+
+.rc-name {
+  font-size: 35rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+  letter-spacing: 0.5rpx;
+}
+
+.rc-star {
+  color: var(--gold);
+  font-size: 28rpx;
+  margin-left: 12rpx;
+}
+
+.rc-sub {
+  font-size: 24rpx;
+  color: var(--text-2);
+  margin-top: 8rpx;
+}
+
+/* 参数区 */
+.rc-params {
+  display: flex;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 22rpx 0;
+  margin-bottom: 18rpx;
+}
+
+.param {
+  flex: 1;
+  text-align: center;
+  border-right: 1rpx solid var(--line);
+}
+
+.param:last-child {
+  border-right: none;
+}
+
+.p-val {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--coffee);
+  line-height: 1.2;
+}
+
+.p-key {
+  display: block;
+  font-size: 20rpx;
+  color: var(--text-2);
+  margin-top: 6rpx;
+}
+
+.rc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18rpx;
+  border-top: 1rpx solid var(--line);
+}
+
+.rc-tags {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.rc-ops {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.op {
+  font-size: 24rpx;
+  color: var(--coffee);
+  padding: 8rpx 12rpx;
+}
+
+.op.danger {
+  color: var(--red);
+}
+
+.ph {
+  color: var(--text-3);
+}

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "点单",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {}
+}

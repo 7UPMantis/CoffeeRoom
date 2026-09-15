@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "咖啡配方",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {}
+}

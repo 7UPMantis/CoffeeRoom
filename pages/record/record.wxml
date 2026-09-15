@@ -1,0 +1,74 @@
+<view class="page">
+  <!-- 统计 -->
+  <view class="card stat-card">
+    <view class="stat-item">
+      <text class="stat-num">{{monthCount}}</text>
+      <text class="stat-key">本月杯数</text>
+    </view>
+    <view class="stat-div"></view>
+    <view class="stat-item">
+      <text class="stat-num">{{totalCount}}</text>
+      <text class="stat-key">累计杯数</text>
+    </view>
+    <view class="stat-div"></view>
+    <view class="stat-item">
+      <text class="stat-num">{{orders.length}}</text>
+      <text class="stat-key">点单次数</text>
+    </view>
+  </view>
+
+  <view class="list-head">
+    <text class="section-title">点单记录</text>
+    <text class="muted">{{orders.length}} 条</text>
+  </view>
+
+  <view wx:for="{{orders}}" wx:key="_id" class="card order-card">
+    <view class="oc-head">
+      <view class="oc-who">给 {{item.forWho}}</view>
+      <view class="tag {{item.status === 'done' ? 'green' : 'orange'}}">{{item.status === 'done' ? '已完成' : '待制作'}}</view>
+    </view>
+
+    <view class="oc-items">
+      <view wx:for="{{item.items}}" wx:for-item="it" wx:key="recipeId" class="oc-item">
+        <text class="oi-name">{{it.name}}</text>
+        <text class="oi-count">× {{it.count}}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{item.note}}" class="oc-note">备注：{{item.note}}</view>
+
+    <view class="oc-foot">
+      <text class="oc-time">{{item._time}} · 共 {{item.totalCount}} 杯</text>
+      <view class="oc-ops">
+        <text class="op" data-id="{{item._id}}" bindtap="onToggleStatus">{{item.status === 'done' ? '标记待做' : '标记完成'}}</text>
+        <text class="op danger" data-id="{{item._id}}" bindtap="onDelete">删除</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{!orders.length}}" class="empty">
+    <text class="empty-icon">🧾</text>
+    <view>还没有点单记录</view>
+    <view class="muted" style="margin-top:16rpx">去「点单」页选几杯试试</view>
+  </view>
+
+  <!-- 数据 -->
+  <view class="list-head">
+    <text class="section-title">数据</text>
+  </view>
+  <view class="card">
+    <view class="row-line">
+      <text class="rl-key">当前存储</text>
+      <text class="rl-val">{{modeText}}</text>
+    </view>
+    <view class="row-line">
+      <text class="rl-key">云环境 ID</text>
+      <text class="rl-val">{{envId || '未配置'}}</text>
+    </view>
+    <view class="btn-row">
+      <view class="btn-ghost" bindtap="onRedetect">重新检测</view>
+      <view class="btn-ghost" bindtap="onSeed">示例数据</view>
+    </view>
+    <view class="tip-text">未配置云环境时数据只存在本机；填好 app.js 里的 env 后点「重新检测」即可切到云开发，家人朋友可共享同一份配方与豆仓。</view>
+  </view>
+</view>

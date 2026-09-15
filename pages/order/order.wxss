@@ -1,0 +1,239 @@
+/* ---------- 欢迎头部 ---------- */
+.hero {
+  background: linear-gradient(135deg, #7B5940 0%, #5D4030 100%);
+  border-radius: var(--r-xl);
+  padding: 38rpx 34rpx;
+  margin-bottom: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 14rpx 30rpx rgba(93, 64, 48, 0.24);
+}
+
+.hero-text {
+  flex: 1;
+}
+
+.hero-title {
+  font-size: 38rpx;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 1rpx;
+}
+
+.hero-sub {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.72);
+  margin-top: 10rpx;
+}
+
+.hero-badge {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  text-align: center;
+  line-height: 100rpx;
+  font-size: 46rpx;
+  flex-shrink: 0;
+  margin-left: 20rpx;
+}
+
+.search-clear {
+  color: var(--text-3);
+  font-size: 40rpx;
+  padding: 0 8rpx;
+  line-height: 1;
+}
+
+.list-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 26rpx;
+}
+
+.recipe-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10rpx;
+}
+
+.r-card {
+  width: calc(50% - 20rpx);
+  margin: 0 10rpx 20rpx;
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  padding: 26rpx 24rpx 22rpx;
+  box-shadow: var(--shadow-sm);
+  border: 1rpx solid rgba(230, 217, 200, 0.5);
+  overflow: hidden;
+}
+
+.r-top {
+  display: flex;
+  flex-direction: column;
+}
+
+.r-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+  letter-spacing: 0.5rpx;
+}
+
+.r-cat {
+  font-size: 22rpx;
+  color: var(--text-2);
+  margin-top: 8rpx;
+}
+
+.r-meta {
+  font-size: 22rpx;
+  color: var(--text-2);
+  margin-top: 14rpx;
+}
+
+.r-meta .dot {
+  margin: 0 8rpx;
+  color: var(--text-3);
+}
+
+.r-tags {
+  margin-top: 14rpx;
+  min-height: 36rpx;
+}
+
+.r-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20rpx;
+  padding-top: 18rpx;
+  border-top: 1rpx solid var(--line);
+}
+
+.r-fav {
+  font-size: 22rpx;
+  color: var(--gold);
+}
+
+.placeholder-fav {
+  height: 22rpx;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+}
+
+.st-btn {
+  width: 52rpx;
+  height: 52rpx;
+  line-height: 48rpx;
+  text-align: center;
+  border-radius: 50%;
+  border: 1rpx solid var(--coffee);
+  color: var(--coffee);
+  font-size: 32rpx;
+}
+
+.st-btn.add {
+  background: linear-gradient(135deg, #7B5940 0%, #6F4E37 100%);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4rpx 12rpx rgba(111, 78, 55, 0.25);
+}
+
+.st-num {
+  min-width: 44rpx;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+}
+
+/* 底部购物车 */
+.cart-bar {
+  position: fixed;
+  left: 24rpx;
+  right: 24rpx;
+  bottom: 24rpx;
+  background: linear-gradient(135deg, #4A3428 0%, #3A271E 100%);
+  border-radius: 999rpx;
+  padding: 16rpx 16rpx 16rpx 36rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 14rpx 34rpx rgba(58, 39, 30, 0.35);
+  z-index: 30;
+}
+
+.cart-info {
+  flex: 1;
+}
+
+.cart-count {
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.cart-desc {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 22rpx;
+}
+
+.cart-btn {
+  background: #fff;
+  color: var(--coffee-dark);
+  border-radius: 999rpx;
+  padding: 18rpx 42rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.12);
+}
+
+/* 弹层 */
+.sheet-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+  margin-bottom: 20rpx;
+}
+
+.sheet-items {
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 12rpx 24rpx;
+  margin-bottom: 8rpx;
+}
+
+.sheet-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.sheet-item:last-child {
+  border-bottom: none;
+}
+
+.si-name {
+  color: var(--text);
+}
+
+.si-count {
+  color: var(--coffee);
+  font-weight: 600;
+}
+
+.sheet-actions {
+  display: flex;
+  margin-top: 40rpx;
+}
+
+.ph {
+  color: var(--text-3);
+}

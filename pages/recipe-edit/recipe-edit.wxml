@@ -1,0 +1,131 @@
+<view class="page">
+  <!-- 基础信息 -->
+  <view class="card">
+    <view class="form-row">
+      <text class="form-label">配方名称</text>
+      <input class="form-value" placeholder="例如：经典拿铁" placeholder-class="ph" value="{{name}}" data-key="name" bindinput="onInput" />
+    </view>
+
+    <view class="cover-row">
+      <view class="cover-box" bindtap="onChooseCover">
+        <image wx:if="{{cover}}" class="cover-img" src="{{cover}}" mode="aspectFill" />
+        <view wx:else class="cover-empty">
+          <text class="cover-plus">＋</text>
+          <text class="cover-tip">添加图片</text>
+        </view>
+      </view>
+      <view class="cover-side">
+        <view class="form-row" style="border:none;padding-top:0">
+          <text class="form-label">设为常喝</text>
+          <switch checked="{{favorite}}" color="#6F4E37" bindchange="onToggleFav" />
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分类 -->
+  <view class="card">
+    <view class="section-title">分类标签</view>
+    <view class="cat-wrap">
+      <view wx:for="{{catList}}" wx:key="key"
+            class="cat-item {{category === item.key ? 'active' : ''}}"
+            data-key="{{item.key}}" bindtap="onCatTap">{{item.icon}} {{item.label}}</view>
+    </view>
+  </view>
+
+  <!-- 冲煮参数 -->
+  <view class="card">
+    <view class="section-title">冲煮参数</view>
+
+    <view class="form-row">
+      <text class="form-label">使用咖啡豆</text>
+      <picker mode="selector" range="{{beanLabels}}" value="{{beanIndex}}" bindchange="onBeanChange">
+        <view class="form-value {{beanName ? '' : 'placeholder'}}">{{beanName || '不指定'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">冲煮器具</text>
+      <picker mode="selector" range="{{toolLabels}}" value="{{toolIndex}}" bindchange="onToolChange">
+        <view class="form-value">{{toolLabels[toolIndex]}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">研磨度</text>
+      <picker mode="selector" range="{{grindLabels}}" value="{{grindIndex}}" bindchange="onGrindChange">
+        <view class="form-value">{{grindLabels[grindIndex]}}</view>
+      </picker>
+    </view>
+
+    <view class="param-grid">
+      <view class="pg-item">
+        <text class="pg-label">咖啡粉</text>
+        <input class="pg-input" type="digit" placeholder="18" placeholder-class="ph" value="{{dose}}" data-key="dose" bindinput="onInput" />
+        <text class="pg-unit">g</text>
+      </view>
+      <view class="pg-item">
+        <text class="pg-label">水量/液重</text>
+        <input class="pg-input" type="digit" placeholder="36" placeholder-class="ph" value="{{water}}" data-key="water" bindinput="onInput" />
+        <text class="pg-unit">g</text>
+      </view>
+      <view class="pg-item">
+        <text class="pg-label">牛奶</text>
+        <input class="pg-input" type="digit" placeholder="0" placeholder-class="ph" value="{{milk}}" data-key="milk" bindinput="onInput" />
+        <text class="pg-unit">ml</text>
+      </view>
+      <view class="pg-item">
+        <text class="pg-label">水温</text>
+        <input class="pg-input" type="digit" placeholder="92" placeholder-class="ph" value="{{temp}}" data-key="temp" bindinput="onInput" />
+        <text class="pg-unit">℃</text>
+      </view>
+    </view>
+
+    <view class="ratio-line">
+      <text class="muted">粉水比</text>
+      <text class="ratio-val">{{ratio || '—'}}</text>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">萃取时间</text>
+      <input class="form-value" placeholder="25-28s / 2:30" placeholder-class="ph" value="{{time}}" data-key="time" bindinput="onInput" />
+    </view>
+  </view>
+
+  <!-- 做法步骤 -->
+  <view class="card">
+    <view class="section-title">做法步骤</view>
+    <view wx:for="{{steps}}" wx:key="index" class="step-row">
+      <text class="step-no">{{index + 1}}</text>
+      <textarea class="step-input" placeholder="描述这一步" placeholder-class="ph" value="{{item}}"
+                data-index="{{index}}" bindinput="onStepInput" auto-height maxlength="200" />
+      <text class="step-del" data-index="{{index}}" bindtap="onStepDel">×</text>
+    </view>
+    <view class="add-line" bindtap="onStepAdd">＋ 添加步骤</view>
+  </view>
+
+  <!-- 标签 -->
+  <view class="card">
+    <view class="section-title">自定义标签</view>
+    <view class="tag-wrap">
+      <view wx:for="{{tags}}" wx:key="*this" class="tag-item" data-index="{{index}}" bindtap="onTagDel">
+        {{item}} <text class="tag-x">×</text>
+      </view>
+    </view>
+    <view class="tag-add">
+      <input class="tag-input" placeholder="输入标签，回车添加" placeholder-class="ph" value="{{tagInput}}"
+             bindinput="onTagInput" confirm-type="done" bindconfirm="onTagAdd" />
+      <view class="tag-btn" bindtap="onTagAdd">添加</view>
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="card">
+    <view class="section-title">备注</view>
+    <textarea class="note-area" placeholder="口感描述、注意事项…" placeholder-class="ph"
+              value="{{note}}" data-key="note" bindinput="onInput" maxlength="300" auto-height />
+  </view>
+
+  <view class="btn-primary save-btn" bindtap="onSave">保存配方</view>
+  <view wx:if="{{isEdit}}" class="btn-danger del-btn" bindtap="onDelete">删除配方</view>
+</view>

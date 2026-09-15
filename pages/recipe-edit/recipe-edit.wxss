@@ -1,0 +1,236 @@
+/* ---------- 封面 ---------- */
+.cover-row {
+  display: flex;
+  align-items: center;
+  padding-top: 26rpx;
+}
+
+.cover-box {
+  width: 168rpx;
+  height: 168rpx;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--surface-2);
+  flex-shrink: 0;
+  border: 1rpx dashed var(--line-strong);
+}
+
+.cover-img {
+  width: 100%;
+  height: 100%;
+}
+
+.cover-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover-plus {
+  font-size: 50rpx;
+  color: var(--coffee-light);
+  line-height: 1;
+}
+
+.cover-tip {
+  font-size: 22rpx;
+  color: var(--text-3);
+  margin-top: 10rpx;
+}
+
+.cover-side {
+  flex: 1;
+  margin-left: 26rpx;
+}
+
+/* ---------- 分类选择 ---------- */
+.cat-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -8rpx;
+}
+
+.cat-item {
+  padding: 15rpx 30rpx;
+  border-radius: 999rpx;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 26rpx;
+  margin: 8rpx;
+  border: 1rpx solid transparent;
+}
+
+.cat-item.active {
+  background: linear-gradient(135deg, #7B5940 0%, #6F4E37 100%);
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 6rpx 16rpx rgba(111, 78, 55, 0.24);
+}
+
+/* ---------- 参数输入 ---------- */
+.param-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 26rpx -8rpx 0;
+}
+
+.pg-item {
+  width: calc(50% - 16rpx);
+  margin: 8rpx;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 20rpx 22rpx;
+  display: flex;
+  align-items: center;
+}
+
+.pg-label {
+  font-size: 24rpx;
+  color: var(--text-2);
+  width: 130rpx;
+  flex-shrink: 0;
+}
+
+.pg-input {
+  flex: 1;
+  text-align: right;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--coffee);
+}
+
+.pg-unit {
+  font-size: 22rpx;
+  color: var(--text-3);
+  margin-left: 6rpx;
+}
+
+.ratio-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 4rpx 0;
+}
+
+.ratio-val {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--coffee);
+}
+
+/* ---------- 步骤 ---------- */
+.step-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 18rpx;
+}
+
+.step-no {
+  width: 46rpx;
+  height: 46rpx;
+  line-height: 46rpx;
+  text-align: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7B5940 0%, #6F4E37 100%);
+  color: #fff;
+  font-size: 24rpx;
+  flex-shrink: 0;
+  margin-right: 16rpx;
+  margin-top: 8rpx;
+  box-shadow: 0 4rpx 10rpx rgba(111, 78, 55, 0.2);
+}
+
+.step-input {
+  flex: 1;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 18rpx 22rpx;
+  font-size: 28rpx;
+  min-height: 84rpx;
+}
+
+.step-del {
+  color: var(--text-3);
+  font-size: 40rpx;
+  padding: 0 8rpx;
+  line-height: 1;
+  margin-top: 12rpx;
+}
+
+.add-line {
+  text-align: center;
+  padding: 22rpx;
+  color: var(--coffee);
+  font-size: 26rpx;
+  border: 2rpx dashed var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+
+/* ---------- 标签 ---------- */
+.tag-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tag-item {
+  padding: 11rpx 22rpx;
+  border-radius: 999rpx;
+  background: var(--coffee-tint);
+  color: var(--coffee-mid);
+  font-size: 24rpx;
+  margin: 0 16rpx 16rpx 0;
+}
+
+.tag-x {
+  color: var(--text-3);
+  margin-left: 8rpx;
+}
+
+.tag-add {
+  display: flex;
+  align-items: center;
+}
+
+.tag-input {
+  flex: 1;
+  background: var(--surface-2);
+  border-radius: 999rpx;
+  padding: 18rpx 26rpx;
+  font-size: 28rpx;
+}
+
+.tag-btn {
+  margin-left: 16rpx;
+  padding: 18rpx 34rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #7B5940 0%, #6F4E37 100%);
+  color: #fff;
+  font-size: 26rpx;
+  box-shadow: 0 6rpx 16rpx rgba(111, 78, 55, 0.22);
+}
+
+/* ---------- 备注 ---------- */
+.note-area {
+  width: 100%;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 22rpx;
+  font-size: 28rpx;
+  min-height: 130rpx;
+}
+
+.save-btn {
+  margin-top: 44rpx;
+}
+
+.del-btn {
+  margin-top: 22rpx;
+}
+
+.ph {
+  color: var(--text-3);
+}

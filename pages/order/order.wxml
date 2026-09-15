@@ -1,0 +1,99 @@
+<view class="page order-page">
+  <!-- 欢迎头部 -->
+  <view class="hero">
+    <view class="hero-text">
+      <view class="hero-title">今天想喝点什么</view>
+      <view class="hero-sub">{{recipes.length}} 款配方 · {{beanCount}} 支咖啡豆</view>
+    </view>
+    <view class="hero-badge">☕</view>
+  </view>
+
+  <!-- 搜索 -->
+  <view class="search">
+    <input placeholder="搜配方、标签、器具" placeholder-class="ph" value="{{keyword}}" bindinput="onSearch" confirm-type="search" />
+    <text wx:if="{{keyword}}" class="search-clear" bindtap="onClearSearch">×</text>
+  </view>
+
+  <!-- 分类标签 -->
+  <scroll-view class="chip-scroll" scroll-x enable-flex>
+    <view wx:for="{{categories}}" wx:key="key"
+          class="chip {{activeCat === item.key ? 'active' : ''}}"
+          data-key="{{item.key}}" bindtap="onCatTap">{{item.icon}} {{item.label}}</view>
+  </scroll-view>
+
+  <view class="list-head">
+    <text class="section-title">选一杯</text>
+    <text class="muted">共 {{list.length}} 款</text>
+  </view>
+
+  <!-- 配方卡片 -->
+  <view class="recipe-grid">
+    <view wx:for="{{list}}" wx:key="_id" class="r-card">
+      <view class="r-top">
+        <view class="r-name">{{item.name}}</view>
+        <view class="r-cat">{{item._catIcon}} {{item._catLabel}}</view>
+      </view>
+      <view class="r-meta">
+        <text wx:if="{{item.dose}}">{{item.dose}}g 粉</text>
+        <text wx:if="{{item._ratio}}" class="dot">·</text>
+        <text wx:if="{{item._ratio}}">{{item._ratio}}</text>
+        <text wx:if="{{item._toolLabel && item._toolLabel !== '未设置'}}" class="dot">·</text>
+        <text wx:if="{{item._toolLabel && item._toolLabel !== '未设置'}}">{{item._toolLabel}}</text>
+      </view>
+      <view class="r-tags">
+        <text wx:for="{{item.tags}}" wx:for-item="tg" wx:key="*this" class="tag">{{tg}}</text>
+      </view>
+      <view class="r-bottom">
+        <view wx:if="{{item.favorite}}" class="r-fav">★ 常喝</view>
+        <view wx:else class="r-fav placeholder-fav"></view>
+        <view class="stepper">
+          <view wx:if="{{cart[item._id]}}" class="st-btn" data-id="{{item._id}}" bindtap="onMinus">−</view>
+          <text wx:if="{{cart[item._id]}}" class="st-num">{{cart[item._id]}}</text>
+          <view class="st-btn add" data-id="{{item._id}}" bindtap="onPlus">＋</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{!list.length}}" class="empty">
+    <text class="empty-icon">☕</text>
+    <view>这个分类还没有配方</view>
+    <view class="muted" style="margin-top:16rpx" bindtap="onGoRecipe">去「配方」页添加一款</view>
+  </view>
+</view>
+
+<!-- 底部购物车 -->
+<view wx:if="{{cartCount}}" class="cart-bar">
+  <view class="cart-info" bindtap="onCartTap">
+    <view class="cart-count">{{cartCount}} 杯</view>
+    <view class="cart-desc">{{cartList[0].name}}<text wx:if="{{cartList.length > 1}}"> 等 {{cartList.length}} 款</text></view>
+  </view>
+  <view class="cart-btn" bindtap="onCartTap">去下单</view>
+</view>
+
+<!-- 下单弹层 -->
+<view wx:if="{{showSheet}}" class="mask" bindtap="onCloseSheet"></view>
+<view wx:if="{{showSheet}}" class="sheet" catchtap="stopPop">
+  <view class="sheet-title">确认点单</view>
+
+  <view class="sheet-items">
+    <view wx:for="{{cartList}}" wx:key="id" class="sheet-item">
+      <text class="si-name">{{item.name}}</text>
+      <text class="si-count">× {{item.count}}</text>
+    </view>
+  </view>
+
+  <view class="form-row">
+    <text class="form-label">给谁做</text>
+    <input class="form-value" placeholder="爸爸 / 妈妈 / 自己" placeholder-class="ph" value="{{forWho}}" bindinput="onForWho" />
+  </view>
+  <view class="form-row">
+    <text class="form-label">备注</text>
+    <input class="form-value" placeholder="少糖、多奶、去冰…" placeholder-class="ph" value="{{note}}" bindinput="onNote" />
+  </view>
+
+  <view class="sheet-actions">
+    <view class="btn-ghost" style="flex:1;margin-right:20rpx" bindtap="onCloseSheet">再看看</view>
+    <view class="btn-primary" style="flex:1" bindtap="onSubmit">提交 {{cartCount}} 杯</view>
+  </view>
+</view>

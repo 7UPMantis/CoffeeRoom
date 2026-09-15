@@ -1,0 +1,53 @@
+{
+  "pages": [
+    "pages/order/order",
+    "pages/recipe/recipe",
+    "pages/bean/bean",
+    "pages/record/record",
+    "pages/recipe-edit/recipe-edit",
+    "pages/bean-edit/bean-edit"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4E342E",
+    "navigationBarTitleText": "咖屋",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#FDF8F3",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#B5A495",
+    "selectedColor": "#6F4E37",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/order/order",
+        "text": "点单",
+        "iconPath": "images/tab-order.png",
+        "selectedIconPath": "images/tab-order-on.png"
+      },
+      {
+        "pagePath": "pages/recipe/recipe",
+        "text": "配方",
+        "iconPath": "images/tab-recipe.png",
+        "selectedIconPath": "images/tab-recipe-on.png"
+      },
+      {
+        "pagePath": "pages/bean/bean",
+        "text": "咖啡豆",
+        "iconPath": "images/tab-bean.png",
+        "selectedIconPath": "images/tab-bean-on.png"
+      },
+      {
+        "pagePath": "pages/record/record",
+        "text": "记录",
+        "iconPath": "images/tab-record.png",
+        "selectedIconPath": "images/tab-record-on.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

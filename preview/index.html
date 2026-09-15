@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>咖屋 · 界面预览</title>
+<style>
+  :root{
+    --coffee:#6F4E37; --coffee-dark:#4A3428; --coffee-mid:#8B6B52; --coffee-light:#B08E72;
+    --cream:#FBF6F0; --cream-2:#F8F1E9; --cream-3:#F1E7DA; --line:#F1E7DB;
+    --text:#3D2C21; --text-2:#8A7666; --text-3:#B5A495;
+    --green:#4A9E6B; --orange:#D98B3A; --red:#C9564A; --blue:#5B8FB9; --gold:#C19A6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:#EFEAE4; color:var(--text); font-size:14px; line-height:1.5;
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    display:flex; flex-direction:column; align-items:center; padding:28px 16px 48px; min-height:100vh;
+  }
+  .hint{max-width:390px;margin-bottom:18px;font-size:13px;color:#7A6A5E;text-align:center;line-height:1.8}
+  .hint b{color:var(--coffee-dark)}
+
+  /* 手机外壳 */
+  .phone{
+    width:390px;height:844px;background:var(--cream);border-radius:44px;
+    box-shadow:0 24px 60px rgba(62,39,35,.28),0 0 0 11px #2B2B2B,0 0 0 13px #4A4A4A;
+    display:flex;flex-direction:column;overflow:hidden;position:relative;flex-shrink:0;
+  }
+  .status{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-size:13px;font-weight:600;color:#fff;background:var(--coffee-dark);flex-shrink:0}
+  .navbar{height:44px;background:var(--coffee-dark);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;flex-shrink:0}
+  .body{flex:1;overflow-y:auto;padding:12px 12px 96px;background:var(--cream)}
+  .body::-webkit-scrollbar{width:0}
+  .tabbar{height:60px;background:#fff;border-top:1px solid var(--line);display:flex;flex-shrink:0;padding-bottom:6px}
+  .tabbar div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;color:var(--text-3);cursor:pointer}
+  .tabbar div.on{color:var(--coffee);font-weight:500}
+  .ti{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:4.8;stroke-linecap:round;stroke-linejoin:round}
+
+  .hero{background:linear-gradient(135deg,#7B5940 0%,#5D4030 100%);border-radius:16px;padding:18px 17px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 7px 15px rgba(93,64,48,.24)}
+  .hero-title{font-size:19px;font-weight:600;color:#fff;letter-spacing:.5px}
+  .hero-sub{font-size:12px;color:rgba(255,255,255,.72);margin-top:5px}
+  .hero-badge{width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.16);text-align:center;line-height:50px;font-size:23px;flex-shrink:0;margin-left:10px}
+  .card{background:#fff;border-radius:13px;padding:15px;box-shadow:0 2px 10px rgba(122,88,60,.06);border:1px solid rgba(230,217,200,.5);margin-bottom:11px}
+  .search{display:flex;align-items:center;background:#fff;border-radius:999px;height:38px;padding:0 14px;border:1px solid var(--line);margin-bottom:10px;font-size:13px;color:var(--text-3)}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;margin-bottom:4px}
+  .chips::-webkit-scrollbar{height:0}
+  .chip{flex-shrink:0;padding:6px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--text-2);font-size:13px;cursor:pointer;white-space:nowrap}
+  .chip.on{background:var(--coffee);border-color:var(--coffee);color:#fff;font-weight:500}
+  .list-head{display:flex;justify-content:space-between;align-items:baseline;margin:12px 2px 6px}
+  .sec-title{font-size:15px;font-weight:600;color:var(--coffee-dark)}
+  .muted{font-size:12px;color:var(--text-2)}
+  .tag{display:inline-block;padding:2px 7px;border-radius:4px;background:var(--cream-2);color:var(--coffee-mid);font-size:11px;margin-right:5px}
+  .tag.green{background:#E8F6ED;color:var(--green)} .tag.blue{background:#E9F2FC;color:var(--blue)}
+  .tag.orange{background:#FEF1E2;color:var(--orange)} .tag.red{background:#FDECEA;color:var(--red)}
+  .tag.grey{background:var(--cream-2);color:var(--text-2)}
+
+  /* 点单 */
+  .grid{display:flex;flex-wrap:wrap;margin:0 -5px}
+  .r-card{width:calc(50% - 10px);margin:0 5px 10px;background:#fff;border-radius:10px;padding:12px;box-shadow:0 2px 10px rgba(78,52,46,.06)}
+  .r-name{font-size:16px;font-weight:600;color:var(--coffee-dark)}
+  .r-cat{font-size:11px;color:var(--text-2);margin-top:3px}
+  .r-meta{font-size:11px;color:var(--text-2);margin-top:7px}
+  .r-meta i{font-style:normal;color:var(--text-3);margin:0 4px}
+  .r-tags{margin-top:6px;min-height:17px}
+  .r-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:9px}
+  .r-fav{font-size:11px;color:var(--orange)}
+  .stepper{display:flex;align-items:center}
+  .st-btn{width:24px;height:24px;line-height:22px;text-align:center;border-radius:50%;border:1px solid var(--coffee);color:var(--coffee);font-size:16px;cursor:pointer;user-select:none}
+  .st-btn.add{background:var(--coffee);color:#fff}
+  .st-num{min-width:20px;text-align:center;font-size:15px;font-weight:600;color:var(--coffee-dark)}
+  .cart-bar{position:absolute;left:12px;right:12px;bottom:62px;background:var(--coffee-dark);border-radius:999px;padding:9px 12px 9px 18px;display:flex;align-items:center;box-shadow:0 6px 18px rgba(62,39,35,.3);z-index:5}
+  .cart-info{flex:1}
+  .cart-count{color:#fff;font-size:15px;font-weight:600}
+  .cart-desc{color:rgba(255,255,255,.7);font-size:11px}
+  .cart-btn{background:#fff;color:var(--coffee-dark);border-radius:999px;padding:8px 20px;font-size:14px;font-weight:600;cursor:pointer}
+
+  /* 配方 */
+  .rc-name{font-size:17px;font-weight:600;color:var(--coffee-dark)}
+  .rc-star{color:var(--orange);margin-left:6px}
+  .rc-sub{font-size:12px;color:var(--text-2);margin-top:4px}
+  .params{display:flex;background:var(--cream);border-radius:7px;padding:9px 0;margin:9px 0}
+  .param{flex:1;text-align:center;border-right:1px solid var(--line)}
+  .param:last-child{border-right:none}
+  .p-val{display:block;font-size:15px;font-weight:600;color:var(--coffee)}
+  .p-key{display:block;font-size:10px;color:var(--text-2);margin-top:2px}
+  .rc-foot{display:flex;align-items:center;justify-content:space-between}
+  .rc-tags{flex:1;display:flex;flex-wrap:wrap}
+  .op{font-size:12px;color:var(--coffee);cursor:pointer;padding:4px 6px}
+
+  /* 咖啡豆 */
+  .ov-grid{display:flex;background:var(--cream);border-radius:8px;padding:10px 0}
+  .ov-item{flex:1;text-align:center;border-right:1px solid var(--line)}
+  .ov-item:last-child{border-right:none}
+  .ov-num{display:block;font-size:19px;font-weight:600}
+  .ov-num.green{color:var(--green)} .ov-num.blue{color:var(--blue)}
+  .ov-num.orange{color:var(--orange)} .ov-num.red{color:var(--red)}
+  .ov-key{display:block;font-size:11px;color:var(--text-2);margin-top:2px}
+  .bc-head{display:flex;justify-content:space-between;align-items:flex-start}
+  .bc-name{font-size:17px;font-weight:600;color:var(--coffee-dark)}
+  .bc-origin{font-size:12px;color:var(--text-2);margin-top:4px}
+  .bc-origin i{font-style:normal;color:var(--text-3);margin:0 4px}
+  .timeline{margin-top:11px;background:var(--cream);border-radius:7px;padding:9px 10px}
+  .tl-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .tl-label{font-size:13px;font-weight:500}
+  .tl-day{font-size:11px;color:var(--text-2)}
+  .progress{height:5px;border-radius:999px;background:var(--cream-2);overflow:hidden}
+  .bar{height:100%;border-radius:999px}
+  .bg-coffee{background:var(--coffee)} .bg-green{background:var(--green)} .bg-blue{background:var(--blue)}
+  .bg-orange{background:var(--orange)} .bg-red{background:var(--red)} .bg-grey{background:var(--text-3)}
+  .tl-tip{font-size:11px;color:var(--text-2);margin-top:6px}
+  .bc-stock{margin-top:9px}
+  .stk-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .stk-label{font-size:13px} .stk-val{font-size:13px;color:var(--coffee);font-weight:600}
+  .bc-flavor{margin-top:9px}
+  .bc-date{margin-top:7px;font-size:11px;color:var(--text-3)}
+
+  /* 记录 */
+  .stat-card{display:flex;align-items:center;padding:17px 14px;background:linear-gradient(160deg,#FFFDFB 0%,#FBF4EC 100%)}
+  .stat-item{flex:1;text-align:center}
+  .stat-num{display:block;font-size:22px;font-weight:600;color:var(--coffee)}
+  .stat-key{display:block;font-size:11px;color:var(--text-2);margin-top:3px}
+  .stat-div{width:1px;height:30px;background:var(--line)}
+  .oc-head{display:flex;justify-content:space-between;align-items:center}
+  .oc-who{font-size:15px;font-weight:600;color:var(--coffee-dark)}
+  .oc-items{margin-top:8px;background:var(--cream);border-radius:7px;padding:4px 10px}
+  .oc-item{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid var(--line)}
+  .oc-item:last-child{border-bottom:none}
+  .oi-count{color:var(--coffee);font-weight:600}
+  .oc-note{margin-top:7px;font-size:12px;color:var(--text-2)}
+  .oc-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+  .oc-time{font-size:11px;color:var(--text-3)}
+  .row-line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .rl-key{color:var(--text-2)}
+  .tip-text{margin-top:12px;font-size:11px;color:var(--text-2);line-height:1.7}
+
+  .fab{position:absolute;right:16px;bottom:74px;width:52px;height:52px;border-radius:50%;background:var(--coffee);color:#fff;font-size:28px;line-height:50px;text-align:center;box-shadow:0 4px 12px rgba(111,78,55,.35);z-index:4}
+
+  /* 弹层 */
+  .mask{position:absolute;inset:0;background:rgba(40,26,20,.45);z-index:10}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:14px 14px 0 0;padding:16px 16px 24px;z-index:11}
+  .sheet-title{font-size:17px;font-weight:600;color:var(--coffee-dark);margin-bottom:10px}
+  .sheet-items{background:var(--cream);border-radius:8px;padding:6px 12px;margin-bottom:4px}
+  .sheet-item{display:flex;justify-content:space-between;padding:7px 0;font-size:14px;border-bottom:1px solid var(--line)}
+  .sheet-item:last-child{border-bottom:none}
+  .si-count{color:var(--coffee);font-weight:600}
+  .form-row{display:flex;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
+  .form-label{width:95px;color:var(--text-2);font-size:14px}
+  .form-input{flex:1;text-align:right;font-size:14px;border:none;outline:none;background:transparent;color:var(--text)}
+  .sheet-actions{display:flex;margin-top:20px}
+  .btn-ghost{flex:1;background:#fff;color:var(--coffee);border:1px solid var(--line);border-radius:999px;padding:10px 0;text-align:center;font-size:15px;cursor:pointer}
+  .btn-primary{flex:1;background:var(--coffee);color:#fff;border-radius:999px;padding:11px 0;text-align:center;font-size:15px;font-weight:500;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="hint">
+  <b>咖屋 · 界面预览</b><br>
+  这是按小程序样式做的网页原型，点了能切页、能加杯数，<b>不是真的小程序</b>。<br>
+  真机运行需要在微信开发者工具里打开项目。
+</div>
+
+<div class="phone">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="navbar" id="navTitle">点单</div>
+  <div class="body" id="page"></div>
+
+  <div class="tabbar" id="tabbar">
+    <div data-t="order" class="on">
+      <svg class="ti" viewBox="0 0 81 81"><path d="M25 31h31l-5 27H30z"/><path d="M56 34a7.5 7.5 0 0 1 0 14"/><path d="M34 24V14M40.5 21.5V11.5M47 24V14"/></svg>
+      <span>点单</span>
+    </div>
+    <div data-t="recipe">
+      <svg class="ti" viewBox="0 0 81 81"><path d="M29 16h23a5 5 0 0 1 5 5v38a5 5 0 0 1-5 5H29a5 5 0 0 1-5-5V21a5 5 0 0 1 5-5z"/><path d="M32 32h17M32 41h17M32 50h11"/></svg>
+      <span>配方</span>
+    </div>
+    <div data-t="bean">
+      <svg class="ti" viewBox="0 0 81 81"><ellipse cx="40.5" cy="40.5" rx="20" ry="25"/><path d="M40.5 19C47 28 34 33 40.5 40.5C47 48 34 53 40.5 62"/></svg>
+      <span>咖啡豆</span>
+    </div>
+    <div data-t="record">
+      <svg class="ti" viewBox="0 0 81 81"><circle cx="40.5" cy="40.5" r="21"/><path d="M40.5 40.5V28M40.5 40.5H51"/></svg>
+      <span>记录</span>
+    </div>
+  </div>
+
+  <div class="fab" id="fab" style="display:none">＋</div>
+  <div id="overlay"></div>
+</div>
+
+<script>
+const CATS=[{key:'all',label:'全部',icon:'🏠'},{key:'espresso',label:'浓缩',icon:'☕'},{key:'milk',label:'奶咖',icon:'🥛'},{key:'filter',label:'手冲',icon:'🌊'},{key:'cold',label:'冷饮',icon:'🧊'},{key:'special',label:'特调',icon:'✨'},{key:'other',label:'其他',icon:'🍮'}];
+const TOOL={machine:'意式咖啡机',hand_drip:'手冲壶',french_press:'法压壶',aeropress:'爱乐压',moka:'摩卡壶',cold_brew:'冷萃瓶',siphon:'虹吸壶',capsule:'胶囊机',other:'其他'};
+const ROAST={light:'浅烘',medium:'中烘',medium_dark:'中深烘',dark:'深烘',other:'未设置'};
+const DEF={rest:7,peak:45,shelf:90};
+
+function dstr(off){const d=new Date();d.setDate(d.getDate()+off);const p=x=>(x<10?'0':'')+x;return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())}
+function daysSince(s){const a=s.split('-');const t=new Date(+a[0],+a[1]-1,+a[2]);const n=new Date();t.setHours(0,0,0,0);n.setHours(0,0,0,0);return Math.round((n-t)/864e5)}
+
+const BEANS=[
+ {name:'耶加雪菲 科契尔',origin:'埃塞俄比亚',process:'水洗',roast:'light',roastDate:dstr(-12),weight:250,remaining:180,price:98,flavor:['柑橘','茉莉','蜂蜜']},
+ {name:'哥伦比亚 慧兰',origin:'哥伦比亚',process:'水洗',roast:'medium_dark',roastDate:dstr(-3),weight:500,remaining:460,price:128,flavor:['坚果','焦糖','巧克力']}
+];
+const RECIPES=[
+ {id:'r1',name:'经典拿铁',category:'milk',tool:'machine',beanName:'哥伦比亚 慧兰',dose:18,water:36,milk:220,grind:'细',temp:92,time:'25-28s',tags:['日常','奶咖'],favorite:true},
+ {id:'r2',name:'澳白 Flat White',category:'milk',tool:'machine',beanName:'哥伦比亚 慧兰',dose:18,water:30,milk:130,grind:'细',temp:92,time:'25s',tags:['咖啡感强'],favorite:false},
+ {id:'r3',name:'手冲耶加',category:'filter',tool:'hand_drip',beanName:'耶加雪菲 科契尔',dose:15,water:240,milk:0,grind:'中细',temp:92,time:'2:30',tags:['果酸','慢手冲'],favorite:true},
+ {id:'r4',name:'冰美式',category:'cold',tool:'machine',beanName:'哥伦比亚 慧兰',dose:18,water:36,milk:0,grind:'细',temp:92,time:'25s',tags:['夏天','解腻'],favorite:false},
+ {id:'r5',name:'浓缩 Espresso',category:'espresso',tool:'machine',beanName:'哥伦比亚 慧兰',dose:20,water:40,milk:0,grind:'细',temp:93,time:'28s',tags:['基础'],favorite:false}
+];
+const ORDERS=[
+ {id:'o1',forWho:'妈妈',note:'少糖、多奶',status:'done',createdAt:Date.now()-864e5*2,items:[{name:'经典拿铁',count:2}],totalCount:2},
+ {id:'o2',forWho:'爸爸',note:'',status:'pending',createdAt:Date.now()-36e5*5,items:[{name:'手冲耶加',count:1},{name:'冰美式',count:1}],totalCount:2}
+];
+
+let tab='order',cat='all',cart={},sheet=false,forWho='',note='';
+
+function catOf(k){return CATS.find(c=>c.key===k)||CATS[CATS.length-1]}
+function ratio(d,w){return d&&w?'1:'+(Math.round(w/d*10)/10):''}
+function status(b){
+  const n=daysSince(b.roastDate);
+  if(n<0) return {label:'未到烘焙日',tone:'grey',tip:'烘焙日期在未来',p:0};
+  if(n<DEF.rest) return {label:'养豆中',tone:'blue',tip:'还需养 '+(DEF.rest-n)+' 天',p:n/DEF.rest,end:DEF.rest-n};
+  if(n<=DEF.peak) return {label:'最佳风味',tone:'green',tip:'风味巅峰期，还剩 '+(DEF.peak-n)+' 天',p:(n-DEF.rest)/(DEF.peak-DEF.rest)};
+  if(n<=DEF.shelf) return {label:'风味衰退',tone:'orange',tip:'已过巅峰 '+(n-DEF.peak)+' 天，建议尽快喝完',p:(n-DEF.peak)/(DEF.shelf-DEF.peak)};
+  return {label:'已过保质期',tone:'red',tip:'超期 '+(n-DEF.shelf)+' 天，不建议继续饮用',p:1};
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+
+function render(){
+  const P=document.getElementById('page');
+  document.getElementById('navTitle').textContent={order:'点单',recipe:'咖啡配方',bean:'咖啡豆管理',record:'点单记录'}[tab];
+  document.querySelectorAll('#tabbar div').forEach(d=>d.classList.toggle('on',d.dataset.t===tab));
+  document.getElementById('fab').style.display=(tab==='recipe'||tab==='bean')?'block':'none';
+  P.innerHTML={order:pOrder,recipe:pRecipe,bean:pBean,record:pRecord}[tab]();
+  P.scrollTop=0;
+  renderOverlay();
+}
+function renderOverlay(){
+  const O=document.getElementById('overlay');
+  if(!sheet){O.innerHTML=cartHTML();return}
+  const list=RECIPES.filter(r=>cart[r.id]);
+  O.innerHTML='<div class="mask" onclick="sheet=false;render()"></div><div class="sheet">'
+   +'<div class="sheet-title">确认点单</div><div class="sheet-items">'
+   +list.map(r=>'<div class="sheet-item"><span>'+esc(r.name)+'</span><span class="si-count">× '+cart[r.id]+'</span></div>').join('')
+   +'</div><div class="form-row"><span class="form-label">给谁做</span><input class="form-input" id="who" placeholder="爸爸 / 妈妈 / 自己" value="'+esc(forWho)+'"></div>'
+   +'<div class="form-row"><span class="form-label">备注</span><input class="form-input" id="note" placeholder="少糖、多奶、去冰…" value="'+esc(note)+'"></div>'
+   +'<div class="sheet-actions"><div class="btn-ghost" style="margin-right:10px" onclick="sheet=false;render()">再看看</div>'
+   +'<div class="btn-primary" onclick="submit()">提交 '+total()+' 杯</div></div></div>';
+}
+function cartHTML(){
+  const n=total(); if(!n) return '';
+  const list=RECIPES.filter(r=>cart[r.id]);
+  return '<div class="cart-bar"><div class="cart-info" onclick="sheet=true;render()">'
+   +'<div class="cart-count">'+n+' 杯</div><div class="cart-desc">'+esc(list[0].name)+(list.length>1?' 等 '+list.length+' 款':'')+'</div></div>'
+   +'<div class="cart-btn" onclick="sheet=true;render()">去下单</div></div>';
+}
+function total(){return Object.values(cart).reduce((a,b)=>a+b,0)}
+
+function chips(){
+  return '<div class="chips">'+CATS.map(c=>'<div class="chip'+(cat===c.key?' on':'')+'" onclick="cat=\''+c.key+'\';render()">'+c.icon+' '+c.label+'</div>').join('')+'</div>';
+}
+
+function pOrder(){
+  const list=cat==='all'?RECIPES:RECIPES.filter(r=>r.category===cat);
+  return '<div class="hero"><div><div class="hero-title">今天想喝点什么</div>'
+   +'<div class="hero-sub">'+RECIPES.length+' 款配方 · '+BEANS.length+' 支咖啡豆</div></div>'
+   +'<div class="hero-badge">☕</div></div>'
+   +'<div class="search">🔍 搜配方、标签、器具</div>'+chips()
+   +'<div class="list-head"><span class="sec-title">选一杯</span><span class="muted">共 '+list.length+' 款</span></div>'
+   +'<div class="grid">'+list.map(r=>{
+      const c=cart[r.id]||0;
+      return '<div class="r-card"><div class="r-name">'+esc(r.name)+'</div>'
+       +'<div class="r-cat">'+catOf(r.category).icon+' '+catOf(r.category).label+'</div>'
+       +'<div class="r-meta">'+(r.dose?r.dose+'g 粉':'')+(ratio(r.dose,r.water)?'<i>·</i>'+ratio(r.dose,r.water):'')+'<i>·</i>'+(TOOL[r.tool]||'')+'</div>'
+       +'<div class="r-tags">'+r.tags.map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</div>'
+       +'<div class="r-bottom"><div class="r-fav">'+(r.favorite?'★ 常喝':'')+'</div><div class="stepper">'
+       +(c?'<div class="st-btn" onclick="minus(\''+r.id+'\')">−</div><span class="st-num">'+c+'</span>':'')
+       +'<div class="st-btn add" onclick="plus(\''+r.id+'\')">＋</div></div></div></div>';
+    }).join('')+'</div>';
+}
+function pRecipe(){
+  const list=cat==='all'?RECIPES:RECIPES.filter(r=>r.category===cat);
+  return '<div class="search">🔍 搜配方、标签、器具</div>'+chips()
+   +'<div class="list-head"><span class="sec-title">我的配方</span><span class="muted">'+list.length+' / '+RECIPES.length+'</span></div>'
+   +list.map(r=>'<div class="card"><div class="rc-name">'+esc(r.name)+(r.favorite?'<span class="rc-star">★</span>':'')+'</div>'
+     +'<div class="rc-sub">'+catOf(r.category).icon+' '+catOf(r.category).label+' · '+(TOOL[r.tool]||'')+'</div>'
+     +'<div class="params">'+(r.dose?'<div class="param"><span class="p-val">'+r.dose+'</span><span class="p-key">咖啡粉 g</span></div>':'')
+     +(r.water?'<div class="param"><span class="p-val">'+r.water+'</span><span class="p-key">液体 g</span></div>':'')
+     +(ratio(r.dose,r.water)?'<div class="param"><span class="p-val">'+ratio(r.dose,r.water)+'</span><span class="p-key">粉水比</span></div>':'')
+     +(r.temp?'<div class="param"><span class="p-val">'+r.temp+'</span><span class="p-key">水温 ℃</span></div>':'')+'</div>'
+     +'<div class="rc-foot"><div class="rc-tags"><span class="tag">'+esc(r.beanName)+'</span>'
+     +r.tags.map(t=>'<span class="tag grey">'+esc(t)+'</span>').join('')
+     +'<span class="tag grey">'+esc(r.grind)+'研磨</span><span class="tag grey">'+esc(r.time)+'</span></div>'
+     +'<span class="op">设常喝</span></div></div>').join('');
+}
+function pBean(){
+  const st=BEANS.map(status);
+  const sum={peak:0,resting:0,fading:0,expired:0};
+  st.forEach(s=>({最佳风味:'peak',养豆中:'resting',风味衰退:'fading',已过保质期:'expired'})[s.label]!==undefined&&sum[({最佳风味:'peak',养豆中:'resting',风味衰退:'fading',已过保质期:'expired'})[s.label]]++);
+  const left=BEANS.reduce((a,b)=>a+b.remaining,0);
+  return '<div class="card"><div class="ov-top"><div class="sec-title">豆仓概览</div>'
+   +'<div class="muted">在库 '+BEANS.length+' 支 · 剩余 '+left+'g</div></div>'
+   +'<div class="ov-grid" style="margin-top:12px">'
+   +'<div class="ov-item"><span class="ov-num green">'+sum.peak+'</span><span class="ov-key">最佳风味</span></div>'
+   +'<div class="ov-item"><span class="ov-num blue">'+sum.resting+'</span><span class="ov-key">养豆中</span></div>'
+   +'<div class="ov-item"><span class="ov-num orange">'+sum.fading+'</span><span class="ov-key">风味衰退</span></div>'
+   +'<div class="ov-item"><span class="ov-num red">'+sum.expired+'</span><span class="ov-key">已过期</span></div></div></div>'
+   +'<div class="list-head"><span class="sec-title">我的咖啡豆</span></div>'
+   +BEANS.map((b,i)=>{const s=st[i];const n=daysSince(b.roastDate);const pct=Math.round(b.remaining/b.weight*100);
+     return '<div class="card"><div class="bc-head"><div><div class="bc-name">'+esc(b.name)+'</div>'
+      +'<div class="bc-origin">'+esc(b.origin)+'<i>·</i>'+esc(b.process)+'<i>·</i>'+ROAST[b.roast]+'</div></div>'
+      +'<span class="tag '+s.tone+'">'+s.label+'</span></div>'
+      +'<div class="timeline"><div class="tl-row"><span class="tl-label">'+s.label+'</span><span class="tl-day">烘焙后第 '+n+' 天</span></div>'
+      +'<div class="progress"><div class="bar bg-'+s.tone+'" style="width:'+Math.min(100,s.p*100)+'%"></div></div>'
+      +'<div class="tl-tip">'+s.tip+'</div></div>'
+      +'<div class="bc-stock"><div class="stk-row"><span class="stk-label">余量</span><span class="stk-val">'+b.remaining+'g / '+b.weight+'g</span></div>'
+      +'<div class="progress"><div class="bar '+(pct<=15?'bg-orange':'bg-coffee')+'" style="width:'+pct+'%"></div></div></div>'
+      +'<div class="bc-flavor">'+b.flavor.map(f=>'<span class="tag">'+esc(f)+'</span>').join('')+'</div>'
+      +'<div class="bc-date">'+(s.end?s.label+'截止 '+dstr(s.end):'烘焙日 '+b.roastDate)+'</div></div>';
+   }).join('');
+}
+function pRecord(){
+  const done=ORDERS.filter(o=>o.status==='done').reduce((a,o)=>a+o.totalCount,0);
+  const all=ORDERS.reduce((a,o)=>a+o.totalCount,0);
+  const tf=ts=>{const d=new Date(ts);return (d.getMonth()+1)+'-'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+  return '<div class="card stat-card"><div class="stat-item"><span class="stat-num">'+all+'</span><span class="stat-key">本月杯数</span></div>'
+   +'<div class="stat-div"></div><div class="stat-item"><span class="stat-num">'+all+'</span><span class="stat-key">累计杯数</span></div>'
+   +'<div class="stat-div"></div><div class="stat-item"><span class="stat-num">'+ORDERS.length+'</span><span class="stat-key">点单次数</span></div></div>'
+   +'<div class="list-head"><span class="sec-title">点单记录</span><span class="muted">'+ORDERS.length+' 条</span></div>'
+   +ORDERS.map(o=>'<div class="card"><div class="oc-head"><div class="oc-who">给 '+esc(o.forWho)+'</div>'
+     +'<span class="tag '+(o.status==='done'?'green':'orange')+'">'+(o.status==='done'?'已完成':'待制作')+'</span></div>'
+     +'<div class="oc-items">'+o.items.map(it=>'<div class="oc-item"><span>'+esc(it.name)+'</span><span class="oi-count">× '+it.count+'</span></div>').join('')+'</div>'
+     +(o.note?'<div class="oc-note">备注：'+esc(o.note)+'</div>':'')
+     +'<div class="oc-foot"><span class="oc-time">'+tf(o.createdAt)+' · 共 '+o.totalCount+' 杯</span>'
+     +'<span class="op">标记完成</span></div></div>').join('')
+   +'<div class="list-head"><span class="sec-title">数据</span></div>'
+   +'<div class="card"><div class="row-line"><span class="rl-key">当前存储</span><span>本地存储（未配置云环境）</span></div>'
+   +'<div class="row-line"><span class="rl-key">云环境 ID</span><span>未配置</span></div>'
+   +'<div class="tip-text">未配置云环境时数据只存在本机；填好 app.js 里的 env 后点「重新检测」即可切到云开发，家人朋友可共享同一份配方与豆仓。</div></div>';
+}
+function plus(id){cart[id]=(cart[id]||0)+1;render()}
+function minus(id){cart[id]=(cart[id]||0)-1;if(cart[id]<=0)delete cart[id];render()}
+function submit(){
+  forWho=document.getElementById('who').value; note=document.getElementById('note').value;
+  const list=RECIPES.filter(r=>cart[r.id]).map(r=>({name:r.name,count:cart[r.id]}));
+  ORDERS.unshift({id:'o'+Date.now(),forWho:forWho||'自己',note:note,status:'pending',createdAt:Date.now(),items:list,totalCount:total()});
+  cart={};sheet=false;forWho='';note='';tab='record';render();
+}
+document.getElementById('tabbar').addEventListener('click',e=>{
+  if(!e.target.dataset.t)return; tab=e.target.dataset.t; cat='all'; render();
+});
+render();
+</script>
+</body>
+</html>

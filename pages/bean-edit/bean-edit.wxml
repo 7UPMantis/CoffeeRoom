@@ -1,0 +1,116 @@
+<view class="page">
+  <view class="card">
+    <view class="form-row">
+      <text class="form-label">豆子名称</text>
+      <input class="form-value" placeholder="例如：耶加雪菲 科契尔" placeholder-class="ph" value="{{name}}" data-key="name" bindinput="onInput" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">产地</text>
+      <input class="form-value" placeholder="埃塞俄比亚 / 哥伦比亚" placeholder-class="ph" value="{{origin}}" data-key="origin" bindinput="onInput" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">处理法</text>
+      <picker mode="selector" range="{{processLabels}}" value="{{processIndex}}" bindchange="onProcessChange">
+        <view class="form-value {{processIndex === 0 ? 'placeholder' : ''}}">{{processLabels[processIndex]}}</view>
+      </picker>
+    </view>
+    <view class="form-row">
+      <text class="form-label">烘焙度</text>
+      <picker mode="selector" range="{{roastLabels}}" value="{{roastIndex}}" bindchange="onRoastChange">
+        <view class="form-value">{{roastLabels[roastIndex]}}</view>
+      </picker>
+    </view>
+    <view class="form-row" style="border:none">
+      <text class="form-label">烘焙日期</text>
+      <picker mode="date" value="{{roastDate}}" end="{{today}}" bindchange="onDateChange">
+        <view class="form-value">{{roastDate}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 养豆与保质期 -->
+  <view class="card">
+    <view class="section-title">养豆与保质期</view>
+
+    <view class="param-grid">
+      <view class="pg-item">
+        <text class="pg-label">养豆期</text>
+        <input class="pg-input" type="number" value="{{restDays}}" data-key="restDays" bindinput="onInput" />
+        <text class="pg-unit">天</text>
+      </view>
+      <view class="pg-item">
+        <text class="pg-label">最佳风味</text>
+        <input class="pg-input" type="number" value="{{peakDays}}" data-key="peakDays" bindinput="onInput" />
+        <text class="pg-unit">天</text>
+      </view>
+      <view class="pg-item">
+        <text class="pg-label">保质期</text>
+        <input class="pg-input" type="number" value="{{shelfDays}}" data-key="shelfDays" bindinput="onInput" />
+        <text class="pg-unit">天</text>
+      </view>
+      <view class="pg-item">
+        <text class="pg-label">单价</text>
+        <input class="pg-input" type="digit" placeholder="0" placeholder-class="ph" value="{{price}}" data-key="price" bindinput="onInput" />
+        <text class="pg-unit">元</text>
+      </view>
+    </view>
+
+    <view class="preview-box">{{preview}}</view>
+
+    <view class="axis">
+      <view class="axis-label">
+        <text>养豆中</text>
+        <text>最佳风味</text>
+        <text>衰退</text>
+        <text>过期</text>
+      </view>
+      <view class="axis-bar">
+        <view class="ax ax-blue" style="width: {{restDays / shelfDays * 100}}%"></view>
+        <view class="ax ax-green" style="width: {{(peakDays - restDays) / shelfDays * 100}}%"></view>
+        <view class="ax ax-orange" style="width: {{(shelfDays - peakDays) / shelfDays * 100}}%"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 克重 -->
+  <view class="card">
+    <view class="section-title">克重</view>
+    <view class="param-grid">
+      <view class="pg-item">
+        <text class="pg-label">净重</text>
+        <input class="pg-input" type="digit" placeholder="250" placeholder-class="ph" value="{{weight}}" data-key="weight" bindinput="onInput" />
+        <text class="pg-unit">g</text>
+      </view>
+      <view class="pg-item">
+        <text class="pg-label">剩余</text>
+        <input class="pg-input" type="digit" placeholder="250" placeholder-class="ph" value="{{remaining}}" data-key="remaining" bindinput="onInput" />
+        <text class="pg-unit">g</text>
+      </view>
+    </view>
+    <view class="reset-line" bindtap="onUseAll">剩余重置为满</view>
+  </view>
+
+  <!-- 风味 -->
+  <view class="card">
+    <view class="section-title">风味标签</view>
+    <view class="tag-wrap">
+      <view wx:for="{{flavor}}" wx:key="*this" class="tag-item" data-index="{{index}}" bindtap="onFlavorDel">
+        {{item}} <text class="tag-x">×</text>
+      </view>
+    </view>
+    <view class="tag-add">
+      <input class="tag-input" placeholder="柑橘 / 坚果 / 巧克力" placeholder-class="ph" value="{{flavorInput}}"
+             bindinput="onFlavorInput" confirm-type="done" bindconfirm="onFlavorAdd" />
+      <view class="tag-btn" bindtap="onFlavorAdd">添加</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">备注</view>
+    <textarea class="note-area" placeholder="购买渠道、冲煮建议…" placeholder-class="ph"
+              value="{{note}}" data-key="note" bindinput="onInput" maxlength="300" auto-height />
+  </view>
+
+  <view class="btn-primary save-btn" bindtap="onSave">保存</view>
+  <view wx:if="{{isEdit}}" class="btn-danger del-btn" bindtap="onDelete">删除这支豆</view>
+</view>

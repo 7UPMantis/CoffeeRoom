@@ -1,0 +1,10 @@
+{
+  "name": "initDb",
+  "version": "1.0.0",
+  "description": "创建咖屋所需的三个数据库集合",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

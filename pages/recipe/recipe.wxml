@@ -1,0 +1,68 @@
+<view class="page">
+  <view class="search">
+    <input placeholder="搜配方、标签、器具" placeholder-class="ph" value="{{keyword}}" bindinput="onSearch" />
+    <text wx:if="{{keyword}}" class="search-clear" bindtap="onClearSearch">×</text>
+  </view>
+
+  <scroll-view class="chip-scroll" scroll-x enable-flex>
+    <view wx:for="{{categories}}" wx:key="key"
+          class="chip {{activeCat === item.key ? 'active' : ''}}"
+          data-key="{{item.key}}" bindtap="onCatTap">{{item.icon}} {{item.label}}</view>
+  </scroll-view>
+
+  <view class="list-head">
+    <text class="section-title">我的配方</text>
+    <text class="muted">{{list.length}} / {{all.length}}</text>
+  </view>
+
+  <view wx:for="{{list}}" wx:key="_id" class="card recipe-card">
+    <view class="rc-head" data-id="{{item._id}}" bindtap="onEdit">
+      <view class="rc-title">
+        <text class="rc-name">{{item.name}}</text>
+        <text wx:if="{{item.favorite}}" class="rc-star">★</text>
+      </view>
+      <view class="rc-sub">{{item._catIcon}} {{item._catLabel}}<text wx:if="{{item._toolLabel && item._toolLabel !== '未设置'}}"> · {{item._toolLabel}}</text></view>
+    </view>
+
+    <view class="rc-params" data-id="{{item._id}}" bindtap="onEdit">
+      <view class="param" wx:if="{{item.dose}}">
+        <text class="p-val">{{item.dose}}</text>
+        <text class="p-key">咖啡粉 g</text>
+      </view>
+      <view class="param" wx:if="{{item.water}}">
+        <text class="p-val">{{item.water}}</text>
+        <text class="p-key">液体 g</text>
+      </view>
+      <view class="param" wx:if="{{item._ratio}}">
+        <text class="p-val">{{item._ratio}}</text>
+        <text class="p-key">粉水比</text>
+      </view>
+      <view class="param" wx:if="{{item.temp}}">
+        <text class="p-val">{{item.temp}}</text>
+        <text class="p-key">水温 ℃</text>
+      </view>
+    </view>
+
+    <view class="rc-foot">
+      <view class="rc-tags">
+        <text wx:if="{{item.beanName}}" class="tag">{{item.beanName}}</text>
+        <text wx:for="{{item.tags}}" wx:for-item="tg" wx:key="*this" class="tag grey">{{tg}}</text>
+        <text wx:if="{{item.grind}}" class="tag grey">{{item.grind}}研磨</text>
+        <text wx:if="{{item.time}}" class="tag grey">{{item.time}}</text>
+      </view>
+      <view class="rc-ops">
+        <text class="op" data-id="{{item._id}}" catchtap="onToggleFav">{{item.favorite ? '取消常喝' : '设常喝'}}</text>
+        <text class="op danger" data-id="{{item._id}}" data-name="{{item.name}}" catchtap="onDelete">删除</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{!list.length}}" class="empty">
+    <text class="empty-icon">📖</text>
+    <view wx:if="{{all.length}}">没有匹配的配方</view>
+    <view wx:else>还没有配方</view>
+    <view class="muted" style="margin-top:16rpx">点右下角 ＋ 记录第一杯</view>
+  </view>
+</view>
+
+<view class="fab" bindtap="onAdd">＋</view>

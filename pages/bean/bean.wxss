@@ -1,0 +1,186 @@
+/* ---------- 概览 ---------- */
+.overview {
+  padding: 32rpx 28rpx 26rpx;
+  background: linear-gradient(160deg, #FFFDFB 0%, #FBF4EC 100%);
+}
+
+.ov-top {
+  margin-bottom: 26rpx;
+}
+
+.ov-title {
+  font-size: 33rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+  letter-spacing: 0.5rpx;
+}
+
+.ov-sub {
+  font-size: 24rpx;
+  color: var(--text-2);
+  margin-top: 8rpx;
+}
+
+.ov-grid {
+  display: flex;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 22rpx 0;
+}
+
+.ov-item {
+  flex: 1;
+  text-align: center;
+  border-right: 1rpx solid var(--line);
+}
+
+.ov-item:last-child {
+  border-right: none;
+}
+
+.ov-num {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.ov-num.green { color: var(--green); }
+.ov-num.blue { color: var(--blue); }
+.ov-num.orange { color: var(--orange); }
+.ov-num.red { color: var(--red); }
+
+.ov-key {
+  display: block;
+  font-size: 21rpx;
+  color: var(--text-2);
+  margin-top: 6rpx;
+}
+
+.list-head {
+  margin: 30rpx 0 4rpx;
+}
+
+/* ---------- 咖啡豆卡片 ---------- */
+.bean-card {
+  padding: 30rpx 28rpx 24rpx;
+}
+
+.bc-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.bc-left {
+  flex: 1;
+}
+
+.bc-name {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+  letter-spacing: 0.5rpx;
+}
+
+.bc-origin {
+  font-size: 24rpx;
+  color: var(--text-2);
+  margin-top: 8rpx;
+}
+
+.bc-origin .dot {
+  margin: 0 8rpx;
+  color: var(--text-3);
+}
+
+/* 养豆 / 保质期时间轴 */
+.timeline {
+  margin-top: 24rpx;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 22rpx 24rpx;
+}
+
+.tl-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14rpx;
+}
+
+.tl-label {
+  font-size: 27rpx;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.tl-day {
+  font-size: 22rpx;
+  color: var(--text-2);
+}
+
+.tl-tip {
+  font-size: 22rpx;
+  color: var(--text-2);
+  margin-top: 14rpx;
+  line-height: 1.6;
+}
+
+.bg-coffee { background: linear-gradient(90deg, #B08E72 0%, #6F4E37 100%); }
+.bg-green { background: linear-gradient(90deg, #7CC199 0%, #4A9E6B 100%); }
+.bg-blue { background: linear-gradient(90deg, #8FB9D6 0%, #5B8FB9 100%); }
+.bg-orange { background: linear-gradient(90deg, #EAB676 0%, #D98B3A 100%); }
+.bg-red { background: linear-gradient(90deg, #DE8A80 0%, #C9564A 100%); }
+.bg-grey { background: var(--text-3); }
+
+/* 余量 */
+.bc-stock {
+  margin-top: 22rpx;
+}
+
+.stk-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12rpx;
+}
+
+.stk-label {
+  font-size: 26rpx;
+  color: var(--text);
+}
+
+.stk-val {
+  font-size: 26rpx;
+  color: var(--coffee);
+  font-weight: 600;
+}
+
+.bc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20rpx;
+  padding-top: 18rpx;
+  border-top: 1rpx solid var(--line);
+}
+
+.bc-flavor {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.bc-del {
+  flex-shrink: 0;
+  font-size: 24rpx;
+  color: var(--red);
+  padding: 8rpx 12rpx;
+}
+
+.bc-date {
+  margin-top: 14rpx;
+  font-size: 22rpx;
+  color: var(--text-3);
+}
