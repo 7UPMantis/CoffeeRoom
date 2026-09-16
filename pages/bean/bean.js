@@ -7,6 +7,9 @@ const PRIORITY = { peak: 0, resting: 1, fading: 2, expired: 3, future: 4, unknow
 Page({
   data: {
     beans: [],
+    visibleBeans: [],  // 按用途筛选后实际渲染的列表
+    activeUsage: '',   // '' 全部 / 'none' 未标用途 / 其它为用途 key
+    activeUsageLabel: '',
     summary: { peak: 0, resting: 0, fading: 0, expired: 0, unknown: 0 },
     totalWeight: 0,
     todos: [] // 「该处理了」清单：低余量 / 临期 / 已过期
@@ -34,7 +37,7 @@ Page({
           _pct: Math.round(stock.pct * 100),
           _days: status.days === undefined ? null : status.days,
           _usageTags: usageTags,
-          _usageLabels: usageTags.map(function (k) { return C.usageLabel(k) }),
+          _usages: usageTags.map(function (k) { return { key: k, label: C.usageLabel(k) } }),
           _noUsage: !usageTags.length
         })
       })
@@ -74,9 +77,38 @@ Page({
         }
       })
 
-      self.setData({ beans: decorated, summary: summary, totalWeight: total, todos: todos })
-      if (done) done()
+      self.setData({ beans: decorated, summary: summary, totalWeight: total, todos: todos }, function () {
+        self.applyFilter()
+        if (done) done()
+      })
     })
+  },
+
+  // 按用途筛选：手冲 / 意式 / 冷萃 / 通用 / 未标用途
+  applyFilter: function () {
+    const u = this.data.activeUsage
+    const beans = this.data.beans || []
+    let list = beans
+    if (u === 'none') {
+      list = beans.filter(function (b) { return b._noUsage })
+    } else if (u) {
+      list = beans.filter(function (b) { return (b._usageTags || []).indexOf(u) > -1 })
+    }
+    this.setData({
+      visibleBeans: list,
+      activeUsageLabel: u === 'none' ? '未标用途' : (u ? C.usageLabel(u) : '')
+    })
+  },
+
+  // 点用途标签切换筛选；再点一次同一个则取消
+  onUsageTap: function (e) {
+    const u = e.currentTarget.dataset.usage || ''
+    const next = this.data.activeUsage === u ? '' : u
+    this.setData({ activeUsage: next }, this.applyFilter)
+  },
+
+  onClearUsage: function () {
+    this.setData({ activeUsage: '' }, this.applyFilter)
   },
 
   onAdd: function () {

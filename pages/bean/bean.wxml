@@ -40,9 +40,16 @@
 
   <view class="list-head">
     <text class="section-title">我的咖啡豆</text>
+    <text class="muted" wx:if="{{!activeUsage}}">{{beans.length}} 支</text>
   </view>
 
-  <view wx:for="{{beans}}" wx:key="_id" class="card bean-card" data-id="{{item._id}}" bindtap="onEdit">
+  <!-- 用途筛选状态条 -->
+  <view wx:if="{{activeUsage}}" class="filter-bar">
+    <text class="fb-text">只看「{{activeUsageLabel}}」· {{visibleBeans.length}} 支</text>
+    <text class="fb-clear" catchtap="onClearUsage">清除 ✕</text>
+  </view>
+
+  <view wx:for="{{visibleBeans}}" wx:key="_id" class="card bean-card" data-id="{{item._id}}" bindtap="onEdit">
     <view class="bc-head">
       <view class="bc-left">
         <view class="bc-name">{{item.name}}</view>
@@ -54,8 +61,11 @@
           <text wx:if="{{item._roastLabel && item._roastLabel !== '未设置'}}">{{item._roastLabel}}</text>
         </view>
         <view class="bc-usage">
-          <text wx:for="{{item._usageLabels}}" wx:for-item="u" wx:key="*this" class="usage-chip">{{u}}</text>
-          <text wx:if="{{item._noUsage}}" class="usage-chip warn">未标用途</text>
+          <text wx:for="{{item._usages}}" wx:for-item="u" wx:key="key"
+                class="usage-chip {{activeUsage === u.key ? 'on' : ''}}"
+                data-usage="{{u.key}}" catchtap="onUsageTap">{{u.label}}</text>
+          <text wx:if="{{item._noUsage}}" class="usage-chip warn {{activeUsage === 'none' ? 'on' : ''}}"
+                data-usage="none" catchtap="onUsageTap">未标用途</text>
         </view>
       </view>
       <view class="tag {{item._status.tone}}">{{item._status.label}}</view>
@@ -97,10 +107,12 @@
     </view>
   </view>
 
-  <view wx:if="{{!beans.length}}" class="empty">
+  <view wx:if="{{!visibleBeans.length}}" class="empty">
     <text class="empty-icon">🫘</text>
-    <view>还没有登记咖啡豆</view>
-    <view class="muted" style="margin-top:16rpx">点右下角 ＋ 添加，自动帮你算养豆期</view>
+    <view wx:if="{{activeUsage}}">没有标注「{{activeUsageLabel}}」的咖啡豆</view>
+    <view wx:else>还没有登记咖啡豆</view>
+    <view class="muted" style="margin-top:16rpx" wx:if="{{activeUsage}}" bindtap="onClearUsage">点这里看全部</view>
+    <view class="muted" style="margin-top:16rpx" wx:else>点右下角 ＋ 添加，自动帮你算养豆期</view>
   </view>
 </view>
 

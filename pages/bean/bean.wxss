@@ -206,6 +206,41 @@
   background: var(--orange-bg);
 }
 
+/* 用途标签可点击筛选，选中后高亮 */
+.usage-chip.on {
+  background: linear-gradient(135deg, #7B5940 0%, #6F4E37 100%);
+  color: #fff;
+  box-shadow: 0 4rpx 10rpx rgba(111, 78, 55, 0.24);
+}
+
+.usage-chip.warn.on {
+  background: linear-gradient(135deg, #E2A055 0%, #D98B3A 100%);
+  color: #fff;
+}
+
+/* 筛选状态条 */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--coffee-tint);
+  border-radius: var(--r-md);
+  padding: 16rpx 22rpx;
+  margin-bottom: 18rpx;
+}
+
+.fb-text {
+  font-size: 24rpx;
+  color: var(--coffee-mid);
+}
+
+.fb-clear {
+  font-size: 24rpx;
+  color: var(--coffee);
+  font-weight: 500;
+  padding: 4rpx 8rpx;
+}
+
 /* ---------- 该处理了 ---------- */
 .todo-card {
   border-left: 6rpx solid var(--orange);
