@@ -12,12 +12,85 @@
   margin: 26rpx 0 4rpx;
 }
 
-.recipe-card {
-  padding: 30rpx 28rpx 22rpx;
+/* ---------- 分组（常喝置顶 + 按分类） ---------- */
+.group {
+  margin-bottom: 6rpx;
 }
 
-.rc-head {
-  margin-bottom: 20rpx;
+.group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22rpx 8rpx 12rpx;
+}
+
+.gh-left {
+  display: flex;
+  align-items: baseline;
+}
+
+.gh-icon {
+  font-size: 26rpx;
+  margin-right: 10rpx;
+}
+
+.gh-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--coffee-dark);
+}
+
+.gh-count {
+  font-size: 21rpx;
+  color: var(--text-2);
+  margin-left: 12rpx;
+  background: var(--surface-3);
+  border-radius: 999rpx;
+  padding: 2rpx 14rpx;
+}
+
+.gh-arrow {
+  font-size: 24rpx;
+  color: var(--text-3);
+  padding: 0 10rpx;
+}
+
+.gh-arrow.open {
+  color: var(--coffee);
+}
+
+/* ---------- 配方卡片（紧凑版：封面缩略图 + 主信息两栏） ---------- */
+.recipe-card {
+  padding: 22rpx 24rpx 18rpx;
+}
+
+.rc-body {
+  display: flex;
+  align-items: flex-start;
+}
+
+.rc-thumb {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: var(--r-md);
+  flex-shrink: 0;
+  margin-right: 20rpx;
+  background: var(--surface-2);
+  display: block;
+}
+
+/* 没有封面时用分类图标占位，保持左侧对齐不塌陷 */
+.rc-thumb-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42rpx;
+  color: var(--coffee-light);
+}
+
+.rc-main {
+  flex: 1;
+  min-width: 0;
 }
 
 .rc-title {
@@ -26,7 +99,7 @@
 }
 
 .rc-name {
-  font-size: 35rpx;
+  font-size: 31rpx;
   font-weight: 600;
   color: var(--coffee-dark);
   letter-spacing: 0.5rpx;
@@ -34,68 +107,35 @@
 
 .rc-star {
   color: var(--gold);
-  font-size: 28rpx;
-  margin-left: 12rpx;
+  font-size: 24rpx;
+  margin-left: 10rpx;
 }
 
-.rc-sub {
-  font-size: 24rpx;
+/* 参数压成一行：器具 · 粉→液 · 粉水比 · 水温 · 时长 */
+.rc-spec {
+  font-size: 23rpx;
   color: var(--text-2);
   margin-top: 8rpx;
-}
-
-/* 参数区 */
-.rc-params {
-  display: flex;
-  background: var(--surface-2);
-  border-radius: var(--r-md);
-  padding: 22rpx 0;
-  margin-bottom: 18rpx;
-}
-
-.param {
-  flex: 1;
-  text-align: center;
-  border-right: 1rpx solid var(--line);
-}
-
-.param:last-child {
-  border-right: none;
-}
-
-.p-val {
-  display: block;
-  font-size: 32rpx;
-  font-weight: 600;
-  color: var(--coffee);
-  line-height: 1.2;
-}
-
-.p-key {
-  display: block;
-  font-size: 20rpx;
-  color: var(--text-2);
-  margin-top: 6rpx;
-}
-
-/* 底部改为纵向堆叠：标签独占整行自由换行，操作区另起一行右对齐，
-   避免标签多时和「设常喝 / 删除」抢横向空间 */
-.rc-foot {
-  padding-top: 18rpx;
-  border-top: 1rpx solid var(--line);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .rc-tags {
   display: flex;
   flex-wrap: wrap;
-  /* 抵消 .tag 自带的下边距，免得底部多出一截空隙 */
+  margin-top: 12rpx;
+  /* 抵消 .tag 自带的下边距 */
   margin-bottom: -8rpx;
 }
 
 .rc-ops {
   display: flex;
   justify-content: flex-end;
-  margin-top: 12rpx;
+  gap: 8rpx;
+  margin-top: 14rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx solid var(--line);
 }
 
 .op {
@@ -104,32 +144,17 @@
   padding: 8rpx 12rpx;
 }
 
+.op.brew {
+  color: var(--coffee-dark);
+  font-weight: 500;
+}
+
 .op.danger {
   color: var(--red);
 }
 
 .ph {
   color: var(--text-3);
-}
-
-/* ---------- 封面 ---------- */
-.rc-cover {
-  width: 100%;
-  height: 240rpx;
-  border-radius: var(--r-md);
-  margin-bottom: 22rpx;
-  background: var(--surface-2);
-  display: block;
-}
-
-/* ---------- 冲煮入口 ---------- */
-.op.brew {
-  color: var(--coffee-dark);
-  font-weight: 500;
-}
-
-.rc-ops {
-  gap: 8rpx;
 }
 
 /* ---------- 待做队列 ---------- */

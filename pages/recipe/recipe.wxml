@@ -54,50 +54,46 @@
     <text class="muted">{{list.length}} / {{all.length}}</text>
   </view>
 
-  <view wx:for="{{list}}" wx:key="_id" class="card recipe-card">
-    <image wx:if="{{item.cover}}" class="rc-cover" src="{{item.cover}}" mode="aspectFill" data-id="{{item._id}}" bindtap="onEdit" lazy-load />
-    <view class="rc-head" data-id="{{item._id}}" bindtap="onEdit">
-      <view class="rc-title">
-        <text class="rc-name">{{item.name}}</text>
-        <text wx:if="{{item.favorite}}" class="rc-star">★</text>
+  <view wx:for="{{groups}}" wx:for-item="g" wx:key="key" class="group">
+    <!-- 分组标题：常喝置顶，其余按分类，可折叠 -->
+    <view wx:if="{{grouped}}" class="group-head" data-key="{{g.key}}" bindtap="onToggleGroup">
+      <view class="gh-left">
+        <text class="gh-icon">{{g.icon}}</text>
+        <text class="gh-label">{{g.label}}</text>
+        <text class="gh-count">{{g.items.length}}</text>
       </view>
-      <view class="rc-sub">{{item._catIcon}} {{item._catLabel}}<text wx:if="{{item._toolLabel && item._toolLabel !== '未设置'}}"> · {{item._toolLabel}}</text></view>
+      <text class="gh-arrow {{g.collapsed ? 'folded' : 'open'}}">{{g.collapsed ? '▸' : '▾'}}</text>
     </view>
 
-    <view class="rc-params" data-id="{{item._id}}" bindtap="onEdit">
-      <view class="param" wx:if="{{item.dose}}">
-        <text class="p-val">{{item.dose}}</text>
-        <text class="p-key">咖啡粉 g</text>
-      </view>
-      <view class="param" wx:if="{{item.water}}">
-        <text class="p-val">{{item.water}}</text>
-        <text class="p-key">液体 g</text>
-      </view>
-      <view class="param" wx:if="{{item._ratio}}">
-        <text class="p-val">{{item._ratio}}</text>
-        <text class="p-key">粉水比</text>
-      </view>
-      <view class="param" wx:if="{{item.temp}}">
-        <text class="p-val">{{item.temp}}</text>
-        <text class="p-key">水温 ℃</text>
-      </view>
-    </view>
+    <block wx:if="{{!g.collapsed}}">
+      <view wx:for="{{g.items}}" wx:for-item="item" wx:key="_id" class="card recipe-card">
+        <view class="rc-body" data-id="{{item._id}}" bindtap="onEdit">
+          <image wx:if="{{item.cover}}" class="rc-thumb" src="{{item.cover}}" mode="aspectFill" lazy-load />
+          <view wx:else class="rc-thumb rc-thumb-ph">{{item._catIcon}}</view>
+          <view class="rc-main">
+            <view class="rc-title">
+              <text class="rc-name">{{item.name}}</text>
+              <text wx:if="{{item.favorite}}" class="rc-star">★</text>
+            </view>
+            <view class="rc-spec" wx:if="{{item._specLine}}">{{item._specLine}}</view>
+            <view class="rc-tags">
+              <text class="tag">{{item._beanTypeLabel}}</text>
+              <text wx:if="{{item.beanName}}" class="tag">{{item.beanName}}</text>
+              <text wx:else class="tag grey">未设默认豆</text>
+              <text wx:for="{{item._tags}}" wx:for-item="tg" wx:key="*this" class="tag grey">{{tg}}</text>
+              <text wx:if="{{item._moreTags}}" class="tag grey">+{{item._moreTags}}</text>
+              <text wx:if="{{item.grind}}" class="tag grey">{{item.grind}}研磨</text>
+            </view>
+          </view>
+        </view>
 
-    <view class="rc-foot">
-      <view class="rc-tags">
-        <text class="tag">{{item._beanTypeLabel}}</text>
-        <text wx:if="{{item.beanName}}" class="tag">{{item.beanName}}</text>
-        <text wx:else class="tag grey">未设默认豆</text>
-        <text wx:for="{{item.tags}}" wx:for-item="tg" wx:key="*this" class="tag grey">{{tg}}</text>
-        <text wx:if="{{item.grind}}" class="tag grey">{{item.grind}}研磨</text>
-        <text wx:if="{{item.time}}" class="tag grey">{{item.time}}</text>
+        <view class="rc-ops">
+          <text class="op brew" data-id="{{item._id}}" catchtap="onBrew">▶ 冲煮</text>
+          <text class="op" data-id="{{item._id}}" catchtap="onToggleFav">{{item.favorite ? '取消常喝' : '设常喝'}}</text>
+          <text class="op danger" data-id="{{item._id}}" data-name="{{item.name}}" catchtap="onDelete">删除</text>
+        </view>
       </view>
-      <view class="rc-ops">
-        <text class="op brew" data-id="{{item._id}}" catchtap="onBrew">▶ 开始冲煮</text>
-        <text class="op" data-id="{{item._id}}" catchtap="onToggleFav">{{item.favorite ? '取消常喝' : '设常喝'}}</text>
-        <text class="op danger" data-id="{{item._id}}" data-name="{{item.name}}" catchtap="onDelete">删除</text>
-      </view>
-    </view>
+    </block>
   </view>
 
   <view wx:if="{{!list.length}}" class="empty">
